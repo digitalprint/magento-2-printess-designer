@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<page layout="empty" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <remove src="css/styles-m.css" />
+        <remove src="css/styles-l.css" />
+        <remove src="css/styles.css" />
+        <remove src="css/print.css" />
+        <css src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" src_type="url"  rel="stylesheet" type="text/css" />
+        <css src="Digitalprint_PrintessDesigner::css/bs-layout.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <referenceBlock name="copyright" remove="true" />
+        <referenceBlock name="authentication-popup" remove="true" />
+        <referenceBlock name="cookie-status-check" remove="true"/>
+        <referenceContainer name="content">
+            <block class="Digitalprint\PrintessDesigner\Block\Designer" name="designer" template="Digitalprint_PrintessDesigner::designer/page/view/designer.phtml" />
+        </referenceContainer>
+        <block class="Digitalprint\Printessdesigner\Pricing\Render" name="product.price.render.designer">
+            <arguments>
+                <argument name="price_render_handle" xsi:type="string">designer_product_prices</argument>
+                <argument name="use_link_for_as_low_as" xsi:type="boolean">true</argument>
+            </arguments>
+        </block>
+    </body>
+</page>

@@ -1,0 +1,14 @@
+
+<?php if ($block->hasPrintessTemplate()) :?>
+    <div class="product-add-form printess-designer">
+        <div class="box-tocart">
+            <div class="fieldset">
+                <div class="actions">
+                    <a href="<?= $block->getDesignerUrl() ?>" class="action primary tocart" id="product-designer-button">
+                        <span><?= $block->escapeHtml(__('Design Now')) ?></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

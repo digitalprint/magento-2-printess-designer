@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Digitalprint_PrintessDesigner::css/designer.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <referenceContainer name="alert.urls">
+            <block class="Digitalprint\PrintessDesigner\Block\Catalog\Product\Designer" name="product.info.designer" template="Digitalprint_PrintessDesigner::catalog/product/view/designer.phtml" />
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="printess_product_addtocart" type="Digitalprint\Printessdesigner\Plugin\Product\AddToCart" sortOrder="1"/>
+    </type>
+    <type name="Magento\Checkout\Block\Cart\Item\Renderer">
+        <plugin name="printess_cart_item_image" type="Digitalprint\PrintessDesigner\Plugin\CheckoutCart\Image" sortOrder="1"/>
+    </type>
+    <type name="Magento\Checkout\Block\Cart\Item\Renderer">
+        <plugin name="printess_cart_item_option_list" type="Digitalprint\PrintessDesigner\Plugin\CheckoutCart\OptionList" sortOrder="1"/>
+    </type>
+    <type name="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit">
+        <plugin name="printess_cart_configue_url" type="Digitalprint\PrintessDesigner\Plugin\CheckoutCart\ConfigureUrl" sortOrder="1"/>
+    </type>
+    <type name="Magento\Checkout\CustomerData\AbstractItem">
+        <plugin name="product_minicart_image" type="Digitalprint\PrintessDesigner\Plugin\Minicart\Image" sortOrder="1"/>
+    </type>
+</config>
+
+
+

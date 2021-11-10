@@ -1,0 +1,23 @@
+{
+    "name": "digitalprint/printess-designer",
+    "description": "A module that integrates the printess designer in Magento",
+    "keywords": [
+        "printess",
+        "print",
+        "automation",
+        "mass customization",
+        "editor"
+    ],
+    "type": "magento2-module",
+    "version": "0.0.1",
+    "license": "BSD-2-Clause",
+    "require": {
+        "php": "~7.3.0||~7.4.0"
+    },
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Digitalprint\\PrintessDesigner\\": ""
+        }
+    }
+}
