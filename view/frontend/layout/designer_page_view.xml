@@ -12,6 +12,9 @@
         <referenceBlock name="copyright" remove="true" />
         <referenceBlock name="authentication-popup" remove="true" />
         <referenceBlock name="cookie-status-check" remove="true"/>
+        <referenceBlock name="head.additional">
+            <block class="Digitalprint\PrintessDesigner\Block\Designer" name="dynamiccss" template="Digitalprint_PrintessDesigner::designer/page/view/dynamiccss.phtml" />
+        </referenceBlock>
         <referenceContainer name="content">
             <block class="Digitalprint\PrintessDesigner\Block\Designer" name="designer" template="Digitalprint_PrintessDesigner::designer/page/view/designer.phtml" />
         </referenceContainer>

@@ -1,0 +1,49 @@
+<?php $colors = $block->getCustomColors(); ?>
+
+<?php if ( $colors['primary_color'] && $colors['primary_color_hover']) :?>
+<style>
+    .printess-designer .list-group-item.active {
+        background-color: <?php echo $colors['primary_color']; ?>;
+        border-color: <?php echo $colors['primary_color']; ?>;
+    }
+
+    .printess-designer .btn-primary {
+        background-color: <?php echo $colors['primary_color']; ?>;
+        border-color: <?php echo $colors['primary_color']; ?>;
+    }
+
+    .printess-designer .btn-primary:active,
+    .printess-designer .btn-primary:hover {
+        background-color: <?php echo $colors['primary_color_hover']; ?>;
+        border-color: <?php echo $colors['primary_color_hover']; ?>;
+    }
+
+    .printess-designer .btn-outline-primary {
+        color: <?php echo $colors['primary_color']; ?>;
+        border-color: <?php echo $colors['primary_color']; ?>;
+    }
+
+    .printess-designer .btn-outline-primary:active,
+    .printess-designer .btn-outline-primary:hover {
+        background-color: <?php echo $colors['primary_color_hover']; ?>;
+        border-color: <?php echo $colors['primary_color_hover']; ?>;
+    }
+
+    .mobile-navbar.bg-primary {
+        background-color: <?php echo $colors['primary_color']; ?> !important;
+    }
+
+    .mobile-ui .bg-primary {
+        background-color: <?php echo $colors['primary_color']; ?> !important;
+    }
+
+    .mobile-ui .list-group-item.active {
+        background-color: <?php echo $colors['primary_color']; ?> !important;
+        border-color: <?php echo $colors['primary_color']; ?> !important;
+    }
+
+    .mobile-ui .mobile-property-button.selected .form-field-caption {
+        border-color: <?php echo $colors['primary_color']; ?> !important;
+    }
+</style>
+<?php endif; ?>

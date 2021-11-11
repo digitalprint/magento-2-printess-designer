@@ -41,6 +41,14 @@ class Designer extends Template
      * @var string
      */
     private const XML_PATH_DESIGNER_TOKEN = 'designer/general/token';
+    /**
+     * @var string
+     */
+    private const XML_PATH_DESIGNER_PRIMARY_COLOR = 'designer/colors/primary_color';
+    /**
+     * @var string
+     */
+    private const XML_PATH_DESIGNER_PRIMARY_COLOR_HOVER = 'designer/colors/primary_color_hover';
 
     /**
      * @param Context $context
@@ -104,6 +112,19 @@ class Designer extends Template
         }
 
         return $price;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCustomColors(): array
+    {
+        $storeScope = ScopeInterface::SCOPE_STORE;
+
+        return [
+            'primary_color' => $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_PRIMARY_COLOR, $storeScope),
+            'primary_color_hover' => $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_PRIMARY_COLOR_HOVER, $storeScope),
+        ];
     }
 
     /**
