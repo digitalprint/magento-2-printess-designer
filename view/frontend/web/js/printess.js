@@ -38,7 +38,7 @@ define(['webcomponents-loader', 'polyfill', 'Digitalprint_PrintessDesigner/js/ui
                     getOverlayCallback: (properties) => { bridge.getOverlay(properties) },
                     addToBasketCallback: (saveToken, url) => { bridge.addToBasket(saveToken, url) },
                     formFieldChangedCallback: (name, value) => { bridge.formFieldChanged(name, value) },
-                    refreshPaginationCallback: () => { bridge.refreshPaginationCallback() }
+                    refreshPaginationCallback: () => { bridge.refreshPagination() }
                 });
 
                 bridge = new Bridge(printess, config.printess, config.variants);
