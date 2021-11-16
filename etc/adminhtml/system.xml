@@ -16,6 +16,9 @@
                 <field id="token" translate="label" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Token</label>
                 </field>
+                <field id="access_token" translate="label" type="textarea" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Access-Token</label>
+                </field>
             </group>
             <group id="colors" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Colors</label>
@@ -24,6 +27,16 @@
                 </field>
                 <field id="primary_color_hover" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Primary Color (Hover)</label>
+                </field>
+            </group>
+            <group id="output" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Output</label>
+                <field id="origin" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Origin</label>
+                </field>
+                <field id="dpi" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>DPI</label>
+                    <source_model>DigitalPrint\PrintessDesigner\Model\Config\Dpi</source_model>
                 </field>
             </group>
         </section>
