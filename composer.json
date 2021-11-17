@@ -9,7 +9,7 @@
         "editor"
     ],
     "type": "magento2-module",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "license": "BSD-2-Clause",
     "require": {
         "php": "~7.3.0||~7.4.0",
