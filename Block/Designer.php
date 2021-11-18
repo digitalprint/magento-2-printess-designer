@@ -161,18 +161,21 @@ class Designer extends Template
 
                 $formFields = json_decode($childProduct->getData('printess_form_fields'), true);
 
-                foreach($formFields as $formField) {
+                if (is_array($formFields)) {
 
-                    $attributes[] = array(
-                        'code' => $formField['pim_attr_name'],
-                        'value' => $formField['value']
-                    );
+                    foreach ($formFields as $formField) {
 
-                    $attributes[] = array(
-                        'code' => $formField['printess_ff_name'],
-                        'value' => $formField['value']
-                    );
+                        $attributes[] = array(
+                            'code' => $formField['pim_attr_name'],
+                            'value' => $formField['value']
+                        );
 
+                        $attributes[] = array(
+                            'code' => $formField['printess_ff_name'],
+                            'value' => $formField['value']
+                        );
+
+                    }
                 }
 
                 $attributes[] = array(
@@ -207,18 +210,21 @@ class Designer extends Template
 
             $formFields = json_decode($product->getData('printess_form_fields'), true);
 
-            foreach($formFields as $formField) {
+            if (is_array($formFields)) {
 
-                $attributes[] = array(
-                    'code' => $formField['pim_attr_name'],
-                    'value' => $formField['value']
-                );
+                foreach ($formFields as $formField) {
 
-                $attributes[] = array(
-                    'code' => $formField['printess_ff_name'],
-                    'value' => $formField['value']
-                );
+                    $attributes[] = array(
+                        'code' => $formField['pim_attr_name'],
+                        'value' => $formField['value']
+                    );
 
+                    $attributes[] = array(
+                        'code' => $formField['printess_ff_name'],
+                        'value' => $formField['value']
+                    );
+
+                }
             }
 
             $attributes[] = array(
