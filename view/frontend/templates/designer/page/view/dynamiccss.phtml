@@ -1,7 +1,16 @@
 <?php $colors = $block->getCustomColors(); ?>
 
-<?php if ( $colors['primary_color'] && $colors['primary_color_hover']) :?>
+<?php if ($colors['primary_color'] && $colors['primary_color_hover']) :?>
 <style>
+
+    .printess-designer a {
+        color: <?php echo $colors['primary_color']; ?>;
+    }
+
+    .printess-designer a:hover {
+        color: <?php echo $colors['primary_color_hover']; ?>;
+    }
+
     .printess-designer .list-group-item.active {
         background-color: <?php echo $colors['primary_color']; ?>;
         border-color: <?php echo $colors['primary_color']; ?>;
