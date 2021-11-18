@@ -36,7 +36,7 @@
                 </field>
                 <field id="dpi" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>DPI</label>
-                    <source_model>DigitalPrint\PrintessDesigner\Model\Config\Dpi</source_model>
+                    <source_model>Digitalprint\PrintessDesigner\Model\Config\Dpi</source_model>
                 </field>
             </group>
         </section>
