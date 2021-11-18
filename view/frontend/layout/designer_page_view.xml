@@ -15,6 +15,7 @@
         <referenceBlock name="head.additional">
             <block class="Digitalprint\PrintessDesigner\Block\Designer" name="dynamiccss" template="Digitalprint_PrintessDesigner::designer/page/view/dynamiccss.phtml" />
         </referenceBlock>
+        <referenceBlock name="page.main.title" remove="true" />
         <referenceContainer name="content">
             <block class="Digitalprint\PrintessDesigner\Block\Designer" name="designer" template="Digitalprint_PrintessDesigner::designer/page/view/designer.phtml" />
         </referenceContainer>

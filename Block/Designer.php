@@ -78,6 +78,12 @@ class Designer extends Template
         parent::__construct($context, $data);
     }
 
+    public function _prepareLayout()
+    {
+        $this->pageConfig->getTitle()->set(sprintf("%s - %s", $this->getName(), __('Designer')));
+        return parent::_prepareLayout();
+    }
+
     /**
      * @return string
      * @throws \Magento\Framework\Exception\NoSuchEntityException
