@@ -38,6 +38,10 @@
                     <label>DPI</label>
                     <source_model>Digitalprint\PrintessDesigner\Model\Config\Dpi</source_model>
                 </field>
+                <field id="optimize_images" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Optimize Images</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
         </section>
     </system>

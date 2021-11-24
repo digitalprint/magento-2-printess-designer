@@ -40,6 +40,10 @@ class Index extends Action
      * @var string
      */
     private const XML_PATH_DESIGNER_DPI = 'designer/output/dpi';
+    /**
+     * @var string
+     */
+    private const XML_PATH_DESIGNER_OPTIMIZE_IMAGES = 'designer/output/optimize_images';
 
     /**
      * @var ScopeConfigInterface
@@ -112,17 +116,15 @@ class Index extends Action
     public function execute()
     {
 
-        $storeScope = ScopeInterface::SCOPE_STORE;
-        $accessToken = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ACCESS_TOKEN, $storeScope);
-        $dpi = (int)$this->scopeConfig->getValue(self::XML_PATH_DESIGNER_DPI, $storeScope);
-        $origin = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ORIGIN, $storeScope);
-
         $orderId = $this->getRequest()->getParam('order_id');
         $quoteItemId = $this->getRequest()->getParam('quote_item_id');
 
         $item = $this->getItemByQuoteItemId($orderId, $quoteItemId);
 
         if (($options = $item->getProductOptions()) && isset($options['options']['printess_save_token'])) {
+
+            $storeScope = ScopeInterface::SCOPE_STORE;
+            $accessToken = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ACCESS_TOKEN, $storeScope);
 
             $data = [];
 
@@ -136,11 +138,14 @@ class Index extends Action
 
                 $job = $printess->production->produce([
                     'templateName' => $options['options']['printess_save_token']['value'],
-                    'outputSettings' => ['dpi' => $dpi],
+                    'outputSettings' => [
+                        'dpi' => (int)$this->scopeConfig->getValue(self::XML_PATH_DESIGNER_DPI, $storeScope),
+                        'optimizeImages' => (bool)$this->scopeConfig->getValue(self::XML_PATH_DESIGNER_OPTIMIZE_IMAGES, $storeScope),
+                    ],
                     'outputFiles' => [
                         ['documentName' => 'myDocument'],
                     ],
-                    'origin' => $origin
+                    'origin' => $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ORIGIN, $storeScope)
                 ]);
 
                 $data['jobId'] = $job->jobId;
