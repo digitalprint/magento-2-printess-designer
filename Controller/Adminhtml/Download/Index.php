@@ -156,10 +156,10 @@ class Index extends Action
                 $data = $this->serializer->unserialize($cacheData);
             }
 
-            $fileCreated = false;
-            $times = 0;
             $status = null;
-            while (false === $fileCreated) {
+            $times = 0;
+            $finalStatus = false;
+            while (false === $finalStatus) {
                 sleep(3);
                 ++$times;
 
@@ -167,16 +167,20 @@ class Index extends Action
                     'jobId' => $data['jobId'],
                 ]);
 
-                if (true === $status->isSuccess) {
-                    $fileCreated = true;
+                if (true === $status->isFinalStatus) {
+                    $finalStatus = true;
                 }
 
-                if (true === $fileCreated || 20 === $times) {
+                if (true === $finalStatus || 60 === $times) {
                     break;
                 }
             }
 
-            if ($fileCreated) {
+            if (false === $status->isSuccess) {
+                throw new \Exception('Something went wrong during printfile creating. Error: ' . $status->errorDetails);
+            }
+
+            if (isset($status->result->r->myDocument)) {
 
                 header('Content-Type: application/pdf');
                 header('Content-disposition: attachment;filename=' . $status->result->d->myDocument);
