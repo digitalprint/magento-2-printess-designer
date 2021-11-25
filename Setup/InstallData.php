@@ -123,5 +123,33 @@ class InstallData implements InstallDataInterface
             ]
         );
 
+        // Printess Form Fields
+        $eavSetup->addAttribute(
+            Product::ENTITY,
+            'printess_output_dpi',
+            [
+                'group' => 'Printess',
+                'type' => 'int',
+                'backend' => '',
+                'frontend' => '',
+                'label' => 'Output DPI',
+                'input' => 'select',
+                'class' => '',
+                'source' => 'Digitalprint\PrintessDesigner\Model\Config\Source\Dpi',
+                'global' => ScopedAttributeInterface::SCOPE_STORE,
+                'visible' => true,
+                'required' => false,
+                'user_defined' => false,
+                'default' => '',
+                'searchable' => false,
+                'filterable' => false,
+                'comparable' => false,
+                'visible_on_front' => false,
+                'used_in_product_listing' => false,
+                'unique' => false,
+                'apply_to' => ''
+            ]
+        );
+
     }
 }

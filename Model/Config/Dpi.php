@@ -2,9 +2,9 @@
 
 namespace Digitalprint\PrintessDesigner\Model\Config;
 
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
-class Dpi implements ArrayInterface
+class Dpi implements OptionSourceInterface
 {
 
     /**
@@ -12,10 +12,23 @@ class Dpi implements ArrayInterface
      */
     public function toOptionArray()
     {
-       return [
-            ['label' => '72 dpi', 'value' => 72],
-            ['label' => '150 dpi', 'value' => 150],
-            ['label' => '300 dpi', 'value' => 300],
+        $arr = $this->toArray();
+        $ret = [];
+        foreach ($arr as $key => $value) {
+            $ret[] = [
+                'value' => $key,
+                'label' => $value
+            ];
+        }
+        return $ret;
+    }
+
+    public function toArray()
+    {
+        return [
+            72 => '72 dpi',
+            150 => '150 dpi',
+            300 => '300 dpi'
         ];
     }
 }

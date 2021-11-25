@@ -5,6 +5,7 @@ namespace Digitalprint\PrintessDesigner\Controller\Adminhtml\Download;
 use DigitalPrint\PrintessDesigner\Model\Cache\Type\CacheType;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\Result\Redirect;
@@ -62,15 +63,21 @@ class Index extends Action
      */
     protected $orderRepository;
     /**
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
+    /**
      * @var Redirect
      */
     protected $resultRedirectFactory;
+
 
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param CacheInterface $cache
      * @param SerializerInterface $serializer
      * @param OrderRepositoryInterface $orderRepository
+     * @param ProductRepositoryInterface $productRepository
      * @param Redirect $resultRedirectFactory
      * @param Context $context
      */
@@ -79,6 +86,7 @@ class Index extends Action
         CacheInterface $cache,
         SerializerInterface $serializer,
         OrderRepositoryInterface $orderRepository,
+        ProductRepositoryInterface $productRepository,
         Redirect $resultRedirectFactory,
         Context $context
     )
@@ -87,6 +95,7 @@ class Index extends Action
         $this->cache = $cache;
         $this->serializer = $serializer;
         $this->orderRepository = $orderRepository;
+        $this->productRepository = $productRepository;
         $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
@@ -120,6 +129,7 @@ class Index extends Action
         $quoteItemId = $this->getRequest()->getParam('quote_item_id');
 
         $item = $this->getItemByQuoteItemId($orderId, $quoteItemId);
+        $product = $this->productRepository->get($item->getSku());
 
         if (($options = $item->getProductOptions()) && isset($options['options']['printess_save_token'])) {
 
@@ -139,7 +149,7 @@ class Index extends Action
                 $job = $printess->production->produce([
                     'templateName' => $options['options']['printess_save_token']['value'],
                     'outputSettings' => [
-                        'dpi' => (int)$this->scopeConfig->getValue(self::XML_PATH_DESIGNER_DPI, $storeScope),
+                        'dpi' => (int)($product->getData('printess_output_dpi') ?? $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_DPI, $storeScope)),
                         'optimizeImages' => (bool)$this->scopeConfig->getValue(self::XML_PATH_DESIGNER_OPTIMIZE_IMAGES, $storeScope),
                     ],
                     'outputFiles' => [
