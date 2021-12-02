@@ -24,7 +24,7 @@ define(['webcomponents-loader', 'polyfill', 'Digitalprint_PrintessDesigner/js/ui
                     resourcePath: "https://editor.printess.com/printess-editor",
                     domain: "api.printess.com",
                     div: document.getElementById("desktop-printess-container"),
-                    token: config.printess.token,
+                    token: config.printess.shopToken,
                     basketId: config.printess.basketId,
                     shopUserId: config.printess.shopUserId,
                     showBuyerSide: true,

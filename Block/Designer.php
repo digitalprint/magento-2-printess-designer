@@ -40,7 +40,7 @@ class Designer extends Template
     /**
      * @var string
      */
-    private const XML_PATH_DESIGNER_TOKEN = 'designer/general/token';
+    private const XML_PATH_DESIGNER_SHOP_TOKEN = 'designer/api_token/shop_token';
     /**
      * @var string
      */
@@ -267,7 +267,7 @@ class Designer extends Template
 
         $config = array();
 
-        $config['token'] = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_TOKEN, $storeScope);
+        $config['shopToken'] = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_SHOP_TOKEN, $storeScope);
         $config['basketId'] = $this->customerSession->getSessionId();
 
         $config['shopUserId'] = 'CurrentShopCustomerId';

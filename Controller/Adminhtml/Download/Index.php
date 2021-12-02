@@ -32,7 +32,7 @@ class Index extends Action
     /**
      * @var string
      */
-    private const XML_PATH_DESIGNER_ACCESS_TOKEN = 'designer/general/access_token';
+    private const XML_PATH_DESIGNER_SERVICE_TOKEN = 'designer/api_token/service_token';
     /**
      * @var string
      */
@@ -134,12 +134,12 @@ class Index extends Action
         if (($options = $item->getProductOptions()) && isset($options['options']['printess_save_token'])) {
 
             $storeScope = ScopeInterface::SCOPE_STORE;
-            $accessToken = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ACCESS_TOKEN, $storeScope);
+            $serviceToken = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_SERVICE_TOKEN, $storeScope);
 
             $data = [];
 
             $printess = new PrintessApiClient();
-            $printess->setAccessToken($accessToken);
+            $printess->setAccessToken($serviceToken);
 
             $cacheKey = implode("_", [self::CACHE_KEY, $orderId, $quoteItemId]);
             $cacheData = $this->cache->load($cacheKey);
