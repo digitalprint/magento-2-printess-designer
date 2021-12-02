@@ -1,22 +1,24 @@
 <?php
 
-namespace Digitalprint\PrintessDesigner\Controller\Page;
+namespace Digitalprint\PrintessDesigner\Model;
 
+use Digitalprint\PrintessDesigner\Api\CartInterface;
+use Digitalprint\PrintessDesigner\Api\Data\CartInterface as DataCartInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\SessionFactory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\Context;
-use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\UrlInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 
-class AddToCart extends Action
+class Cart implements CartInterface
 {
 
+    /**
+     * @var DataCartInterface
+     */
+    private $dataCart;
     /**
      * @var Json
      */
@@ -38,53 +40,52 @@ class AddToCart extends Action
      */
     private $configurableType;
     /**
-     * @var JsonFactory
+     * @var UrlInterface
      */
-    private $jsonResultFactory;
+    private $urlBuilder;
 
     /**
-     * @param Context $context
+     * @param DataCartInterface $dataCart
      * @param Json $json
      * @param SessionFactory $checkoutSession
      * @param CartRepositoryInterface $cartRepository
      * @param ProductRepositoryInterface $productRepository
      * @param Configurable $configurableType
-     * @param JsonFactory $jsonResultFactory
+     * @param UrlInterface $urlBuilder
      */
     public function __construct(
-        Context $context,
+        DataCartInterface $dataCart,
         Json $json,
         SessionFactory $checkoutSession,
         CartRepositoryInterface $cartRepository,
         ProductRepositoryInterface $productRepository,
         Configurable $configurableType,
-        JsonFactory $jsonResultFactory
+        UrlInterface $urlBuilder
     ) {
+        $this->dataCart = $dataCart;
         $this->json = $json;
         $this->checkoutSession = $checkoutSession;
         $this->cartRepository = $cartRepository;
         $this->productRepository = $productRepository;
-
         $this->configurableType = $configurableType;
-        $this->jsonResultFactory = $jsonResultFactory;
-        parent::__construct($context);
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\Result\Json|ResultInterface
-     * @throws LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * Add to cart
+     *
+     * @param string $sku
+     * @param string $quantity
+     * @param string $saveToken
+     * @param string $thumbnailUrl
+     * @return \Digitalprint\PrintessDesigner\Api\Data\CartInterface
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute()
+    public function addToCart($sku, $quantity, $saveToken, $thumbnailUrl)
     {
 
-        $result = $this->jsonResultFactory->create();
-        $response = array();
-
-        $sku = $this->getRequest()->getParam('sku');
-        $quantity = $this->getRequest()->getParam('quantity');
-        $saveToken = $this->getRequest()->getParam('saveToken');
-        $thumbnailUrl = $this->getRequest()->getParam('thumbnailUrl');
+        $this->dataCart->setStatus('error');
 
         if (!is_null($sku) && !is_null($quantity) && !is_null($saveToken)) {
 
@@ -120,7 +121,7 @@ class AddToCart extends Action
                 $this->cartRepository->save($quote);
                 $session->replaceQuote($quote)->unsLastRealOrderId();
 
-                $response['status'] = 'success';
+                $this->dataCart->setStatus('success');
 
             } else {
 
@@ -131,17 +132,14 @@ class AddToCart extends Action
                 $this->cartRepository->save($quote);
                 $session->replaceQuote($quote)->unsLastRealOrderId();
 
-                $response['status'] = 'success';
+                $this->dataCart->setStatus('success');
             }
 
-            $response['checkout_url'] =  $this->_url->getUrl('checkout/cart', ['_secure' => true]);
+            $this->dataCart->setCheckoutUrl($this->urlBuilder->getUrl('checkout/cart', ['_secure' => true]));
 
-        } else {
-            $response['status'] = 'error';
         }
 
-        return  $result->setData($response);
+        return $this->dataCart;
 
     }
-
 }

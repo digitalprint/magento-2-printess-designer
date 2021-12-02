@@ -3,19 +3,19 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
 
     function addToCart(sku, quantity, thumbnailUrl, saveToken) {
 
-        const searchParams = new URLSearchParams();
-        searchParams.set("sku", sku);
-        searchParams.set("quantity", quantity);
-        searchParams.set("thumbnailUrl", thumbnailUrl);
-        searchParams.set("saveToken", saveToken);
+        let payload = {
+            "sku": sku,
+            "quantity": quantity,
+            "thumbnailUrl": thumbnailUrl,
+            "saveToken": saveToken
+        };
 
-        return fetch('/designer/page/addtocart/', {
+        return fetch('/rest/V1/digitalprint-designer/addtocart/', {
             method: "POST",
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "X-Requested-With": "XMLHttpRequest"
+                "Content-Type": "application/json",
             },
-            body: searchParams
+            body: JSON.stringify(payload),
         });
 
     }
