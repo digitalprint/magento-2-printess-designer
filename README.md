@@ -1,59 +1,87 @@
+# Printess Designer for Magento2
 
-Digitalprint Printessdesigner Extension
-=====================
-The Digitalprint_Printessdesigner module integrates the printess designer into Magento.
+Thank you for using the "Printess Designer module for Magento2" (Digitalprint_PrintessDesigner).
 
-**This project is under active development. Do not use it for production.**
+This package contains everything you need to connect Printess with your Magento commerce shop to get the most advanced editor for print automation and mass customization.
 
-Facts
------
-- version: 0.0.1
-- extension key: Digitalprint_PrintessDesigner
-- [extension on GitHub](https://github.com/digitalprint/PrintessDesigner)
+[![Latest Stable Version](http://poser.pugx.org/digitalprint/magento-2-printess-designer/v)](https://packagist.org/packages/digitalprint/magento-2-printess-designer) [![Total Downloads](http://poser.pugx.org/digitalprint/magento-2-printess-designer/downloads)](https://packagist.org/packages/digitalprint/magento-2-printess-designer)
 
-Description
------------
-Printess is an advanced editor for print automation and mass customization. The editor can be customized and embedded in your own projects. This extension embeds the Printess designer into your Magento store.
-You can find more information about printess [here](https://printess.com/).
+## 1. Documentation
 
-Requirements
-------------
-php >= 7.3.0
+- [Contribute on Github](https://github.com/digitalprint/magento-2-printess-designer)
+- [Releases](https://github.com/digitalprint/magento-2-printess-designer/releases)
+- [Printess Knowledge Base](https://printess.com/kb/)
 
-Compatibility
--------------
-- Magento >= 2.3.0
+## 2. How to install Printess Designer Extension
 
-Installation Instructions
--------------------------
-1. Install the extension via Magento Connect with the key shown above or copy all the files into your document root.
-2. Clear the cache, logout from the admin panel and then login again.
-3. Configure and activate the extension under System - Configuration - Printess - Designer.
+### Install via composer (recommend)
 
-Uninstallation
---------------
-1. Remove all extension files from your Magento installation
+Run the following command in Magento 2 root folder:
 
-Support
--------
-If you have any issues with this extension, open an issue on [GitHub](https://github.com/digitalprint/PrintessDesigner/issues).
+```
+composer require digitalprint/magento-2-printess-designer
+php bin/magento setup:upgrade
+```
 
-Contribution
-------------
-Any contribution is highly appreciated. The best way to contribute code is to open a [pull request on GitHub](https://help.github.com/articles/using-pull-requests).
+## 3. User Guide
 
-Developer
----------
-digital print Laserdruck Centrum Garbsen GmbH
-[https://www.digital-print.net/](https://www.digital-print.net/)  
+This module integrates the Printess Editor into Magento2. If the module is activated and a product is configured accordingly, the buy button is automatically replaced with the design button. When clicked, the preconfigured designer opens to edit the product. Finished configured products can be put directly into the shopping cart via the designer. The relevant configuration is saved and transmitted through the normal magento checkout.
 
-License
--------
-[BSD-2-Clause - Simplified BSD License](https://opensource.org/licenses/BSD-2-Clause)
+After the purchase, the store owner can simply download the generated PDF from printess via the sales overview.
 
-Copyright
----------
-(c) digital print Laserdruck Centrum Garbsen GmbH
+### 3.1 General Configuration
 
+![General](https://user-images.githubusercontent.com/14890174/144609004-3464554a-4ed0-4696-aa00-5cd60a87e081.png)
 
+Log into the Magento administration panel, go to Stores > Configuration  > Printess > Designer
 
+Choose Yes to enable the extension.
+
+### 3.1.2 API-Token
+
+![API Token](https://user-images.githubusercontent.com/14890174/144609082-9bbeeefb-12d7-41da-9f6d-8ebc1dbee6ff.png)
+
+You will find your Shop- and Service-Token in your [printess account](https://editor.printess.com/) in the account menu to the right of the top menu bar.
+
+- Shop Token: The shop token allows loading of templates and snippets, upload images and saving / loading the current layout.
+- Service Token: The service token has access to the production api and can render PDFs or PNGs.
+
+### 3.1.3 Colors
+
+![Colors](https://user-images.githubusercontent.com/14890174/144609178-881262d2-bacf-450b-867a-6295d19559d1.png)
+
+Choose color. This will change the color of primary elements like links, buttons, etc ...
+
+### 3.1.4 Output
+
+![Output](https://user-images.githubusercontent.com/14890174/144609340-69c26f59-4c95-40e0-9e45-0478ba77e905.png)
+
+- Origin: Identifier for orders from this magento scope.
+- Optimize Images: Global setting. Enable images optimization during the rendering of print files.
+- DPI: Global fallback. Each product can have individual print resolution settings.
+
+### 3.2 Product Configuration
+
+![Product Configuration](https://user-images.githubusercontent.com/14890174/144617146-117b947b-d298-4a68-92d3-1dc5e8767699.png)
+
+Each product must be configured individually for the editor. This can be done for the respective product in the catalog under the item "Printess".
+The following fields can be configured.
+
+- Template-Name: the name of the template assigned in Printess.
+- Document-Name: optional, if not supplied primary or first document is used.
+- Form Fields (JSON): read "mapping the form fields" for detailed informations.
+- DPI: optional: optional, overwrite global print resolution settings
+
+### 3.3 Mapping the form fields
+
+Since there is no direct link from a Printess template to a Magento product, a mapping is necessary which is created via this JSON field.
+
+Example: 
+```
+[{"printess_ff_name": "DOCUMENT_SIZE", "pim_attr_name": "poster_din_format", "value": "42x59.4"}]
+```
+
+The attribute printess_ff_name contains the configurable property which is configured in printess. In this example it's "DOCUMENT_SIZE". In Magento a configurable product must be created. The attribute values must be the same as in Printess.
+
+![Printess Document Size](https://user-images.githubusercontent.com/14890174/144631170-4581ba7b-c2f0-4267-ac1a-c0c55dbdce46.png)
+![Magento Attributes](https://user-images.githubusercontent.com/14890174/144630691-fa390ad6-46a2-474b-bb28-9ac2315c01ae.png)
