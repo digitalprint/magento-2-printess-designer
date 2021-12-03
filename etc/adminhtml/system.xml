@@ -5,10 +5,15 @@
         </tab>
         <section id="designer" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Designer</label>
+            <comment><![CDATA[<ul>
+                            <li>The most advanced editor for print automation and mass customization integrated as Magento extension.</li>
+                            <li><a href="https://printess.com/kb/" target="_blank">Knowledge Base</a></li>
+                        </ul>]]></comment>
             <tab>printess</tab>
             <resource>Digitalprint_PrintessDesigner::config</resource>
             <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>General</label>
+                <label>Printess</label>
+                <comment><![CDATA[Enable all Printess Designer Magento extension features at this Magento scope.]]></comment>
                 <field id="enable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -16,15 +21,19 @@
             </group>
             <group id="api_token" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>API Token</label>
+                <comment><![CDATA[You will find your Shop- and Service-Token in your <a href="https://editor.printess.com/" target="_blank">printess account</a> in the account menu to the right of the top menu bar.]]></comment>
                 <field id="shop_token" translate="label" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Shop-Token</label>
+                    <comment><![CDATA[The shop token allows loading of templates and snippets, upload images and saving / loading the current layout.]]></comment>
                 </field>
                 <field id="service_token" translate="label" type="textarea" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Service-Token</label>
+                    <comment><![CDATA[The service token has access to the production api and can render PDFs or PNGs.]]></comment>
                 </field>
             </group>
             <group id="colors" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Colors</label>
+                <comment><![CDATA[Choose color. This will change the color of primary elements like links, buttons, etc ...]]></comment>
                 <field id="primary_color" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Primary Color</label>
                 </field>
@@ -34,16 +43,20 @@
             </group>
             <group id="output" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Output</label>
+                <comment><![CDATA[Configure print file settings.]]></comment>
                 <field id="origin" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Origin</label>
+                    <comment><![CDATA[Identifier for orders from this magento scope.]]></comment>
                 </field>
                 <field id="dpi" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>DPI</label>
                     <source_model>Digitalprint\PrintessDesigner\Model\Config\Dpi</source_model>
+                    <comment><![CDATA[Global fallback. Each product can have individual print resolution settings.]]></comment>
                 </field>
                 <field id="optimize_images" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Optimize Images</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Global setting. Enable images optimization during the rendering of print files.]]></comment>
                 </field>
             </group>
         </section>
