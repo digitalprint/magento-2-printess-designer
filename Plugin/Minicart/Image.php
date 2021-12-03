@@ -2,8 +2,10 @@
 
 namespace Digitalprint\PrintessDesigner\Plugin\Minicart;
 
+use Magento\Checkout\CustomerData\AbstractItem;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
+
 
 class Image {
 
@@ -28,14 +30,14 @@ class Image {
     {
         $this->serializer = $serializer ?: ObjectManager::getInstance() ->get(Json::class);
     }
-
+    
     /**
-     * @param $subject
+     * @param AbstractItem $subject
      * @param $proceed
      * @param $item
-     * @return string
+     * @return array
      */
-    public function afterGetImage($subject, $proceed, $item): string
+    public function aroundGetItemData(AbstractItem $subject, $proceed, $item): array
     {
 
         $result = $proceed($item);
