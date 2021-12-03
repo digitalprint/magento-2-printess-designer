@@ -11,7 +11,7 @@ class AddToCart {
     /**
      * @var string
      */
-    private const XML_PATH_DESIGNER_ACTIVE = 'designer/general/active';
+    private const XML_PATH_DESIGNER_ENABLE = 'designer/general/enable';
 
     /**
      * @var ScopeConfigInterface
@@ -35,7 +35,7 @@ class AddToCart {
      */
     public function afterIsSaleable(Product $product, $return): bool {
 
-        if ($this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ACTIVE, ScopeInterface::SCOPE_STORE)) {
+        if ($this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ENABLE, ScopeInterface::SCOPE_STORE)) {
 
             $printessTemplate = $product->getData('printess_template');
 

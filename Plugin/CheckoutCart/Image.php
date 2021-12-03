@@ -13,7 +13,7 @@ class Image {
     /**
      * @var string;
      */
-    private const XML_PATH_DESIGNER_ACTIVE = 'designer/general/active';
+    private const XML_PATH_DESIGNER_ENABLE = 'designer/general/enable';
 
     /**
      * @var ScopeConfigInterface
@@ -45,7 +45,7 @@ class Image {
     public function afterGetImage(Renderer $subject, $result)
     {
 
-        if ($this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ACTIVE, ScopeInterface::SCOPE_STORE)) {
+        if ($this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ENABLE, ScopeInterface::SCOPE_STORE)) {
 
             $item = $subject->getItem();
 

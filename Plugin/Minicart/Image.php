@@ -10,7 +10,7 @@ class Image {
     /**
      * @var string
      */
-    private const XML_PATH_DESIGNER_ACTIVE = 'designer/general/active';
+    private const XML_PATH_DESIGNER_ENABLE = 'designer/general/enable';
 
     /**
      * @var
