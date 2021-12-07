@@ -265,6 +265,8 @@ class Designer extends Template
         $sku = $this->getRequest()->getParam('sku');
         $product = $this->productRepository->get($sku);
 
+        $saveToken = $this->getRequest()->getParam('save_token');
+
         $config = array();
 
         $config['shopToken'] = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_SHOP_TOKEN, $storeScope);
@@ -275,9 +277,11 @@ class Designer extends Template
             $config['shopUserId'] = $this->customerSession->getId();
         }
 
-        $config['templateName'] = $product->getData('printess_template');
-
-        $config['saveToken'] = $this->getRequest()->getParam('save_token');
+        if (!is_null($saveToken)) {
+            $config['templateName'] = $saveToken;
+        } else {
+            $config['templateName'] = $product->getData('printess_template');
+        }
 
         $config['sku'] = $sku;
         $config['variant'] = $sku;

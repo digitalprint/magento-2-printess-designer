@@ -13,11 +13,6 @@ define(['webcomponents-loader', 'polyfill', 'Digitalprint_PrintessDesigner/js/ui
 
         require(['Digitalprint_PrintessDesigner/js/bridge'], function(Bridge) {
 
-            if (config.printess.saveToken) {
-                config.printess.templateName = {};
-                config.printess.formFields = [];
-            }
-
             window.WebComponents.waitFor(async () => {
                 const printessLoader = await import('https://editor.printess.com/printess-editor/printess-editor.js');
                 printess = await printessLoader.attachPrintess({
@@ -29,8 +24,7 @@ define(['webcomponents-loader', 'polyfill', 'Digitalprint_PrintessDesigner/js/ui
                     shopUserId: config.printess.shopUserId,
                     showBuyerSide: true,
                     noBasketThumbnail: true,
-                    templateName: config.printess.templateName || config.printess.saveToken,
-                    formFields: config.printess.formFields,
+                    templateName: config.printess.templateName,
                     singleSpreadView: true,
                     loadingDoneCallback: (spreads, title) => { bridge.loadingDone(spreads, title) },
                     selectionChangeCallback: (properties, state) => { bridge.selectionChange(properties, state) },
