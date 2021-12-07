@@ -10,14 +10,13 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
             "saveToken": saveToken
         };
 
-        return fetch('/rest/V1/digitalprint-designer/addtocart/', {
+        return fetch('/rest/V1/digitalprint-designer/addtocart', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(payload),
         });
-
     }
 
     function createOffcanvas() {
