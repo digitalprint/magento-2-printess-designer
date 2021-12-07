@@ -13,7 +13,7 @@
         <plugin name="printess_cart_configue_url" type="Digitalprint\PrintessDesigner\Plugin\CheckoutCart\ConfigureUrl" sortOrder="1"/>
     </type>
     <type name="Magento\Checkout\CustomerData\AbstractItem">
-        <plugin name="product_minicart_image" type="Digitalprint\PrintessDesigner\Plugin\Minicart\Image" sortOrder="1"/>
+        <plugin name="product_minicart_itemdata" type="Digitalprint\PrintessDesigner\Plugin\Minicart\ItemData" sortOrder="1"/>
     </type>
     <preference for="Digitalprint\PrintessDesigner\Api\CartInterface" type="Digitalprint\PrintessDesigner\Model\Cart"/>
     <preference for="Digitalprint\PrintessDesigner\Api\Data\CartInterface" type="Digitalprint\PrintessDesigner\Model\Data\Cart"/>
