@@ -25,9 +25,7 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
 
         document.getElementById('cartOffcanvas').addEventListener('cart.add.bs.offcanvas', function() {
 
-            const element = document.getElementById('offcanvasBody');
-            let event = new CustomEvent('processStart');
-            element.dispatchEvent(event);
+            showLoader('offcanvasBody');
 
             const fileName = `${CartStore.saveToken}.png`.replace(/st:/i, '');
 
@@ -52,6 +50,16 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
         });
 
         return new Cart('cartOffcanvas');
+    }
+
+     function showLoader(elm) {
+        let event = new CustomEvent('processStart');
+        document.getElementById(elm).dispatchEvent(event);
+    }
+
+    function hideLoader(elm) {
+        let event = new CustomEvent('processStop');
+        document.getElementById(elm).dispatchEvent(event);
     }
 
     function setCurrentVariantByCode(code) {
@@ -159,6 +167,8 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
         this.currentGroupSnippets = [];
         this.cartOffcanvas = createOffcanvas.call(this);
 
+        showLoader('printessDesigner');
+
         setCurrentVariantByCode.call(this, config.variant);
         setAttributeMappingByVariant.call(this, this.currentVariant);
         setCurrentAttributeMapByVariant.call(this, this.currentVariant);
@@ -166,7 +176,10 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
     }
 
     Bridge.prototype.loadingDone = function (spreads, title) {
+
         this.printess.resizePrintess();
+
+        hideLoader('printessDesigner');
 
         const priceDiv = document.getElementById("designerProductPrice");
         priceDiv.innerHTML = this.currentVariant.price;

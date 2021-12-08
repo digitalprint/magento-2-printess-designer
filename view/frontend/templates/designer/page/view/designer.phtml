@@ -1,5 +1,5 @@
 
-<div class="printess-designer">
+<div class="printess-designer" id="printessDesigner">
 
     <button class="show-layouts-button btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#layoutOffcanvas" aria-controls="layoutOffcanvas">
         <?php echo __('Change Layout'); ?>
@@ -72,9 +72,15 @@
             }
        },
 
+       "#printessDesigner": {
+            "loader": {
+                "template": "<div data-role=\"loader\" class=\"position-absolute top-0 start-0 h-100 w-100 bg-light\" style=\"z-index: 99;\"><div class=\"d-flex w-100 h-100 justify-content-center align-items-center\"><div class=\"spinner-border text-secondary\" style=\"width: 5rem; height: 5rem;\" role=\"status\"><span class=\"visually-hidden\">Loading...</span></div></div></div>"
+            }
+       },
+
        "#offcanvasBody": {
             "loader": {
-                "template": "<div class=\"position-absolute top-0 start-0 h-100 w-100 d-flex justify-content-center align-items-center bg-light\" style=\"z-index: 99;\"><div class=\"spinner-border text-secondary\" style=\"width: 5rem; height: 5rem;\" role=\"status\"><span class=\"visually-hidden\">Loading...</span></div></div>"
+                "template": "<div data-role=\"loader\" class=\"position-absolute top-0 start-0 h-100 w-100 bg-light\" style=\"z-index: 99;\"><div class=\"d-flex w-100 h-100 justify-content-center align-items-center\"><div class=\"spinner-border text-secondary\" style=\"width: 5rem; height: 5rem;\" role=\"status\"><span class=\"visually-hidden\">Loading...</span></div></div></div>"
             }
        }
 
