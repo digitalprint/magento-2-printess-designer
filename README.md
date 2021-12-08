@@ -4,6 +4,8 @@ Thank you for using the "Printess Designer module for Magento2" (Digitalprint_Pr
 
 This package contains everything you need to connect Printess with your Magento commerce shop to get the most advanced editor for print automation and mass customization.
 
+Developed and tested on Magento 2.4 only. Feel free to send us an issue if they are any problems with the extension.
+
 [![Latest Stable Version](http://poser.pugx.org/digitalprint/magento-2-printess-designer/v)](https://packagist.org/packages/digitalprint/magento-2-printess-designer) [![Total Downloads](http://poser.pugx.org/digitalprint/magento-2-printess-designer/downloads)](https://packagist.org/packages/digitalprint/magento-2-printess-designer)
 
 ## 1. Documentation
@@ -85,3 +87,11 @@ The attribute printess_ff_name contains the configurable property which is confi
 
 ![Printess Document Size](https://user-images.githubusercontent.com/14890174/144631170-4581ba7b-c2f0-4267-ac1a-c0c55dbdce46.png)
 ![Magento Attributes](https://user-images.githubusercontent.com/14890174/144630691-fa390ad6-46a2-474b-bb28-9ac2315c01ae.png)
+
+## 4. Download print files
+
+After a customer has completed an order with Printess products you will find the download link to the pdf file under "Items Ordered" listed at the order details.
+
+Admin > Sales > Orders > #ID > Items Ordered
+
+![Print Files](https://user-images.githubusercontent.com/14890174/145195421-5d6bdb39-03d3-452c-81f3-f77b78eb2b63.png)
