@@ -227,5 +227,9 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
         window.uiHelper.refreshPagination(this.printess) ;
     }
 
+    Bridge.prototype.backButtonHandler = function(saveToken) {
+        window.history.back();
+    }
+
     return Bridge;
 });
