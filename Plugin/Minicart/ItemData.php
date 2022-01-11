@@ -16,7 +16,7 @@ class ItemData {
      * @var string
      */
     private const XML_PATH_DESIGNER_ENABLE = 'designer/general/enable';
-    
+
     /**
      * @var ScopeConfigInterface
      */
@@ -66,24 +66,30 @@ class ItemData {
 
         if ($this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ENABLE, ScopeInterface::SCOPE_STORE)) {
 
-            $additionalOptions = $item->getOptionByCode('additional_options')->getValue();
-            $additionalOptions = $this->serializer->unserialize($additionalOptions);
+            $additionalOptions = $item->getOptionByCode('additional_options');
 
-            $product = $this->productRepository->getById($item->getProduct()->getId());
+            if (!is_null($additionalOptions)) {
 
-            if (isset($additionalOptions['printess_thumbnail_url']['value'])) {
-                $result['product_image']['src'] = $additionalOptions['printess_thumbnail_url']['value'];
+                $data = $this->serializer->unserialize($additionalOptions->getValue());
+
+                $product = $this->productRepository->getById($item->getProduct()->getId());
+
+                if (isset($data['printess_thumbnail_url']['value'])) {
+                    $result['product_image']['src'] = $data['printess_thumbnail_url']['value'];
+                }
+
+                if (isset($data['printess_save_token']['value'])) {
+                    $result['configure_url'] = $this->urlBuilder->getUrl(
+                        'designer/page/view',
+                        [
+                            'sku' => $product->getSku(),
+                            'save_token' => $data['printess_save_token']['value']
+                        ]
+                    );
+                }
+
             }
 
-            if (isset($additionalOptions['printess_save_token']['value'])) {
-                $result['configure_url'] = $this->urlBuilder->getUrl(
-                    'designer/page/view',
-                    [
-                        'sku' => $product->getSku(),
-                        'save_token' => $additionalOptions['printess_save_token']['value']
-                    ]
-                );
-            }
         }
 
         return $result;

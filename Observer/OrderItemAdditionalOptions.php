@@ -49,14 +49,19 @@ class OrderItemAdditionalOptions implements ObserverInterface
                 $quoteItemId = $orderItem->getQuoteItemId();
                 $quoteItem = $quoteItems[$quoteItemId];
                 $additionalOptions = $quoteItem->getOptionByCode('additional_options');
-                $options = $orderItem->getProductOptions();
-                if ($this->isSerialized($additionalOptions->getValue())){
-                    $options['options'] = $this->unserialize->unserialize($additionalOptions->getValue());
-                } else {
-                    $options['options'] = $this->json->unserialize($additionalOptions->getValue());
-                }
 
-                $orderItem->setProductOptions($options);
+                if (!is_null($additionalOptions)) {
+
+                    $options = $orderItem->getProductOptions();
+                    if ($this->isSerialized($additionalOptions->getValue())){
+                        $options['options'] = $this->unserialize->unserialize($additionalOptions->getValue());
+                    } else {
+                        $options['options'] = $this->json->unserialize($additionalOptions->getValue());
+                    }
+
+                    $orderItem->setProductOptions($options);
+
+                }
 
             }
         }

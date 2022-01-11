@@ -66,19 +66,23 @@ class ConfigureUrl {
 
             $item = $subject->getItem();
 
-            $additionalOptions = $item->getOptionByCode('additional_options')->getValue();
-            $additionalOptions = $this->serializer->unserialize($additionalOptions);
+            $additionalOptions = $item->getOptionByCode('additional_options');
 
-            $product = $this->productRepository->getById($item->getProduct()->getId());
+            if (!is_null($additionalOptions)) {
 
-            if (isset($additionalOptions['printess_save_token']['value'])) {
-                $result = $this->urlBuilder->getUrl(
-                    'designer/page/view',
-                    [
-                        'sku' => $product->getSku(),
-                        'save_token' => $additionalOptions['printess_save_token']['value']
-                    ]
-                );
+                $data = $this->serializer->unserialize($additionalOptions->getValue());
+
+                $product = $this->productRepository->getById($item->getProduct()->getId());
+
+                if (isset($data['printess_save_token']['value'])) {
+                    $result = $this->urlBuilder->getUrl(
+                        'designer/page/view',
+                        [
+                            'sku' => $product->getSku(),
+                            'save_token' => $data['printess_save_token']['value']
+                        ]
+                    );
+                }
             }
         }
 
