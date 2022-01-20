@@ -263,6 +263,8 @@ class Designer extends Template
         $storeScope = ScopeInterface::SCOPE_STORE;
 
         $sku = $this->getRequest()->getParam('sku');
+        $variant = $this->getRequest()->getParam('variant');
+
         $product = $this->productRepository->get($sku);
 
         $saveToken = $this->getRequest()->getParam('save_token');
@@ -272,37 +274,31 @@ class Designer extends Template
         $config['shopToken'] = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_SHOP_TOKEN, $storeScope);
         $config['basketId'] = $this->customerSession->getSessionId();
 
-        $config['shopUserId'] = 'CurrentShopCustomerId';
-        if ($this->customerSession->isLoggedIn()) {
-            $config['shopUserId'] = $this->customerSession->getId();
-        }
+        $config['shopUserId'] = $this->customerSession->isLoggedIn() ? $this->customerSession->getId() : 'CurrentShopCustomerId';
 
-        if (!is_null($saveToken)) {
-            $config['templateName'] = $saveToken;
+        $config['templateName'] = !is_null($saveToken) ? $saveToken : $product->getData('printess_template');
+
+        if (is_null($saveToken) && !is_null($variant)) {
+
+            $childProduct = $this->productRepository->get($variant);
+
+            $formFields = json_decode($childProduct->getData('printess_form_fields'), true);
+
+            if (is_array($formFields)) {
+                foreach($formFields as $formField) {
+                    $config['formFields'][] = array(
+                        'name' => $formField['printess_ff_name'],
+                        'value' => $formField['value']
+                    );
+                }
+            }
+
         } else {
-            $config['templateName'] = $product->getData('printess_template');
+            $config['formFields'] = [];
         }
 
         $config['sku'] = $sku;
-        $config['variant'] = $sku;
-
-        if ($product->getTypeId() === 'configurable') {
-
-            $childPriceLowest = '';
-
-            $children = $this->linkManagement->getChildren($product->getSku());
-            foreach($children as $child) {
-
-                $childProduct = $this->productRepository->get($child->getSku());
-
-                if ($childPriceLowest === '' || $childPriceLowest > $childProduct->getPrice()) {
-                    $config['variant'] = $childProduct->getSku();
-                    $childPriceLowest = $childProduct->getPrice();
-                }
-
-            }
-
-        }
+        $config['variant'] = !is_null($variant) ? $variant : $sku;
 
         return $this->serializer->serialize($config);
 

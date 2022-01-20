@@ -25,6 +25,7 @@ define(['webcomponents-loader', 'polyfill', 'Digitalprint_PrintessDesigner/js/ui
                     showBuyerSide: true,
                     noBasketThumbnail: true,
                     templateName: config.printess.templateName,
+                    formFields: config.printess.formFields,
                     singleSpreadView: true,
                     loadingDoneCallback: (spreads, title) => { bridge.loadingDone(spreads, title) },
                     selectionChangeCallback: (properties, state) => { bridge.selectionChange(properties, state) },

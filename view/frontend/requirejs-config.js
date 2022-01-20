@@ -4,4 +4,14 @@ var config = {
         'webcomponents-loader': ['https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2.6.0/webcomponents-loader'],
         'polyfill': ['https://polyfill.io/v3/polyfill.min.js?features=fetch']
     },
+    config: {
+        mixins: {
+            'Magento_ConfigurableProduct/js/configurable': {
+                'Digitalprint_PrintessDesigner/js/model/skuswitch': true
+            },
+            'Magento_Swatches/js/swatch-renderer': {
+                'Digitalprint_PrintessDesigner/js/model/swatch-skuswitch': true
+            }
+        }
+    }
 };

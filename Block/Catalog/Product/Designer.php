@@ -68,11 +68,34 @@ class Designer extends View
      */
     public function getDesignerUrl(): string
     {
-
         $product = $this->getProduct();
         $sku = $product->getSku();
 
         return $this->getUrl('designer/page/view', ['sku' => $sku]);
+    }
+
+    /**
+     * @param $product
+     * @param array $additional
+     * @return string
+     */
+    public function getSubmitUrl($product, $additional = Array()): string
+    {
+        if ($this->hasPrintessTemplate()) {
+            return $this->getDesignerUrl();
+        }
+        return parent::getSubmitUrl($product, $additional);
+    }
+
+    /**
+     * @return bool
+     */
+    public function shouldRenderQuantity(): bool
+    {
+        if ($this->hasPrintessTemplate()) {
+            return false;
+        }
+        return parent::shouldRenderQuantity();
     }
 
 }
