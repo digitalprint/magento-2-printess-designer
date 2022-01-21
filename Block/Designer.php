@@ -5,6 +5,7 @@ namespace Digitalprint\PrintessDesigner\Block;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\ConfigurableProduct\Api\LinkManagementInterface;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Pricing\Render;
@@ -28,6 +29,10 @@ class Designer extends Template
      * @var ProductRepositoryInterface
      */
     protected $productRepository;
+    /**
+     * @var Configurable
+     */
+    private $configurable;
     /**
      * @var LinkManagementInterface
      */
@@ -55,6 +60,7 @@ class Designer extends Template
      * @param Session $customerSession
      * @param SerializerInterface $serializer
      * @param ProductRepositoryInterface $productRepository
+     * @param Configurable $configurable
      * @param LinkManagementInterface $linkManagement
      * @param ScopeConfigInterface $scopeConfig
      * @param array $data
@@ -64,6 +70,7 @@ class Designer extends Template
         Session $customerSession,
         SerializerInterface $serializer,
         ProductRepositoryInterface $productRepository,
+        Configurable $configurable,
         LinkManagementInterface $linkManagement,
         ScopeConfigInterface $scopeConfig,
         array $data = []
@@ -72,6 +79,7 @@ class Designer extends Template
         $this->customerSession = $customerSession;
         $this->serializer = $serializer;
         $this->productRepository = $productRepository;
+        $this->configurable = $configurable;
         $this->linkManagement = $linkManagement;
         $this->scopeConfig = $scopeConfig;
 
@@ -263,7 +271,7 @@ class Designer extends Template
         $storeScope = ScopeInterface::SCOPE_STORE;
 
         $sku = $this->getRequest()->getParam('sku');
-        $variant = $this->getRequest()->getParam('variant');
+        $superAttribute = $this->getRequest()->getParam('super_attribute');
 
         $product = $this->productRepository->get($sku);
 
@@ -278,9 +286,13 @@ class Designer extends Template
 
         $config['templateName'] = !is_null($saveToken) ? $saveToken : $product->getData('printess_template');
 
-        if (is_null($saveToken) && !is_null($variant)) {
+        $config['sku'] = $sku;
 
-            $childProduct = $this->productRepository->get($variant);
+        if (is_null($saveToken) && !is_null($superAttribute)) {
+
+            $childProduct = $this->configurable->getProductByAttributes($superAttribute, $product);
+
+            $config['variant'] = $childProduct->getSku();
 
             $formFields = json_decode($childProduct->getData('printess_form_fields'), true);
 
@@ -294,11 +306,9 @@ class Designer extends Template
             }
 
         } else {
+            $config['variant'] = $sku;
             $config['formFields'] = [];
         }
-
-        $config['sku'] = $sku;
-        $config['variant'] = !is_null($variant) ? $variant : $sku;
 
         return $this->serializer->serialize($config);
 

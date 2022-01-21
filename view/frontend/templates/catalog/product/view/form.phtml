@@ -20,8 +20,6 @@
             <input type="hidden" name="item"  value="<?= (int)$block->getRequest()->getParam('id') ?>" />
             <?= $block->getBlockHtml('formkey') ?>
             <?= $block->getChildHtml('form_top') ?>
-        <?php else :?>
-            <input type="hidden" name="variant" value="" />
         <?php endif; ?>
         <?php if (!$block->hasOptions()) :?>
             <?= $block->getChildHtml('product_info_form_content') ?>
