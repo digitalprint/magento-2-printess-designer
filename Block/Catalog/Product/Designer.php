@@ -68,10 +68,7 @@ class Designer extends View
      */
     public function getDesignerUrl(): string
     {
-        $product = $this->getProduct();
-        $sku = $product->getSku();
-
-        return $this->getUrl('designer/page/view', ['sku' => $sku]);
+        return $this->getUrl('designer/page/view');
     }
 
     /**
