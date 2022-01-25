@@ -66,24 +66,37 @@ class ConfigureUrl {
 
             $item = $subject->getItem();
 
-            $additionalOptions = $item->getOptionByCode('additional_options');
+            $additionalOptions = [];
+            if ($additionalOptions = $item->getOptionByCode('additional_options')) {
+                $additionalOptions = (array) $this->serializer->unserialize($additionalOptions->getValue());
+            }
 
-            if (!is_null($additionalOptions)) {
+            if (isset($additionalOptions['printess_save_token']['value'])) {
 
-                $data = $this->serializer->unserialize($additionalOptions->getValue());
+                $urlParams = [];
 
                 $product = $this->productRepository->getById($item->getProduct()->getId());
 
-                if (isset($data['printess_save_token']['value'])) {
-                    $result = $this->urlBuilder->getUrl(
-                        'designer/page/view',
-                        [
-                            'sku' => $product->getSku(),
-                            'save_token' => $data['printess_save_token']['value']
-                        ]
-                    );
+                $urlParams['sku'] = $product->getSku();
+                $urlParams['save_token'] = $additionalOptions['printess_save_token']['value'];
+
+                $buyRequest = [];
+                if ($buyRequest = $item->getOptionByCode('info_buyRequest')) {
+                    $buyRequest = (array) $this->serializer->unserialize($buyRequest->getValue());
                 }
+
+                if (isset($buyRequest['super_attribute'])) {
+
+                    foreach($buyRequest['super_attribute'] as $key => $val) {
+                        $urlParams["super_attribute[{$key}]"] = $val;
+                    }
+
+                }
+
+                return $this->urlBuilder->getUrl('designer/page/view', array('_query' => $urlParams));
+
             }
+
         }
 
         return $result;

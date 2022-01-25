@@ -267,7 +267,6 @@ class Designer extends Template
      */
     public function getJsonConfig(): string
     {
-
         $storeScope = ScopeInterface::SCOPE_STORE;
 
         $sku = $this->getRequest()->getParam('sku');
@@ -287,27 +286,29 @@ class Designer extends Template
         $config['templateName'] = !is_null($saveToken) ? $saveToken : $product->getData('printess_template');
 
         $config['sku'] = $sku;
+        $config['variant'] = $sku;
+        $config['formFields'] = [];
 
-        if (is_null($saveToken) && !is_null($superAttribute)) {
+        if (!is_null($superAttribute)) {
 
             $childProduct = $this->configurable->getProductByAttributes($superAttribute, $product);
 
             $config['variant'] = $childProduct->getSku();
 
-            $formFields = json_decode($childProduct->getData('printess_form_fields'), true);
+            if (is_null($saveToken)) {
 
-            if (is_array($formFields)) {
-                foreach($formFields as $formField) {
-                    $config['formFields'][] = array(
-                        'name' => $formField['printess_ff_name'],
-                        'value' => $formField['value']
-                    );
+                $formFields = json_decode($childProduct->getData('printess_form_fields'), true);
+
+                if (is_array($formFields)) {
+                    foreach ($formFields as $formField) {
+                        $config['formFields'][] = array(
+                            'name' => $formField['printess_ff_name'],
+                            'value' => $formField['value']
+                        );
+                    }
                 }
             }
 
-        } else {
-            $config['variant'] = $sku;
-            $config['formFields'] = [];
         }
 
         return $this->serializer->serialize($config);
