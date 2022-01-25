@@ -78,15 +78,28 @@ class ItemData {
             }
 
             if (isset($additionalOptions['printess_save_token']['value'])) {
-                $result['configure_url'] = $this->urlBuilder->getUrl(
-                    'designer/page/view',
-                    [
-                        'sku' => $product->getSku(),
-                        'save_token' => $additionalOptions['printess_save_token']['value']
-                    ]
-                );
+
+                $urlParams = [
+                    'sku' => $product->getSku(),
+                    'save_token' => $additionalOptions['printess_save_token']['value']
+                ];
+
+                $buyRequest = [];
+                if ($buyRequest = $item->getOptionByCode('info_buyRequest')) {
+                    $buyRequest = (array) $this->serializer->unserialize($buyRequest->getValue());
+                }
+
+                if (isset($buyRequest['super_attribute'])) {
+
+                    foreach($buyRequest['super_attribute'] as $key => $val) {
+                        $urlParams["super_attribute[{$key}]"] = $val;
+                    }
+
+                }
+
+                $result['configure_url'] = $this->urlBuilder->getUrl('designer/page/view', ['_query' => $urlParams]);
             }
-            
+
         }
 
         return $result;
