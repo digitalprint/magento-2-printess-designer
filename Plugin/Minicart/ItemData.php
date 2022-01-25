@@ -66,30 +66,27 @@ class ItemData {
 
         if ($this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ENABLE, ScopeInterface::SCOPE_STORE)) {
 
-            $additionalOptions = $item->getOptionByCode('additional_options');
-
-            if (!is_null($additionalOptions)) {
-
-                $data = $this->serializer->unserialize($additionalOptions->getValue());
-
-                $product = $this->productRepository->getById($item->getProduct()->getId());
-
-                if (isset($data['printess_thumbnail_url']['value'])) {
-                    $result['product_image']['src'] = $data['printess_thumbnail_url']['value'];
-                }
-
-                if (isset($data['printess_save_token']['value'])) {
-                    $result['configure_url'] = $this->urlBuilder->getUrl(
-                        'designer/page/view',
-                        [
-                            'sku' => $product->getSku(),
-                            'save_token' => $data['printess_save_token']['value']
-                        ]
-                    );
-                }
-
+            $additionalOptions = [];
+            if ($additionalOptions = $item->getOptionByCode('additional_options')) {
+                $additionalOptions = (array) $this->serializer->unserialize($additionalOptions->getValue());
             }
 
+            $product = $this->productRepository->getById($item->getProduct()->getId());
+
+            if (isset($additionalOptions['printess_thumbnail_url']['value'])) {
+                $result['product_image']['src'] = $additionalOptions['printess_thumbnail_url']['value'];
+            }
+
+            if (isset($additionalOptions['printess_save_token']['value'])) {
+                $result['configure_url'] = $this->urlBuilder->getUrl(
+                    'designer/page/view',
+                    [
+                        'sku' => $product->getSku(),
+                        'save_token' => $additionalOptions['printess_save_token']['value']
+                    ]
+                );
+            }
+            
         }
 
         return $result;

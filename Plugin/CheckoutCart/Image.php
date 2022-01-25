@@ -48,16 +48,16 @@ class Image {
         if ($this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ENABLE, ScopeInterface::SCOPE_STORE)) {
 
             $item = $subject->getItem();
-            $additionalOptions = $item->getOptionByCode('additional_options');
 
-            if (!is_null($additionalOptions)) {
-
-                $data = $this->serializer->unserialize($additionalOptions->getValue());
-
-                if (isset($data['printess_thumbnail_url']['value'])) {
-                    $result->setImageUrl($data['printess_thumbnail_url']['value']);
-                }
+            $additionalOptions = [];
+            if ($additionalOptions = $item->getOptionByCode('additional_options')) {
+                $additionalOptions = (array) $this->serializer->unserialize($additionalOptions->getValue());
             }
+
+            if (isset($additionalOptions['printess_thumbnail_url']['value'])) {
+                $result->setImageUrl($additionalOptions['printess_thumbnail_url']['value']);
+            }
+
         }
 
         return $result;
