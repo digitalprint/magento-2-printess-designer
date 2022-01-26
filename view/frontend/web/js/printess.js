@@ -1,4 +1,4 @@
-define(['webcomponents-loader', 'polyfill', 'Digitalprint_PrintessDesigner/js/uiHelper'], function () {
+define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner/js/uiHelper'], function () {
 
     let printess = null;
     let bridge = null;
