@@ -12,6 +12,9 @@
     <type name="Magento\Checkout\CustomerData\AbstractItem">
         <plugin name="product_minicart_itemdata" type="Digitalprint\PrintessDesigner\Plugin\Minicart\ItemData" sortOrder="1"/>
     </type>
+    <type name="Magento\Sales\Api\OrderItemRepositoryInterface">
+        <plugin name="printess_orders_customproductattributes" type="Digitalprint\PrintessDesigner\Plugin\Orders\CustomProductAttributes" />
+    </type>
     <preference for="Digitalprint\PrintessDesigner\Api\CartInterface" type="Digitalprint\PrintessDesigner\Model\Cart"/>
     <preference for="Digitalprint\PrintessDesigner\Api\Data\CartInterface" type="Digitalprint\PrintessDesigner\Model\Data\Cart"/>
     <preference for="Magento\Catalog\Block\Product\View" type="Digitalprint\PrintessDesigner\Block\Catalog\Product\Designer" />
