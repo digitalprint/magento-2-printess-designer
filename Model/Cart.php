@@ -9,6 +9,9 @@ use Magento\Checkout\Model\SessionFactory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\DataObject;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 
@@ -27,6 +30,18 @@ class Cart implements CartInterface
      * @var SessionFactory
      */
     private $checkoutSession;
+    /**
+     * @var SessionManagerInterface
+     */
+    private $sessionManager;
+    /**
+     * @var CookieManagerInterface
+     */
+    private $cookieManager;
+    /**
+     * @var CookieMetadataFactory
+     */
+    private $cookieMetadataFactory;
     /**
      * @var CartRepositoryInterface
      */
@@ -57,6 +72,9 @@ class Cart implements CartInterface
         DataCartInterface $dataCart,
         Json $json,
         SessionFactory $checkoutSession,
+        SessionManagerInterface $sessionManager,
+        CookieManagerInterface $cookieManager,
+        CookieMetadataFactory $cookieMetadataFactory,
         CartRepositoryInterface $cartRepository,
         ProductRepositoryInterface $productRepository,
         Configurable $configurableType,
@@ -65,6 +83,9 @@ class Cart implements CartInterface
         $this->dataCart = $dataCart;
         $this->json = $json;
         $this->checkoutSession = $checkoutSession;
+        $this->sessionManager = $sessionManager;
+        $this->cookieManager = $cookieManager;
+        $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->cartRepository = $cartRepository;
         $this->productRepository = $productRepository;
         $this->configurableType = $configurableType;
@@ -121,6 +142,8 @@ class Cart implements CartInterface
                 $this->cartRepository->save($quote);
                 $session->replaceQuote($quote)->unsLastRealOrderId();
 
+                $this->invalidateCartCookie();
+
                 $this->dataCart->setStatus('success');
 
             } else {
@@ -132,6 +155,8 @@ class Cart implements CartInterface
                 $this->cartRepository->save($quote);
                 $session->replaceQuote($quote)->unsLastRealOrderId();
 
+                $this->invalidateCartCookie();
+
                 $this->dataCart->setStatus('success');
             }
 
@@ -140,6 +165,36 @@ class Cart implements CartInterface
         }
 
         return $this->dataCart;
+
+    }
+
+    /**
+     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
+     * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
+     * @throws \Magento\Framework\Exception\InputException
+     */
+    public function invalidateCartCookie(): void
+    {
+
+        $cookie = $this->cookieManager->getCookie('section_data_ids');
+
+        if ($cookie) {
+            $data = json_decode($cookie, true, 512, JSON_THROW_ON_ERROR);
+
+            if (!isset($data['cart'])) {
+                $data['cart'] = date('U');
+            }
+
+            $data['cart'] += 1000;
+
+            $meta = $this
+                ->cookieMetadataFactory
+                ->createPublicCookieMetadata()
+                ->setPath('/')
+                ->setDomain($this->sessionManager->getCookieDomain());
+
+            $this->cookieManager->setPublicCookie('section_data_ids', json_encode($data, JSON_THROW_ON_ERROR), $meta);
+        }
 
     }
 }
