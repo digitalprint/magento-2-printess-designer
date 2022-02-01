@@ -5,6 +5,8 @@ namespace Digitalprint\PrintessDesigner\Model;
 use Digitalprint\PrintessDesigner\Api\CartInterface;
 use Digitalprint\PrintessDesigner\Api\Data\CartInterface as DataCartInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Checkout\Model\Session;
 use Magento\Checkout\Model\SessionFactory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\DataObject;
@@ -22,86 +24,95 @@ class Cart implements CartInterface
      * @var DataCartInterface
      */
     private $dataCart;
+
     /**
      * @var Json
      */
     private $json;
+
     /**
-     * @var SessionFactory
+     * @var ProductFactory
+     */
+    private $productFactory;
+
+    /**
+     * @var Session
      */
     private $checkoutSession;
+
     /**
      * @var SessionManagerInterface
      */
     private $sessionManager;
+
     /**
      * @var CookieManagerInterface
      */
     private $cookieManager;
+
     /**
      * @var CookieMetadataFactory
      */
     private $cookieMetadataFactory;
+
     /**
-     * @var CartRepositoryInterface
+     * @var \Magento\Checkout\Model\Cart
      */
-    private $cartRepository;
+    private $cart;
+
     /**
      * @var ProductRepositoryInterface
      */
     private $productRepository;
+
     /**
      * @var Configurable
      */
     private $configurableType;
+
     /**
      * @var UrlInterface
      */
     private $urlBuilder;
 
-    /**
-     * @param DataCartInterface $dataCart
-     * @param Json $json
-     * @param SessionFactory $checkoutSession
-     * @param CartRepositoryInterface $cartRepository
-     * @param ProductRepositoryInterface $productRepository
-     * @param Configurable $configurableType
-     * @param UrlInterface $urlBuilder
-     */
     public function __construct(
         DataCartInterface $dataCart,
         Json $json,
-        SessionFactory $checkoutSession,
+        ProductFactory $productFactory,
+        Session $checkoutSession,
         SessionManagerInterface $sessionManager,
         CookieManagerInterface $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory,
-        CartRepositoryInterface $cartRepository,
+        \Magento\Checkout\Model\Cart $cart,
         ProductRepositoryInterface $productRepository,
         Configurable $configurableType,
         UrlInterface $urlBuilder
     ) {
         $this->dataCart = $dataCart;
         $this->json = $json;
+        $this->productFactory = $productFactory;
         $this->checkoutSession = $checkoutSession;
         $this->sessionManager = $sessionManager;
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
-        $this->cartRepository = $cartRepository;
+        $this->cart = $cart;
         $this->productRepository = $productRepository;
         $this->configurableType = $configurableType;
         $this->urlBuilder = $urlBuilder;
     }
 
+
     /**
-     * Add to cart
-     *
-     * @param string $sku
-     * @param string $quantity
-     * @param string $saveToken
-     * @param string $thumbnailUrl
-     * @return \Digitalprint\PrintessDesigner\Api\Data\CartInterface
-     *
+     * @param $sku
+     * @param $quantity
+     * @param $saveToken
+     * @param $thumbnailUrl
+     * @return DataCartInterface
+     * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
+     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
      */
     public function addToCart($sku, $quantity, $saveToken, $thumbnailUrl)
     {
@@ -115,7 +126,7 @@ class Cart implements CartInterface
 
             if (($parentId = reset($parentId)) !== false) {
 
-                $parentProduct = $this->productRepository->getById($parentId);
+                $parentProduct = $this->productFactory->create()->load($parentId);
                 $parentProduct->addCustomOption('additional_options', $this->json->serialize([
                     'printess_save_token' => [
                         'label' => __("Save Token"),
@@ -135,12 +146,8 @@ class Cart implements CartInterface
                 }
                 $buyRequest = new DataObject(['product_id' => $product->getId(), 'qty' => $quantity, 'super_attribute' => $options]);
 
-                $session = $this->checkoutSession->create();
-                $quote = $session->getQuote();
-                $quote->addProduct($parentProduct, $buyRequest);
-
-                $this->cartRepository->save($quote);
-                $session->replaceQuote($quote)->unsLastRealOrderId();
+                $this->cart->addProduct($parentProduct, $buyRequest);
+                $this->cart->save();
 
                 $this->invalidateCartCookie();
 
