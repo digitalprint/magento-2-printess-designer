@@ -155,12 +155,21 @@ class Cart implements CartInterface
 
             } else {
 
-                $session = $this->checkoutSession->create();
-                $quote = $session->getQuote();
-                $quote->addProduct($product, $quantity);
+                $buyRequest = new DataObject(['product_id' => $product->getId(), 'qty' => $quantity]);
 
-                $this->cartRepository->save($quote);
-                $session->replaceQuote($quote)->unsLastRealOrderId();
+                $product->addCustomOption('additional_options', $this->json->serialize([
+                    'printess_save_token' => [
+                        'label' => __("Save Token"),
+                        'value' => $saveToken
+                    ],
+                    'printess_thumbnail_url' => [
+                        'label' => __("Thumbnail"),
+                        'value' => $thumbnailUrl
+                    ]
+                ]));
+
+                $this->cart->addProduct($parentProduct, $buyRequest);
+                $this->cart->save();
 
                 $this->invalidateCartCookie();
 
