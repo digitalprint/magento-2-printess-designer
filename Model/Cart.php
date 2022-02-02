@@ -168,7 +168,7 @@ class Cart implements CartInterface
                     ]
                 ]));
 
-                $this->cart->addProduct($parentProduct, $buyRequest);
+                $this->cart->addProduct($product, $buyRequest);
                 $this->cart->save();
 
                 $this->invalidateCartCookie();
