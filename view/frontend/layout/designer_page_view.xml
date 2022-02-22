@@ -5,7 +5,7 @@
         <remove src="css/styles-l.css" />
         <remove src="css/styles.css" />
         <remove src="css/print.css" />
-        <css src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" src_type="url"  rel="stylesheet" type="text/css" />
+        <css src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" src_type="url" rel="stylesheet" type="text/css" />
         <css src="Digitalprint_PrintessDesigner::css/bs-layout.css" rel="stylesheet" type="text/css" />
         <meta name="robots" content="NOINDEX, FOLLOW"/>
     </head>
