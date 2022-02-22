@@ -77,9 +77,7 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
         this.attributeMapping = [];
 
         variant.attributes.forEach((attribute) => {
-
-
-            if (attribute.code === 'printess_form_fields') {
+            if (attribute.code === 'printess_form_fields' && attribute.value !== null) {
                 this.attributeMapping = attribute.value;
 
                 this.attributeMapping.map((mapping) => {

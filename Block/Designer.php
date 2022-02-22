@@ -190,12 +190,13 @@ class Designer extends Template
                         );
 
                     }
-                }
 
-                $attributes[] = array(
-                    'code' => 'printess_form_fields',
-                    'value' => $formFields
-                );
+                    $attributes[] = array(
+                        'code' => 'printess_form_fields',
+                        'value' => $formFields
+                    );
+
+                }
 
                 $variants[] = array(
                     'id' => $child->getId(),
@@ -239,12 +240,13 @@ class Designer extends Template
                     );
 
                 }
-            }
 
-            $attributes[] = array(
-                'code' => 'printess_form_fields',
-                'value' => $formFields
-            );
+                $attributes[] = array(
+                    'code' => 'printess_form_fields',
+                    'value' => $formFields
+                );
+
+            }
 
             $variants[] = array(
                 'id' => $product->getId(),
