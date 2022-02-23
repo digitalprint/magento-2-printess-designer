@@ -26,6 +26,17 @@ class Render extends \Magento\Framework\Pricing\Render
         }
 
         $priceRender = $rendererPool->createPriceRender($priceCode, $saleableItem, $useArguments);
-        return $priceRender->toHtml();
+        $priceHtml = $priceRender->toHtml();
+        
+        preg_match_all('/<a ((?!target)[^>])+?>/', $priceHtml, $matches);
+
+        foreach ($matches[0] as $key => $val) {
+            if (!preg_match('/target="_blank"/', $val)){
+                $newLink = preg_replace("/<a(.*?)>/", "<a$1 target=\"_blank\">", $val);
+                $priceHtml = str_replace($val, $newLink, $priceHtml);
+            }
+        }
+
+        return $priceHtml;
     }
 }
