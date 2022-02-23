@@ -25,7 +25,7 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
 
         document.getElementById('cartOffcanvas').addEventListener('cart.add.bs.offcanvas', function() {
 
-            showLoader('offcanvasBody');
+            showLoader('cartOffcanvas');
 
             const fileName = `${CartStore.saveToken}.png`.replace(/st:/i, '');
 
@@ -53,13 +53,18 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
     }
 
      function showLoader(elm) {
-        let event = new CustomEvent('processStart');
-        document.getElementById(elm).dispatchEvent(event);
+         var list = document.getElementById(elm).getElementsByClassName('printess-designer-preloader-wrapper');
+         if (list && list.length > 0) {
+             list[0].classList.remove('hidden');
+         }
+
     }
 
     function hideLoader(elm) {
-        let event = new CustomEvent('processStop');
-        document.getElementById(elm).dispatchEvent(event);
+         var list = document.getElementById(elm).getElementsByClassName('printess-designer-preloader-wrapper');
+         if (list && list.length > 0) {
+             list[0].classList.add('hidden');
+         }
     }
 
     function setCurrentVariantByCode(code) {
@@ -153,6 +158,8 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
 
     function Bridge(printess, config, variants) {
 
+        showLoader('printessDesigner');
+
         this.printess = printess;
         this.config = config;
 
@@ -165,8 +172,6 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
         this.currentGroupSnippets = [];
         this.cartOffcanvas = createOffcanvas.call(this);
 
-        showLoader('printessDesigner');
-
         setCurrentVariantByCode.call(this, config.variant);
         setAttributeMappingByVariant.call(this, this.currentVariant);
         setCurrentAttributeMapByVariant.call(this, this.currentVariant);
@@ -178,6 +183,9 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
         this.printess.resizePrintess();
 
         hideLoader('printessDesigner');
+
+        let event = new CustomEvent('processStop');
+        document.getElementById('printessDesigner').dispatchEvent(event);
 
         const priceDiv = document.getElementById("designerProductPrice");
         priceDiv.innerHTML = this.currentVariant.price;
