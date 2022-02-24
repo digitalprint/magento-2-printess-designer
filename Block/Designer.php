@@ -254,9 +254,9 @@ class Designer extends Template
                 'sku' => $product->getSku(),
                 'name' => $product->getName(),
                 'attributes' => $attributes,
-                'prices' => $this->renderPriceHtml($product)
+                'price' => $this->renderPriceHtml($product)
             );
-
+            
         }
 
         return $this->serializer->serialize($variants);
