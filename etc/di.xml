@@ -15,6 +15,9 @@
     <type name="Magento\Sales\Api\OrderItemRepositoryInterface">
         <plugin name="printess_orders_customproductattributes" type="Digitalprint\PrintessDesigner\Plugin\Orders\CustomProductAttributes" />
     </type>
+    <type name="Magento\Framework\Pricing\Render">
+        <plugin name="product_pricing_renderer" type="Digitalprint\PrintessDesigner\Plugin\Pricing\LinkParser" sortOrder="100"/>
+    </type>
     <preference for="Digitalprint\PrintessDesigner\Api\CartInterface" type="Digitalprint\PrintessDesigner\Model\Cart"/>
     <preference for="Digitalprint\PrintessDesigner\Api\Data\CartInterface" type="Digitalprint\PrintessDesigner\Model\Data\Cart"/>
     <preference for="Magento\Catalog\Block\Product\View" type="Digitalprint\PrintessDesigner\Block\Catalog\Product\Designer" />
