@@ -1,8 +1,12 @@
 <?php
 /** @var $block \Magento\Catalog\Block\Product\View */
 ?>
+<?php $_printess = $this->helper(Digitalprint\PrintessDesigner\Helper\Printess::class); ?>
 <?php $_product = $block->getProduct(); ?>
-<?php $buttonTitle = $block->hasPrintessTemplate() ? __('Design Now') : __('Add to Cart'); ?>
+<?php $_sku = $_product->getSku(); ?>
+
+<?php $buttonTitle = $_printess->hasTemplate($_sku) ? __('Design Now') : __('Add to Cart'); ?>
+
 <?php if ($_product->isSaleable()) :?>
 <div class="box-tocart">
     <div class="fieldset">
@@ -26,7 +30,7 @@
             <button type="submit"
                     title="<?= $block->escapeHtmlAttr($buttonTitle) ?>"
                     class="action primary tocart"
-                    <?php if (!$_product->hasPrintessTemplate()) :?> id="product-addtocart-button" disabled<?php endif; ?>>
+                    <?php if (!$_printess->hasTemplate($_sku)) :?> id="product-addtocart-button" disabled<?php endif; ?>>
                 <span><?= $block->escapeHtml($buttonTitle) ?></span>
             </button>
             <?= $block->getChildHtml('', true) ?>
@@ -37,6 +41,9 @@
 <script type="text/x-magento-init">
     {
         "#product_addtocart_form": {
+            <?php if ($_printess->hasTemplate($_sku)) :?>"Magento_Catalog/product/view/validation": {
+                "bindSubmit": false
+            },<?php endif; ?>
             "Magento_Catalog/js/validate-product": {}
         }
     }

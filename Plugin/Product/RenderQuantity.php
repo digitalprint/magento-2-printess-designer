@@ -1,0 +1,40 @@
+<?php
+
+namespace Digitalprint\PrintessDesigner\Plugin\Product;
+
+use Digitalprint\PrintessDesigner\Helper\Printess;
+use Magento\Catalog\Block\Product\View;
+use Magento\Framework\Exception\NoSuchEntityException;
+
+class RenderQuantity {
+
+    /**
+     * @var Printess
+     */
+    protected $helperPrintess;
+
+    /**
+     * @param Printess $helperPrintess
+     */
+    public function __construct(
+        Printess $helperPrintess
+    ) {
+        $this->helperPrintess = $helperPrintess;
+    }
+
+    /**
+     * @param View $subject
+     * @param $result
+     * @return false|mixed
+     * @throws NoSuchEntityException
+     */
+    public function afterShouldRenderQuantity(View $subject, $result)
+    {
+        if ($this->helperPrintess->hasTemplate($subject->getProduct()->getSku())) {
+            return false;
+        }
+
+        return $result;
+    }
+
+}

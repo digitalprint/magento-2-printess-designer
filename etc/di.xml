@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Catalog\Block\Product\View">
+        <plugin name="printess_catalog_product_render_quantity" type="Digitalprint\PrintessDesigner\Plugin\Product\RenderQuantity" sortOrder="1"/>
+        <plugin name="printess_catalog_product_submit_url" type="Digitalprint\PrintessDesigner\Plugin\Product\SubmitUrl" sortOrder="1"/>
+    </type>
     <type name="Magento\Checkout\Block\Cart\Item\Renderer">
         <plugin name="printess_cart_item_image" type="Digitalprint\PrintessDesigner\Plugin\CheckoutCart\Image" sortOrder="1"/>
     </type>
@@ -20,5 +24,4 @@
     </type>
     <preference for="Digitalprint\PrintessDesigner\Api\CartInterface" type="Digitalprint\PrintessDesigner\Model\Cart"/>
     <preference for="Digitalprint\PrintessDesigner\Api\Data\CartInterface" type="Digitalprint\PrintessDesigner\Model\Data\Cart"/>
-    <preference for="Magento\Catalog\Block\Product\View" type="Digitalprint\PrintessDesigner\Block\Catalog\Product\Designer" />
 </config>
