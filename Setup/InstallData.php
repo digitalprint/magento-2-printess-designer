@@ -123,7 +123,63 @@ class InstallData implements InstallDataInterface
             ]
         );
 
-        // Printess Form Fields
+        // Printess Layout Snippets
+        $eavSetup->addAttribute(
+            Product::ENTITY,
+            'printess_layout_snippets',
+            [
+                'group' => 'Printess',
+                'type' => 'varchar',
+                'backend' => '',
+                'frontend' => '',
+                'label' => 'Layout-Snippets',
+                'input' => 'text',
+                'class' => '',
+                'source' => '',
+                'global' => ScopedAttributeInterface::SCOPE_STORE,
+                'visible' => true,
+                'required' => false,
+                'user_defined' => false,
+                'default' => '',
+                'searchable' => false,
+                'filterable' => false,
+                'comparable' => false,
+                'visible_on_front' => false,
+                'used_in_product_listing' => false,
+                'unique' => false,
+                'apply_to' => ''
+            ]
+        );
+
+        // Printess Group Snippets
+        $eavSetup->addAttribute(
+            Product::ENTITY,
+            'printess_group_snippets',
+            [
+                'group' => 'Printess',
+                'type' => 'varchar',
+                'backend' => '',
+                'frontend' => '',
+                'label' => 'Group-Snippets',
+                'input' => 'text',
+                'class' => '',
+                'source' => '',
+                'global' => ScopedAttributeInterface::SCOPE_STORE,
+                'visible' => true,
+                'required' => false,
+                'user_defined' => false,
+                'default' => '',
+                'searchable' => false,
+                'filterable' => false,
+                'comparable' => false,
+                'visible_on_front' => false,
+                'used_in_product_listing' => false,
+                'unique' => false,
+                'apply_to' => ''
+            ]
+        );
+
+        // Printess Output DPI
         $eavSetup->addAttribute(
             Product::ENTITY,
             'printess_output_dpi',

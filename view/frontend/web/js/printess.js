@@ -25,6 +25,7 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
                     showBuyerSide: true,
                     noBasketThumbnail: true,
                     templateName: config.printess.templateName,
+                    mergeTemplates: config.printess.mergeTemplates,
                     formFields: config.printess.formFields,
                     singleSpreadView: true,
                     loadingDoneCallback: (spreads, title) => { bridge.loadingDone(spreads, title) },

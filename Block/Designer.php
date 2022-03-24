@@ -256,7 +256,7 @@ class Designer extends Template
                 'attributes' => $attributes,
                 'price' => $this->renderPriceHtml($product)
             );
-            
+
         }
 
         return $this->serializer->serialize($variants);
@@ -275,6 +275,7 @@ class Designer extends Template
         $superAttribute = $this->getRequest()->getParam('super_attribute');
 
         $product = $this->productRepository->get($sku);
+        $childProduct = $this->configurable->getProductByAttributes($superAttribute, $product);
 
         $saveToken = $this->getRequest()->getParam('save_token');
 
@@ -285,29 +286,59 @@ class Designer extends Template
 
         $config['shopUserId'] = $this->customerSession->isLoggedIn() ? $this->customerSession->getId() : 'CurrentShopCustomerId';
 
-        $config['templateName'] = !is_null($saveToken) ? $saveToken : $product->getData('printess_template');
+        if (!is_null($saveToken)) {
+            $config['templateName'] = $saveToken;
+        } else {
+            $config['templateName'] = !(is_null($childProduct)) && !is_null($childProduct->getData('printess_template')) ? $childProduct->getData('printess_template') : $product->getData('printess_template');
+        }
 
-        $config['sku'] = $sku;
-        $config['variant'] = $sku;
+        $config['mergeTemplates'] = [];
+
+        $mergeTemplates = [];
+
+        $snippetFields = ['printess_layout_snippets', 'printess_group_snippets'];
+
+        foreach($snippetFields as $snippetField) {
+
+            if (!(is_null($childProduct)) && !is_null($childProduct->getData($snippetField))) {
+                $mergeTemplates[] = $childProduct->getData($snippetField);
+            } elseif (!is_null($product->getData($snippetField))) {
+                $mergeTemplates[] = $product->getData($snippetField);
+            }
+        }
+
+        foreach($mergeTemplates as $mergeTemplate) {
+
+            $res = json_decode($mergeTemplate, true, 512, JSON_THROW_ON_ERROR);
+
+            foreach($res as $row) {
+
+                if (isset($row['id'])) {
+                    $config['mergeTemplates'][] = [
+                        'templateName' => $row['id'],
+                        'mergeMode' => 'layout-snippet-no-repeat'
+                    ];
+                }
+
+            }
+
+        }
+
+        $config['sku'] = !is_null($childProduct) ? $childProduct->getSku() : $product->getSku();
+        $config['variant'] = !is_null($childProduct) ? $childProduct->getSku() : $product->getSku();
+
         $config['formFields'] = [];
 
-        if (!is_null($superAttribute)) {
+        if (is_null($saveToken) && !is_null($childProduct)) {
 
-            $childProduct = $this->configurable->getProductByAttributes($superAttribute, $product);
+            $formFields = json_decode($childProduct->getData('printess_form_fields'), true);
 
-            $config['variant'] = $childProduct->getSku();
-
-            if (is_null($saveToken)) {
-
-                $formFields = json_decode($childProduct->getData('printess_form_fields'), true);
-
-                if (is_array($formFields)) {
-                    foreach ($formFields as $formField) {
-                        $config['formFields'][] = array(
-                            'name' => $formField['printess_ff_name'],
-                            'value' => $formField['value']
-                        );
-                    }
+            if (is_array($formFields)) {
+                foreach ($formFields as $formField) {
+                    $config['formFields'][] = array(
+                        'name' => $formField['printess_ff_name'],
+                        'value' => $formField['value']
+                    );
                 }
             }
 
