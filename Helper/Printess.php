@@ -50,6 +50,11 @@ class Printess extends AbstractHelper
 
             $product = $this->productRepository->get($sku);
 
+            $printessTemplate = $product->getData('printess_template');
+            if ($printessTemplate) {
+                return true;
+            }
+
             if ($product->getTypeId() === 'configurable') {
 
                 $children = $this->linkManagement->getChildren($product->getSku());
@@ -62,13 +67,6 @@ class Printess extends AbstractHelper
                     if ($printessTemplate) {
                         return true;
                     }
-                }
-
-            } else {
-
-                $printessTemplate = $product->getData('printess_template');
-                if ($printessTemplate) {
-                    return true;
                 }
 
             }
