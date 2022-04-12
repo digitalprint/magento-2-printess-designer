@@ -170,6 +170,9 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
         this.currentAttributeMap = null;
 
         this.currentGroupSnippets = [];
+        this.currentLayoutSnippets = [];
+        this.currentTabs = [];
+
         this.cartOffcanvas = createOffcanvas.call(this);
 
         setCurrentVariantByCode.call(this, config.variant);
@@ -199,24 +202,28 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
 
         if (this.printess.isMobile()) {
             // **** add mobile-ui *****
-            window.uiHelper.renderMobileUi(this.printess, properties, state, this.currentGroupSnippets);
-            window.uiHelper.renderMobileNavBar(this.printess);
+            uiHelper.renderMobileUi(this.printess, properties, state, this.currentGroupSnippets, this.currentLayoutSnippets, this.currentTabs);
+            uiHelper.renderMobileNavBar(this.printess);
         } else {
             // ***** add desktop-ui *****
-            const t = uiHelper.renderDesktopUi(this.printess, properties, state, this.currentGroupSnippets);
-            window.uiHelper.refreshUndoRedoState(this.printess);
+            const t = uiHelper.renderDesktopUi(this.printess, properties, state, this.currentGroupSnippets, this.currentLayoutSnippets, this.currentTabs);
+            uiHelper.refreshUndoRedoState(this.printess);
         }
 
     }
 
-    Bridge.prototype.spreadChange = function(groupSnippets, layoutSnippets) {
+    Bridge.prototype.spreadChange = function(groupSnippets, layoutSnippets, tabs) {
+
         // remember groupSnippets for showing as add-able items
         this.currentGroupSnippets = groupSnippets;
+        this.currentLayoutSnippets = layoutSnippets;
+        this.currentTabs = tabs;
 
         const layoutSnippetsDiv = document.getElementById("layoutSnippets");
         layoutSnippetsDiv.innerHTML = "";
-        layoutSnippetsDiv.appendChild(uiHelper.renderLayoutSnippets(this.printess, layoutSnippets));
-        document.querySelector(".show-layouts-button").style.visibility = layoutSnippets.length ? "visible" : "hidden";
+        layoutSnippetsDiv.appendChild(uiHelper.renderLayoutSnippets(this.printess, this.currentLayoutSnippets));
+        document.querySelector(".show-layouts-button").style.visibility = this.currentLayoutSnippets.length ? "visible" : "hidden";
+
     }
 
     Bridge.prototype.getOverlay = function(properties) {

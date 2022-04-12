@@ -14,9 +14,9 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
         require(['Digitalprint_PrintessDesigner/js/bridge'], function(Bridge) {
 
             window.WebComponents.waitFor(async () => {
-                const printessLoader = await import('https://editor.printess.com/v/0.9.5/printess-editor/printess-editor.js');
+                const printessLoader = await import('https://editor.printess.com/v/1.0.0/printess-editor/printess-editor.js');
                 printess = await printessLoader.attachPrintess({
-                    resourcePath: "https://editor.printess.com/v/0.9.5/printess-editor",
+                    resourcePath: "https://editor.printess.com/v/1.0.0/printess-editor",
                     domain: "api.printess.com",
                     div: document.getElementById("desktop-printess-container"),
                     token: config.printess.shopToken,
@@ -30,7 +30,7 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
                     singleSpreadView: true,
                     loadingDoneCallback: (spreads, title) => { bridge.loadingDone(spreads, title) },
                     selectionChangeCallback: (properties, state) => { bridge.selectionChange(properties, state) },
-                    spreadChangeCallback: (groupSnippets, layoutSnippets) => { bridge.spreadChange(groupSnippets, layoutSnippets) },
+                    spreadChangeCallback: (groupSnippets, layoutSnippets, tabs) => { bridge.spreadChange(groupSnippets, layoutSnippets, tabs) },
                     getOverlayCallback: (properties) => { bridge.getOverlay(properties) },
                     addToBasketCallback: (saveToken, url) => { bridge.addToBasket(saveToken, url) },
                     formFieldChangedCallback: (name, value) => { bridge.formFieldChanged(name, value) },
