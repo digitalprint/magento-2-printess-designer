@@ -5,10 +5,6 @@
         </tab>
         <section id="designer" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Designer</label>
-            <comment><![CDATA[<ul>
-                            <li>The most advanced editor for print automation and mass customization integrated as Magento extension.</li>
-                            <li><a href="https://printess.com/kb/" target="_blank">Knowledge Base</a></li>
-                        </ul>]]></comment>
             <tab>printess</tab>
             <resource>Digitalprint_PrintessDesigner::config</resource>
             <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
