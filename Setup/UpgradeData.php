@@ -99,5 +99,39 @@ class UpgradeData implements UpgradeDataInterface
 
         }
 
+        if (version_compare($context->getVersion(), '1.5', '<')) {
+
+            // Printess Start Design
+            $eavSetup->addAttribute(
+                Product::ENTITY,
+                'printess_start_design',
+                [
+                    'group' => 'Printess',
+                    'type' => 'varchar',
+                    'backend' => '',
+                    'frontend' => '',
+                    'label' => 'Start-Design',
+                    'input' => 'text',
+                    'class' => '',
+                    'source' => '',
+                    'global' => ScopedAttributeInterface::SCOPE_STORE,
+                    'visible' => true,
+                    'required' => false,
+                    'user_defined' => false,
+                    'default' => '',
+                    'searchable' => false,
+                    'filterable' => false,
+                    'comparable' => false,
+                    'visible_on_front' => false,
+                    'used_in_product_listing' => false,
+                    'unique' => false,
+                    'apply_to' => ''
+                ]
+            );
+
+        }
+
+
+
     }
 }

@@ -152,6 +152,20 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
         return attribute !== undefined;
     }
 
+    function setStartDesign(startDesign) {
+        this.startDesign = startDesign;
+        return this.startDesign;
+    }
+
+    function loadStartDesign() {
+
+        if (null === this.startDesign) {
+            return;
+        }
+
+        this.printess.insertTemplateAsLayoutSnippet(this.startDesign.templateName, this.startDesign.templateVersion, this.startDesign.documentName, this.startDesign.mode);
+    }
+
     function _structuredClone(obj) {
         return JSON.parse(JSON.stringify(obj));
     }
@@ -179,11 +193,15 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
         setAttributeMappingByVariant.call(this, this.currentVariant);
         setCurrentAttributeMapByVariant.call(this, this.currentVariant);
 
+        setStartDesign.call(this, config.startDesign);
+
     }
 
     Bridge.prototype.loadingDone = function (spreads, title) {
 
         this.printess.resizePrintess();
+
+        loadStartDesign.call(this);
 
         hideLoader('printessDesigner');
 

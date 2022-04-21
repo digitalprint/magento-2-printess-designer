@@ -157,6 +157,10 @@ class Designer extends Template
             $value = $product->getData($path);
         }
 
+        if (is_null($value)) {
+            return [];
+        }
+
         return json_decode($value, true, 512, JSON_THROW_ON_ERROR);
 
     }
@@ -286,6 +290,7 @@ class Designer extends Template
     /**
      * @return string
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \JsonException
      */
     public function getJsonConfig(): string
     {
@@ -338,6 +343,21 @@ class Designer extends Template
                 }
             }
 
+        }
+
+        $config['startDesign'] = null;
+
+        $productConfig = $this->getPrintessConfig('printess_start_design', $sku, $superAttribute);
+        if (!is_null($productConfig) && isset($productConfig['templateName'], $productConfig['documentName'])) {
+
+            $config['startDesign'] = $productConfig;
+
+            if (!isset($config['startDesign']['templateVersion'])) {
+                $config['startDesign']['templateVersion'] = 'published';
+            }
+            if (!isset($config['startDesign']['mode'])) {
+                $config['startDesign']['mode'] = 'layout';
+            }
         }
 
         $config['sku'] = !is_null($childProduct) ? $childProduct->getSku() : $product->getSku();
