@@ -17,6 +17,7 @@
         <policy id="img-src">
             <values>
                 <value id="printess.resource" type="host">https://resource.printess.com</value>
+                <value id="printess.s3" type="host">https://printess-prod.s3.eu-central-1.amazonaws.com</value>
             </values>
         </policy>
         <policy id="font-src">
