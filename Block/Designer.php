@@ -142,6 +142,26 @@ class Designer extends Template
     }
 
     /**
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \JsonException
+     */
+    public function getPrintessConfig($path = null, $sku = null, $superAttribute = null) {
+
+        $product = $this->productRepository->get($sku);
+        $childProduct = $this->configurable->getProductByAttributes($superAttribute, $product);
+
+        $value = null;
+        if (!(is_null($childProduct)) && !is_null($childProduct->getData($path))) {
+            $value = $childProduct->getData($path);
+        } elseif (!is_null($product->getData($path))) {
+            $value = $product->getData($path);
+        }
+
+        return json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+
+    }
+
+    /**
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -293,33 +313,29 @@ class Designer extends Template
         }
 
         $config['mergeTemplates'] = [];
-
-        $mergeTemplates = [];
-
         $snippetFields = ['printess_layout_snippets', 'printess_group_snippets'];
 
         foreach($snippetFields as $snippetField) {
 
-            if (!(is_null($childProduct)) && !is_null($childProduct->getData($snippetField))) {
-                $mergeTemplates[] = $childProduct->getData($snippetField);
-            } elseif (!is_null($product->getData($snippetField))) {
-                $mergeTemplates[] = $product->getData($snippetField);
-            }
-        }
+            $data = [];
 
-        foreach($mergeTemplates as $mergeTemplate) {
+            $productConfig = $this->getPrintessConfig($snippetField, $sku, $superAttribute);
 
-            $res = json_decode($mergeTemplate, true, 512, JSON_THROW_ON_ERROR);
+            foreach ($productConfig as $section) {
 
-            foreach($res as $row) {
+                if (isset($section['id'])) {
 
-                if (isset($row['id'])) {
-                    $config['mergeTemplates'][] = [
-                        'templateName' => $row['id'],
-                        'mergeMode' => 'layout-snippet-no-repeat'
-                    ];
+                    foreach ($section as $key => $val) {
+                        $data[$key] = $val;
+                    }
+
+                    if (!isset($data['mergeMode'])) {
+                        $data['mergeMode'] = 'layout-snippet-no-repeat';
+                    }
+
+                    $config['mergeTemplates'][] = $data;
+
                 }
-
             }
 
         }
