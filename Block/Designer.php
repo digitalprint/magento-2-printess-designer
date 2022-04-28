@@ -302,6 +302,8 @@ class Designer extends Template
         $product = $this->productRepository->get($sku);
         $childProduct = $this->configurable->getProductByAttributes($superAttribute, $product);
 
+        $startDesign = $this->getRequest()->getParam('startDesign');
+
         $saveToken = $this->getRequest()->getParam('save_token');
 
         $config = array();
@@ -347,10 +349,12 @@ class Designer extends Template
 
         $config['startDesign'] = null;
 
-        $productConfig = $this->getPrintessConfig('printess_start_design', $sku, $superAttribute);
-        if (!is_null($productConfig) && isset($productConfig['templateName'], $productConfig['documentName'])) {
+        if (is_null($startDesign)) {
+            $startDesign = $this->getPrintessConfig('printess_start_design', $sku, $superAttribute);
+        }
 
-            $config['startDesign'] = $productConfig;
+        if (!is_null($startDesign) && isset($startDesign['templateName'], $startDesign['documentName'])) {
+            $config['startDesign'] = $startDesign;
 
             if (!isset($config['startDesign']['templateVersion'])) {
                 $config['startDesign']['templateVersion'] = 'published';
@@ -358,6 +362,7 @@ class Designer extends Template
             if (!isset($config['startDesign']['mode'])) {
                 $config['startDesign']['mode'] = 'layout';
             }
+
         }
 
         $config['sku'] = !is_null($childProduct) ? $childProduct->getSku() : $product->getSku();

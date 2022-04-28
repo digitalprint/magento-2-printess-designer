@@ -24,6 +24,9 @@
             <?= $block->getChildHtml('form_top') ?>
         <?php else: ?>
             <input type="hidden" name="sku" value="<?= $_product->getSku() ?>" />
+            <?php foreach ($_printess->getStartDesign($_sku) as $_key => $_val): ?>
+                <input type="hidden" name="startDesign[<?= $_key ?>]" value="<?= $_val ?>" />
+            <?php endforeach; ?>
         <?php endif; ?>
         <?php if (!$block->hasOptions()) :?>
             <?= $block->getChildHtml('product_info_form_content') ?>

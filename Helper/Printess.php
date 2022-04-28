@@ -40,6 +40,32 @@ class Printess extends AbstractHelper
 
     /**
      * @param $sku
+     * @return array|mixed
+     * @throws NoSuchEntityException
+     * @throws \JsonException
+     */
+    public function getStartDesign($sku = null) {
+
+        if (!is_null($sku)) {
+
+            $product = $this->productRepository->get($sku);
+            $config = $product->getData('printess_start_design');
+
+            if (!is_null($config)) {
+                $config = json_decode($config, true, 512, JSON_THROW_ON_ERROR);
+                if (isset($config['templateName'], $config['documentName'])) {
+                    return $config;
+                }
+            }
+
+        }
+
+        return [];
+
+    }
+
+    /**
+     * @param $sku
      * @return bool
      * @throws NoSuchEntityException
      */
