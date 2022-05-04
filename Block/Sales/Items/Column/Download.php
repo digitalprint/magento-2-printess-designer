@@ -13,7 +13,7 @@ class Download extends DefaultColumn
     public function getDownloadUrl()
     {
 
-        if (($options = $this->getItem()->getProductOptions()) && isset($options['options']['printess_save_token'])) {
+        if (($options = $this->getItem()->getProductOptions()) && isset($options['additional_options']['printess_save_token'])) {
             return $this->getUrl('designer/download/index', ['order_id'=> $this->getItem()->getOrderId(), 'quote_item_id' => $this->getItem()->getQuoteItemId()]);
         }
 

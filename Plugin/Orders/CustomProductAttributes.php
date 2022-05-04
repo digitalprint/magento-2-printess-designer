@@ -34,6 +34,11 @@ class CustomProductAttributes
         $this->productFactory = $productFactory;
     }
 
+    /**
+     * @param OrderItemRepositoryInterface $subject
+     * @param OrderItemInterface $orderItem
+     * @return OrderItemInterface
+     */
     public function afterGet(OrderItemRepositoryInterface $subject, OrderItemInterface $orderItem)
     {
         $extensionAttributes = $orderItem->getExtensionAttributes();
@@ -41,12 +46,12 @@ class CustomProductAttributes
 
         $options = $orderItem->getProductOptions();
 
-        if (isset($options['options']['printess_save_token'])) {
-            $extensionAttributes->setPrintessSaveToken($options['options']['printess_save_token']['value']);
+        if (isset($options['additional_options']['printess_save_token'])) {
+            $extensionAttributes->setPrintessSaveToken($options['additional_options']['printess_save_token']['value']);
         }
 
-        if (isset($options['options']['printess_thumbnail_url'])) {
-            $extensionAttributes->setPrintessThumbnailUrl($options['options']['printess_thumbnail_url']['value']);
+        if (isset($options['additional_options']['printess_thumbnail_url'])) {
+            $extensionAttributes->setPrintessThumbnailUrl($options['additional_options']['printess_thumbnail_url']['value']);
         }
 
         $orderItem->setExtensionAttributes($extensionAttributes);
@@ -54,7 +59,11 @@ class CustomProductAttributes
         return $orderItem;
     }
 
-
+    /**
+     * @param OrderItemRepositoryInterface $subject
+     * @param OrderItemSearchResultInterface $result
+     * @return OrderItemSearchResultInterface
+     */
     public function afterGetList(OrderItemRepositoryInterface $subject, OrderItemSearchResultInterface $result)
     {
 
@@ -67,12 +76,12 @@ class CustomProductAttributes
 
             $options = $orderItem->getProductOptions();
 
-            if (isset($options['options']['printess_save_token'])) {
-                $extensionAttributes->setPrintessSaveToken($options['options']['printess_save_token']['value']);
+            if (isset($options['additional_options']['printess_save_token'])) {
+                $extensionAttributes->setPrintessSaveToken($options['additional_options']['printess_save_token']['value']);
             }
 
-            if (isset($options['options']['printess_thumbnail_url'])) {
-                $extensionAttributes->setPrintessThumbnailUrl($options['options']['printess_thumbnail_url']['value']);
+            if (isset($options['additional_options']['printess_thumbnail_url'])) {
+                $extensionAttributes->setPrintessThumbnailUrl($options['additional_options']['printess_thumbnail_url']['value']);
             }
 
             $orderItem->setExtensionAttributes($extensionAttributes);

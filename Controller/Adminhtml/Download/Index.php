@@ -131,7 +131,7 @@ class Index extends Action
         $item = $this->getItemByQuoteItemId($orderId, $quoteItemId);
         $product = $this->productRepository->get($item->getSku());
 
-        if (($options = $item->getProductOptions()) && isset($options['options']['printess_save_token'])) {
+        if (($options = $item->getProductOptions()) && isset($options['additional_options']['printess_save_token'])) {
 
             $storeScope = ScopeInterface::SCOPE_STORE;
             $serviceToken = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_SERVICE_TOKEN, $storeScope);
@@ -147,7 +147,7 @@ class Index extends Action
             if (!$cacheData) {
 
                 $job = $printess->production->produce([
-                    'templateName' => $options['options']['printess_save_token']['value'],
+                    'templateName' => $options['additional_options']['printess_save_token']['value'],
                     'outputSettings' => [
                         'dpi' => (int)($product->getData('printess_output_dpi') ?? $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_DPI, $storeScope)),
                         'optimizeImages' => (bool)$this->scopeConfig->getValue(self::XML_PATH_DESIGNER_OPTIMIZE_IMAGES, $storeScope),
