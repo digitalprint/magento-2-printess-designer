@@ -127,17 +127,6 @@ class Cart implements CartInterface
             if (($parentId = reset($parentId)) !== false) {
 
                 $parentProduct = $this->productFactory->create()->load($parentId);
-                $parentProduct->addCustomOption('additional_options', $this->json->serialize([
-                    'printess_save_token' => [
-                        'label' => __("Save Token"),
-                        'value' => $saveToken
-                    ],
-                    'printess_thumbnail_url' => [
-                        'label' => __("Thumbnail"),
-                        'value' => $thumbnailUrl
-                    ]
-                ]));
-
                 $productAttributeOptions = $this->configurableType->getConfigurableAttributesAsArray($parentProduct);
 
                 $options = [];
@@ -156,17 +145,6 @@ class Cart implements CartInterface
             } else {
 
                 $buyRequest = new DataObject(['product_id' => $product->getId(), 'qty' => $quantity]);
-
-                $product->addCustomOption('additional_options', $this->json->serialize([
-                    'printess_save_token' => [
-                        'label' => __("Save Token"),
-                        'value' => $saveToken
-                    ],
-                    'printess_thumbnail_url' => [
-                        'label' => __("Thumbnail"),
-                        'value' => $thumbnailUrl
-                    ]
-                ]));
 
                 $this->cart->addProduct($product, $buyRequest);
                 $this->cart->save();
