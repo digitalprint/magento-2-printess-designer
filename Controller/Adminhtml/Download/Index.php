@@ -2,7 +2,7 @@
 
 namespace Digitalprint\PrintessDesigner\Controller\Adminhtml\Download;
 
-use DigitalPrint\PrintessDesigner\Model\Cache\Type\CacheType;
+use Digitalprint\PrintessDesigner\Model\Cache\Type\CacheType;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Api\ProductRepositoryInterface;
