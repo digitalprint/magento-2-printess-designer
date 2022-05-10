@@ -25,30 +25,41 @@ class AddAdditionalOptionToOrder implements ObserverInterface
      * @param EventObserver $observer
      * @return void
      */
-    public function execute(EventObserver $observer) {
+    public function execute(EventObserver $observer)
+    {
 
-        $quote = $observer->getQuote();
-        $order = $observer->getOrder();
+        try {
 
-        $quoteItems = [];
+            $quote = $observer->getQuote();
+            $order = $observer->getOrder();
 
-        foreach ($quote->getAllVisibleItems() as $quoteItem) {
-            $quoteItems[$quoteItem->getId()] = $quoteItem;
-        }
+            $quoteItems = [];
 
-        foreach ($order->getAllVisibleItems() as $orderItem) {
-
-            $quoteItemId = $orderItem->getQuoteItemId();
-            $quoteItem = $quoteItems[$quoteItemId];
-
-            $additionalOptions = $quoteItem->getOptionByCode('additional_options');
-
-            if (!is_null($additionalOptions)) {
-                $options = $orderItem->getProductOptions();
-                $options['additional_options'] = $this->serializer->unserialize($additionalOptions->getValue());
-                $orderItem->setProductOptions($options);
+            foreach ($quote->getAllVisibleItems() as $quoteItem) {
+                $quoteItems[$quoteItem->getId()] = $quoteItem;
             }
 
+            foreach ($order->getAllVisibleItems() as $orderItem) {
+
+                $quoteItemId = $orderItem->getQuoteItemId();
+
+                if (isset($quoteItems[$quoteItemId])) {
+
+                    $quoteItem = $quoteItems[$quoteItemId];
+
+                    $additionalOptions = $quoteItem->getOptionByCode('additional_options');
+
+                    if (!is_null($additionalOptions)) {
+                        $options = $orderItem->getProductOptions();
+                        $options['additional_options'] = $this->serializer->unserialize($additionalOptions->getValue());
+                        $orderItem->setProductOptions($options);
+                    }
+                }
+
+            }
+
+        } catch (\Exception $e) {
+            // catch error if any
         }
 
     }
