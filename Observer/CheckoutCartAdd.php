@@ -35,11 +35,12 @@ class CheckoutCartAdd implements ObserverInterface
     /**
      * @param EventObserver $observer
      * @return void
+     * @throws \JsonException
      */
     public function execute(EventObserver $observer) {
 
         $item = $observer->getQuoteItem();
-        $params = json_decode($this->request->getContent());
+        $params = json_decode($this->request->getContent(), true);
 
         $additionalOptions = array();
 
@@ -47,15 +48,15 @@ class CheckoutCartAdd implements ObserverInterface
             $additionalOptions = $this->serializer->unserialize($additionalOption->getValue());
         }
 
-        if (!is_null($params->saveToken) && !is_null($params->thumbnailUrl)) {
+        if (isset($params['saveToken'], $params['thumbnailUrl'])) {
             $additionalOptions['printess_save_token'] = [
                 'label' => 'save_token',
-                'value' => $params->saveToken
+                'value' => $params['saveToken']
             ];
 
             $additionalOptions['printess_thumbnail_url'] = [
                 'label' => 'thumbnail_url',
-                'value' => $params->thumbnailUrl
+                'value' => $params['thumbnailUrl']
             ];
         }
 
