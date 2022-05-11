@@ -2,6 +2,7 @@
 
 namespace DigitalPrint\PrintessDesigner\Observer;
 
+use Exception;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -30,35 +31,36 @@ class AddAdditionalOptionToOrder implements ObserverInterface
 
         try {
 
-            $quote = $observer->getQuote();
-            $order = $observer->getOrder();
-
             $quoteItems = [];
 
-            foreach ($quote->getAllVisibleItems() as $quoteItem) {
-                $quoteItems[$quoteItem->getId()] = $quoteItem;
+            $quote = $observer->getQuote();
+            $order = $observer->getOrder();
+            
+            foreach ($quote->getItems() as $quoteItem) {
+
+                if (!$quoteItem->getParentItemId()) {
+                    $quoteItems[$quoteItem->getId()] = $quoteItem;
+                }
+
             }
 
-            foreach ($order->getAllVisibleItems() as $orderItem) {
+            foreach ($order->getItems() as $orderItem) {
 
-                $quoteItemId = $orderItem->getQuoteItemId();
+                if (!$orderItem->getParentItemId()) {
 
-                if (isset($quoteItems[$quoteItemId])) {
+                    if ($quoteItem = $quoteItems[$orderItem->getQuoteItemId()]) {
 
-                    $quoteItem = $quoteItems[$quoteItemId];
-
-                    $additionalOptions = $quoteItem->getOptionByCode('additional_options');
-
-                    if (!is_null($additionalOptions)) {
-                        $options = $orderItem->getProductOptions();
-                        $options['additional_options'] = $this->serializer->unserialize($additionalOptions->getValue());
-                        $orderItem->setProductOptions($options);
+                        if ($additionalOptions = $quoteItem->getOptionByCode('additional_options')) {
+                            $options = $orderItem->getProductOptions();
+                            $options['additional_options'] = $this->serializer->unserialize($additionalOptions->getValue());
+                            $orderItem->setProductOptions($options);
+                        }
                     }
                 }
 
             }
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // catch error if any
         }
 
