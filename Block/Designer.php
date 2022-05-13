@@ -340,6 +340,11 @@ class Designer extends Template
                         $data['mergeMode'] = 'layout-snippet-no-repeat';
                     }
 
+                    if (!isset($data['templateName']) && isset($data['id'])) {
+                        $data['templateName'] = $data['id'];
+                        unset($data['id']);
+                    }
+
                     $config['mergeTemplates'][] = $data;
 
                 }
