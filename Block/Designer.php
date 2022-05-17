@@ -335,11 +335,7 @@ class Designer extends Template
                     foreach ($section as $key => $val) {
                         $data[$key] = $val;
                     }
-
-                    if (!isset($data['mergeMode'])) {
-                        $data['mergeMode'] = 'layout-snippet-no-repeat';
-                    }
-
+                    
                     if (!isset($data['templateName']) && isset($data['id'])) {
                         $data['templateName'] = $data['id'];
                         unset($data['id']);
