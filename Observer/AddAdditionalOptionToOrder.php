@@ -2,67 +2,41 @@
 
 namespace DigitalPrint\PrintessDesigner\Observer;
 
-use Exception;
-use Magento\Framework\Event\Observer as EventObserver;
+use Digitalprint\PrintessDesigner\Model\AdditionalOptions\OptionsManager;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Sales\Model\Order;
 
-class AddAdditionalOptionToOrder implements ObserverInterface
-{
+class AddAdditionalOptionToOrder implements ObserverInterface {
 
     /**
-     * @var SerializerInterface
+     * @var TotalsManager
      */
-    protected $serializer;
+    private $optionsManager;
 
-    public function __construct(
-        SerializerInterface $serializer
-    )
-    {
-        $this->serializer = $serializer;
+    /**
+     * @param OptionsManager $optionsManager
+     */
+    public function __construct(OptionsManager $optionsManager) {
+        $this->optionsManager = $optionsManager;
     }
 
     /**
-     * @param EventObserver $observer
+     * @event sales_model_service_quote_submit_before
+     *
+     * @param Observer $observer
+     *
      * @return void
      */
-    public function execute(EventObserver $observer)
-    {
+    public function execute(Observer $observer) {
 
-        try {
+        /** @var Quote $quote */
+        $quote = $observer->getData('quote');
+        /** @var Order $order */
+        $order = $observer->getData('order');
 
-            $quoteItems = [];
-
-            $quote = $observer->getQuote();
-            $order = $observer->getOrder();
-            
-            foreach ($quote->getItems() as $quoteItem) {
-
-                if (!$quoteItem->getParentItemId()) {
-                    $quoteItems[$quoteItem->getId()] = $quoteItem;
-                }
-
-            }
-
-            foreach ($order->getItems() as $orderItem) {
-
-                if (!$orderItem->getParentItemId()) {
-
-                    if ($quoteItem = $quoteItems[$orderItem->getQuoteItemId()]) {
-
-                        if ($additionalOptions = $quoteItem->getOptionByCode('additional_options')) {
-                            $options = $orderItem->getProductOptions();
-                            $options['additional_options'] = $this->serializer->unserialize($additionalOptions->getValue());
-                            $orderItem->setProductOptions($options);
-                        }
-                    }
-                }
-
-            }
-
-        } catch (Exception $e) {
-            // catch error if any
-        }
+        $this->optionsManager->transferAdditionalOptions($quote, $order);
 
     }
 
