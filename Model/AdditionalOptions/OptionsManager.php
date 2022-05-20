@@ -43,7 +43,11 @@ Class OptionsManager {
 
                 if (!$destinationItem->getParentItemId()) {
 
-                    if ($sourceItem = $sourceItems[$destinationItem->getQuoteItemId()]) {
+                    $quoteItemId = $destinationItem->getQuoteItemId();
+
+                    if (isset($sourceItems[$quoteItemId])) {
+
+                        $sourceItem = $sourceItems[$quoteItemId];
 
                         if ($additionalOptions = $sourceItem->getOptionByCode('additional_options')) {
                             $options = $destinationItem->getProductOptions();
