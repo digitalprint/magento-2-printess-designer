@@ -60,7 +60,7 @@ Class OptionsManager {
             }
 
         } catch (Exception $e) {
-            $this->logger->debug($e);
+            $this->logger->critical($e);
         }
 
     }
