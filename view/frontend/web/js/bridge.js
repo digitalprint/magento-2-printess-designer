@@ -1,20 +1,26 @@
 
 define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/js/store/cart'], function(Cart, CartStore) {
 
-    function addToCart(sku, quantity, thumbnailUrl, saveToken) {
+    function addToCart(sku, quantity, thumbnailUrl, saveToken, shopUserToken) {
 
         let payload = {
-            "sku": sku,
-            "quantity": quantity,
-            "thumbnailUrl": thumbnailUrl,
-            "saveToken": saveToken
+            'sku': sku,
+            'quantity': quantity,
+            'thumbnailUrl': thumbnailUrl,
+            'saveToken': saveToken
         };
+
+        let headers = {
+            'Content-Type': 'application/json'
+        }
+
+        if (shopUserToken !== 'anonymous') {
+            headers['Authorization'] = `Bearer ${shopUserToken}`
+        }
 
         return fetch('/rest/V1/digitalprint-designer/addtocart', {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: headers,
             body: JSON.stringify(payload),
         });
     }
@@ -33,7 +39,7 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
                 .renderFirstPageImage(fileName)
                 .then((thumbnailUrl) => {
                     CartStore.setThumbnailUrl(thumbnailUrl);
-                    return addToCart(CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken);
+                    return addToCart(CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, config.shopUserToken);
                 })
                 .then(response => response.json())
                 .then((data) => {

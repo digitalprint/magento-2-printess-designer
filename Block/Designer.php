@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\Render;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Integration\Model\Oauth\TokenFactory;
 use Magento\Store\Model\ScopeInterface;
 
 class Designer extends Template
@@ -21,6 +22,12 @@ class Designer extends Template
      * @var Session
      */
     protected $customerSession;
+
+    /**
+     * @var TokenFactory
+     */
+    protected $tokenModelFactory;
+
     /**
      * @var SerializerInterface
      */
@@ -68,6 +75,7 @@ class Designer extends Template
     public function __construct(
         Context $context,
         Session $customerSession,
+        TokenFactory $tokenModelFactory,
         SerializerInterface $serializer,
         ProductRepositoryInterface $productRepository,
         Configurable $configurable,
@@ -77,6 +85,7 @@ class Designer extends Template
     ) {
 
         $this->customerSession = $customerSession;
+        $this->tokenModelFactory = $tokenModelFactory;
         $this->serializer = $serializer;
         $this->productRepository = $productRepository;
         $this->configurable = $configurable;
@@ -309,9 +318,21 @@ class Designer extends Template
         $config = array();
 
         $config['shopToken'] = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_SHOP_TOKEN, $storeScope);
+
         $config['basketId'] = $this->customerSession->getSessionId();
 
-        $config['shopUserId'] = $this->customerSession->isLoggedIn() ? $this->customerSession->getId() : 'CurrentShopCustomerId';
+        if ($this->customerSession->isLoggedIn()) {
+
+            $customerId = $this->customerSession->getCustomer()->getId();
+            $customerToken = $this->tokenModelFactory->create();
+
+            $config['shopUserId'] = $customerId;
+            $config['shopUserToken'] = $customerToken->createCustomerToken($customerId)->getToken();
+
+        } else {
+            $config['shopUserId'] = 'anonymous';
+            $config['shopUserToken'] = 'anonymous';
+        }
 
         if (!is_null($saveToken)) {
             $config['templateName'] = $saveToken;
@@ -335,7 +356,7 @@ class Designer extends Template
                     foreach ($section as $key => $val) {
                         $data[$key] = $val;
                     }
-                    
+
                     if (!isset($data['templateName']) && isset($data['id'])) {
                         $data['templateName'] = $data['id'];
                         unset($data['id']);
