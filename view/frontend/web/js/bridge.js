@@ -28,6 +28,7 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
     function createOffcanvas() {
 
         let printess = this.printess;
+        let config = this.config;
 
         document.getElementById('cartOffcanvas').addEventListener('cart.add.bs.offcanvas', function() {
 
