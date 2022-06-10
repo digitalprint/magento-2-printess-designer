@@ -1,7 +1,7 @@
 
 define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/js/store/cart'], function(Cart, CartStore) {
 
-    function addToCart(sku, quantity, thumbnailUrl, saveToken, shopUserToken) {
+    function addToCart(sku, quantity, thumbnailUrl, saveToken, customerToken) {
 
         let payload = {
             'sku': sku,
@@ -14,8 +14,8 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
             'Content-Type': 'application/json'
         }
 
-        if (shopUserToken !== 'anonymous') {
-            headers['Authorization'] = `Bearer ${shopUserToken}`
+        if (customerToken !== 'anonymous') {
+            headers['Authorization'] = `Bearer ${customerToken}`
         }
 
         return fetch('/rest/V1/digitalprint-designer/addtocart', {
@@ -27,6 +27,7 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
 
     function createOffcanvas() {
 
+        let customer = this.customer;
         let printess = this.printess;
         let config = this.config;
 
@@ -40,7 +41,7 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
                 .renderFirstPageImage(fileName)
                 .then((thumbnailUrl) => {
                     CartStore.setThumbnailUrl(thumbnailUrl);
-                    return addToCart(CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, config.shopUserToken);
+                    return addToCart(CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, customer.customer_token);
                 })
                 .then(response => response.json())
                 .then((data) => {
@@ -177,11 +178,13 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
         return JSON.parse(JSON.stringify(obj));
     }
 
-    function Bridge(printess, config, variants) {
+    function Bridge(printess, customer, config, variants) {
 
         showLoader('printessDesigner');
 
         this.printess = printess;
+
+        this.customer = customer;
         this.config = config;
 
         this.variants = variants;

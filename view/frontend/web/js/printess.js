@@ -11,7 +11,9 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
             }
         };
 
-        require(['Digitalprint_PrintessDesigner/js/bridge'], function(Bridge) {
+        require(['Magento_Customer/js/customer-data', 'Digitalprint_PrintessDesigner/js/bridge'], function(customerData, Bridge) {
+
+            let customer = customerData.get('printessdesigner')();
 
             window.WebComponents.waitFor(async () => {
                 const printessLoader = await import('https://editor.printess.com/v/1.0.0/printess-editor/printess-editor.js');
@@ -20,8 +22,8 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
                     domain: "api.printess.com",
                     div: document.getElementById("desktop-printess-container"),
                     token: config.printess.shopToken,
-                    basketId: config.printess.basketId,
-                    shopUserId: config.printess.shopUserId,
+                    basketId: customer.session_id,
+                    shopUserId: customer.customer_id,
                     showBuyerSide: true,
                     noBasketThumbnail: true,
                     templateName: config.printess.templateName,
@@ -38,7 +40,7 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
                     backButtonCallback: (saveToken) => { bridge.backButtonHandler(saveToken) }
                 });
 
-                bridge = new Bridge(printess, config.printess, config.variants);
+                bridge = new Bridge(printess, customer, config.printess, config.variants);
 
                 // listen to visual viewport changes to detect virtual keyboard on iOs and Android
                 if (window.visualViewport) {
