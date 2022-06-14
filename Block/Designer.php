@@ -18,6 +18,11 @@ class Designer extends Template
 {
 
     /**
+     * @var Session
+     */
+    protected $customerSession;
+
+    /**
      * @var SerializerInterface
      */
     protected $serializer;
@@ -62,6 +67,7 @@ class Designer extends Template
      */
     public function __construct(
         Context $context,
+        Session $customerSession,
         SerializerInterface $serializer,
         ProductRepositoryInterface $productRepository,
         Configurable $configurable,
@@ -69,6 +75,7 @@ class Designer extends Template
         ScopeConfigInterface $scopeConfig,
         array $data = []
     ) {
+        $this->customerSession = $customerSession;
         $this->serializer = $serializer;
         $this->productRepository = $productRepository;
         $this->configurable = $configurable;
@@ -301,6 +308,8 @@ class Designer extends Template
         $config = array();
 
         $config['shopToken'] = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_SHOP_TOKEN, $storeScope);
+
+        $config['basketId'] = $this->customerSession->getSessionId();
 
         if (!is_null($saveToken)) {
             $config['templateName'] = $saveToken;
