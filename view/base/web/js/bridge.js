@@ -25,9 +25,32 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
         });
     }
 
+    function updateOrderItem(orderId, itemId, sku, quantity, thumbnailUrl, saveToken, adminToken) {
+
+        let payload = {
+            'orderId': parseInt(orderId),
+            'itemId': parseInt(itemId),
+            'sku': sku,
+            'qty': quantity,
+            'saveToken': saveToken,
+            'thumbnailUrl': thumbnailUrl,
+        };
+
+        let headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${adminToken}`
+        }
+
+        return fetch('/rest/V1/digitalprint-designer/updateorderitem', {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify(payload),
+        });
+    }
+
     function createOffcanvas() {
 
-        let customer = this.customer;
+        let session = this.session;
         let printess = this.printess;
         let config = this.config;
 
@@ -41,13 +64,18 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
                 .renderFirstPageImage(fileName)
                 .then((thumbnailUrl) => {
                     CartStore.setThumbnailUrl(thumbnailUrl);
-                    return addToCart(CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, customer.customer_token);
+
+                    if (config.areaCode === 'adminhtml') {
+                        return updateOrderItem(config.orderId, config.itemId, CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, session.admin_token)
+                    }
+
+                    return addToCart(CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, session.customer_token);
                 })
                 .then(response => response.json())
                 .then((data) => {
 
-                    if (data.checkout_url) {
-                        location.href = data.checkout_url;
+                    if (data.redirect_url) {
+                        location.href = data.redirect_url;
                     }
 
                 })
@@ -57,7 +85,7 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
 
         });
 
-        return new Cart('cartOffcanvas');
+        return new Cart('cartOffcanvas', this.config.qty);
     }
 
      function showLoader(elm) {
@@ -178,13 +206,13 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
         return JSON.parse(JSON.stringify(obj));
     }
 
-    function Bridge(printess, customer, config, variants) {
+    function Bridge(printess, session, config, variants) {
 
         showLoader('printessDesigner');
 
         this.printess = printess;
 
-        this.customer = customer;
+        this.session = session;
         this.config = config;
 
         this.variants = variants;
@@ -198,6 +226,8 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
         this.currentTabs = [];
 
         this.cartOffcanvas = createOffcanvas.call(this);
+
+
 
         setCurrentVariantByCode.call(this, config.variant);
         setAttributeMappingByVariant.call(this, this.currentVariant);

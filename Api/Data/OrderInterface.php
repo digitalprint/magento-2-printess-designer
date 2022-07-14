@@ -2,7 +2,7 @@
 
 namespace Digitalprint\PrintessDesigner\Api\Data;
 
-interface CartInterface
+interface OrderInterface
 {
     /**
      * Get status
@@ -13,7 +13,7 @@ interface CartInterface
     /**
      * Set status
      * @param string $status
-     * @return CartInterface
+     * @return OrderInterface
      */
     public function setStatus($status);
 
@@ -26,7 +26,7 @@ interface CartInterface
     /**
      * Set redirect url
      * @param string $redirectUrl
-     * @return CartInterface
+     * @return OrderInterface
      */
-    public function setRedirectUrl(string $redirectUrl);
+    public function setRedirectUrl($redirectUrl);
 }

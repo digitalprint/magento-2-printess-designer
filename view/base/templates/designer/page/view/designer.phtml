@@ -71,6 +71,7 @@
     {
        "*": {
             "Digitalprint_PrintessDesigner/js/printess": {
+                "session": <?= $block->getSession() ?>,
                 "printess": <?= $block->getJsonConfig() ?>,
                 "variants":  <?= $block->getJsonVariants() ?>
             }

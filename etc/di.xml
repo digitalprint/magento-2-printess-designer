@@ -1,5 +1,14 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Sales\Block\Adminhtml\Order\View\Items">
+        <plugin name="printess_admin_order_columns" type="Digitalprint\PrintessDesigner\Plugin\Adminhtml\OrderColumnsHead" sortOrder="1" />
+    </type>
+    <type name="Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer">
+        <plugin name="printess_admin_order_columns_renderer" type="Digitalprint\PrintessDesigner\Plugin\Adminhtml\OrderColumnsBody" sortOrder="1" />
+    </type>
+    <type name="Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn">
+        <plugin name="printess_admin_order_options" type="Digitalprint\PrintessDesigner\Plugin\Adminhtml\OrderOptions" sortOrder="1" />
+    </type>
     <type name="Magento\Catalog\Block\Product\View">
         <plugin name="printess_catalog_product_render_quantity" type="Digitalprint\PrintessDesigner\Plugin\Product\RenderQuantity" sortOrder="1"/>
         <plugin name="printess_catalog_product_submit_url" type="Digitalprint\PrintessDesigner\Plugin\Product\SubmitUrl" sortOrder="1"/>
@@ -24,4 +33,6 @@
     </type>
     <preference for="Digitalprint\PrintessDesigner\Api\CartInterface" type="Digitalprint\PrintessDesigner\Model\Cart"/>
     <preference for="Digitalprint\PrintessDesigner\Api\Data\CartInterface" type="Digitalprint\PrintessDesigner\Model\Data\Cart"/>
+    <preference for="Digitalprint\PrintessDesigner\Api\OrderInterface" type="Digitalprint\PrintessDesigner\Model\Order"/>
+    <preference for="Digitalprint\PrintessDesigner\Api\Data\OrderInterface" type="Digitalprint\PrintessDesigner\Model\Data\Order"/>
 </config>

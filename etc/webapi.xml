@@ -6,4 +6,10 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+    <route url="/V1/digitalprint-designer/updateorderitem/" method="POST">
+        <service class="Digitalprint\PrintessDesigner\Api\OrderInterface" method="updateOrderItem"/>
+        <resources>
+            <resource ref="Digitalprint_PrintessDesigner::edit_items"/>
+        </resources>
+    </route>
 </routes>

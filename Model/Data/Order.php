@@ -2,9 +2,9 @@
 
 namespace Digitalprint\PrintessDesigner\Model\Data;
 
-use Digitalprint\PrintessDesigner\Api\Data\CartInterface;
+use Digitalprint\PrintessDesigner\Api\Data\OrderInterface;
 
-class Cart implements CartInterface
+class Order implements OrderInterface
 {
 
     /**
@@ -28,7 +28,7 @@ class Cart implements CartInterface
     /**
      * Set status
      * @param string $status
-     * @return CartInterface
+     * @return \Digitalprint\PrintessDesigner\Api\Data\OrderInterface
      */
     public function setStatus($status)
     {
@@ -47,7 +47,7 @@ class Cart implements CartInterface
     /**
      * Set redirect url
      * @param string $checkoutUrl
-     * @return CartInterface
+     * @return \Digitalprint\PrintessDesigner\Api\Data\OrderInterface
      */
     public function setRedirectUrl($redirectUrl)
     {

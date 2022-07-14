@@ -11,7 +11,7 @@ interface CartInterface {
      * @param string $quantity
      * @param string $saveToken
      * @param string $thumbnailUrl
-     * @return \Digitalprint\PrintessDesigner\Api\Data\CartInterface
+     * @return Data\CartInterface
      *
      */
     public function addToCart($sku, $quantity, $saveToken, $thumbnailUrl);

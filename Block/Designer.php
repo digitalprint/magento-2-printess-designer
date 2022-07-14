@@ -2,20 +2,37 @@
 
 namespace Digitalprint\PrintessDesigner\Block;
 
+use Magento\Backend\Model\Auth\Session as AuthSession;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\ConfigurableProduct\Api\LinkManagementInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Integration\Model\Oauth\TokenFactory;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
 
 class Designer extends Template
 {
+
+    /**
+     * @var State
+     */
+    protected $state;
+
+    /**
+     * @var AuthSession
+     */
+    protected $authSession;
 
     /**
      * @var Session
@@ -42,6 +59,10 @@ class Designer extends Template
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
+    /**
+     * @var TokenFactory
+     */
+    protected $tokenFactory;
 
     /**
      * @var string
@@ -58,7 +79,10 @@ class Designer extends Template
 
     /**
      * @param Context $context
+     * @param State $state
+     * @param Session $customerSession
      * @param SerializerInterface $serializer
+     * @param OrderRepositoryInterface $orderRepository
      * @param ProductRepositoryInterface $productRepository
      * @param Configurable $configurable
      * @param LinkManagementInterface $linkManagement
@@ -67,20 +91,28 @@ class Designer extends Template
      */
     public function __construct(
         Context $context,
+        State $state,
+        AuthSession $authSession,
         Session $customerSession,
-        SerializerInterface $serializer,
+        SerializerInterface  $serializer,
+        OrderRepositoryInterface $orderRepository,
         ProductRepositoryInterface $productRepository,
         Configurable $configurable,
         LinkManagementInterface $linkManagement,
         ScopeConfigInterface $scopeConfig,
+        TokenFactory $tokenFactory,
         array $data = []
     ) {
+        $this->state = $state;
+        $this->authSession = $authSession;
         $this->customerSession = $customerSession;
         $this->serializer = $serializer;
+        $this->orderRepository = $orderRepository;
         $this->productRepository = $productRepository;
         $this->configurable = $configurable;
         $this->linkManagement = $linkManagement;
         $this->scopeConfig = $scopeConfig;
+        $this->tokenFactory = $tokenFactory;
 
         parent::__construct($context, $data);
     }
@@ -93,21 +125,19 @@ class Designer extends Template
 
     /**
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     protected function getName(): string
     {
         $sku = $this->getRequest()->getParam('sku');
-        $product = $this->productRepository->get($sku);
-
-        return $product->getName();
+        return $this->productRepository->get($sku)->getName();
     }
 
 
     /**
      * @param $product
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function renderPriceHtml($product): string
     {
@@ -141,7 +171,7 @@ class Designer extends Template
     }
 
     /**
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      * @throws \JsonException
      */
     public function getPrintessConfig($path = null, $sku = null, $superAttribute = null) {
@@ -166,8 +196,8 @@ class Designer extends Template
 
     /**
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function getJsonVariants(): string
     {
@@ -288,31 +318,43 @@ class Designer extends Template
 
     /**
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      * @throws \JsonException
      */
     public function getJsonConfig(): string
     {
         $storeScope = ScopeInterface::SCOPE_STORE;
 
-        $sku = $this->getRequest()->getParam('sku');
-        $superAttribute = $this->getRequest()->getParam('super_attribute');
+        $params = $this->getRequest()->getParams();
 
-        $product = $this->productRepository->get($sku);
-        $childProduct = $this->configurable->getProductByAttributes($superAttribute, $product);
+        foreach(['sku', 'super_attribute', 'startDesign', 'save_token'] as $key) {
+            if (!array_key_exists($key, $params)) {
+                $params[$key] = null;
+            }
+        }
 
-        $startDesign = $this->getRequest()->getParam('startDesign');
+        if (!array_key_exists('qty', $params)) {
+            $params['qty'] = 1;
+        }
 
-        $saveToken = $this->getRequest()->getParam('save_token');
+        $product = $this->productRepository->get($params['sku']);
+        $childProduct = $this->configurable->getProductByAttributes($params['super_attribute'], $product);
 
         $config = array();
+
+        $config['areaCode'] = $this->state->getAreaCode();
 
         $config['shopToken'] = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_SHOP_TOKEN, $storeScope);
 
         $config['basketId'] = $this->customerSession->getSessionId();
 
-        if (!is_null($saveToken)) {
-            $config['templateName'] = $saveToken;
+        if ($this->state->getAreaCode() === Area::AREA_ADMINHTML) {
+            $config['orderId'] = $params['order_id'];
+            $config['itemId'] = $params['item_id'];
+        }
+
+        if (!is_null($params['save_token'])) {
+            $config['templateName'] = $params['save_token'];
         } else {
             $config['templateName'] = !(is_null($childProduct)) && !is_null($childProduct->getData('printess_template')) ? $childProduct->getData('printess_template') : $product->getData('printess_template');
         }
@@ -324,7 +366,7 @@ class Designer extends Template
 
             $data = [];
 
-            $productConfig = $this->getPrintessConfig($snippetField, $sku, $superAttribute);
+            $productConfig = $this->getPrintessConfig($snippetField, $params['sku'], $params['super_attribute']);
 
             foreach ($productConfig as $section) {
 
@@ -348,18 +390,20 @@ class Designer extends Template
 
         $config['startDesign'] = null;
 
-        if (is_null($startDesign)) {
-            $startDesign = $this->getPrintessConfig('printess_start_design', $sku, $superAttribute);
-        }
+        if (is_null($params['save_token'])) {
 
-        if (!is_null($startDesign) && isset($startDesign['templateName'], $startDesign['documentName'])) {
-            $config['startDesign'] = $startDesign;
+            $startDesign = !is_null($params['startDesign']) ? $params['startDesign'] : $this->getPrintessConfig('printess_start_design', $params['sku'], $params['super_attribute']);
 
-            if (!isset($config['startDesign']['templateVersion'])) {
-                $config['startDesign']['templateVersion'] = 'published';
-            }
-            if (!isset($config['startDesign']['mode'])) {
-                $config['startDesign']['mode'] = 'layout';
+            if (!is_null($startDesign) && isset($startDesign['templateName'], $startDesign['documentName'])) {
+                $config['startDesign'] = $startDesign;
+
+                if (!isset($config['startDesign']['templateVersion'])) {
+                    $config['startDesign']['templateVersion'] = 'published';
+                }
+                if (!isset($config['startDesign']['mode'])) {
+                    $config['startDesign']['mode'] = 'layout';
+                }
+
             }
 
         }
@@ -367,9 +411,11 @@ class Designer extends Template
         $config['sku'] = !is_null($childProduct) ? $childProduct->getSku() : $product->getSku();
         $config['variant'] = !is_null($childProduct) ? $childProduct->getSku() : $product->getSku();
 
+        $config['qty'] = $params['qty'];
+
         $config['formFields'] = [];
 
-        if (is_null($saveToken) && !is_null($childProduct)) {
+        if (is_null($params['save_token']) && !is_null($childProduct)) {
 
             $formFields = json_decode($childProduct->getData('printess_form_fields'), true);
 
@@ -382,6 +428,38 @@ class Designer extends Template
                 }
             }
 
+        }
+
+        return $this->serializer->serialize($config);
+
+    }
+
+    /**
+     * @return bool|string
+     * @throws LocalizedException
+     */
+    public function getSession() {
+
+        if ($this->state->getAreaCode() === Area::AREA_ADMINHTML) {
+
+            $userId = $this->authSession->getUser()->getId();
+
+            $config = [
+                'session_id' => $this->authSession->getSessionId(),
+                'user_id' => $userId
+            ];
+
+            $tokenFactory = $this->tokenFactory->create();
+            $adminToken = $tokenFactory->createAdminToken($userId)->getToken();
+
+            $config['admin_token'] = $adminToken;
+
+        } else {
+            $config = [
+                'session_id' => $this->customerSession->getSessionId(),
+                'customer_id' => null,
+                'customer_token' => null
+            ];
         }
 
         return $this->serializer->serialize($config);

@@ -1,0 +1,14 @@
+<?php
+    $designerUrl = $block->getDesignerUrl();
+    $downloadUrl = $block->getDownloadUrl();
+?>
+<?php if ($designerUrl || $downloadUrl) : ?>
+    <?php if ($designerUrl) : ?>
+        <a href="<?= $designerUrl ?>" style="display: inline-block; margin-bottom: 0.5rem"><?= __('Edit') ?></a>
+    <?php endif; ?>
+    <?php if ($downloadUrl) : ?>
+        <a href="<?= $downloadUrl ?>" style="display: inline-block; margin-bottom: 0.5rem"><?= __('Download') ?></a>
+    <?php endif; ?>
+<?php else :?>
+    -
+<?php endif; ?>

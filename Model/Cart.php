@@ -15,7 +15,6 @@ use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\UrlInterface;
-use Magento\Quote\Api\CartRepositoryInterface;
 
 class Cart implements CartInterface
 {
@@ -154,7 +153,7 @@ class Cart implements CartInterface
                 $this->dataCart->setStatus('success');
             }
 
-            $this->dataCart->setCheckoutUrl($this->urlBuilder->getUrl('checkout/cart', ['_secure' => true]));
+            $this->dataCart->setRedirectUrl($this->urlBuilder->getUrl('checkout/cart', ['_secure' => true]));
 
         }
 

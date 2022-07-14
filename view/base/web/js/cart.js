@@ -35,10 +35,13 @@ define(['bootstrap', 'Digitalprint_PrintessDesigner/js/store/cart'], function(bo
 
     }
 
-    function Cart(element) {
+    function Cart(element, quantity) {
         this.element = document.getElementById(element);
 
         this.offCanvas = initOffCanvas(this.element);
+
+        CartStore.setQuantity(quantity);
+        document.getElementById('designerQuantity').value = CartStore.quantity;
 
         initQuantityChanges();
     }

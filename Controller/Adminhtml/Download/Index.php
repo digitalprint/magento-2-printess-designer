@@ -9,9 +9,11 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
+use Printess\Api\Exceptions\ApiException;
 use Printess\Api\PrintessApiClient;
 
 /**
@@ -106,11 +108,11 @@ class Index extends Action
      * @param $itemId
      * @return mixed|null
      */
-    public function getItemByQuoteItemId($orderId, $itemId)
+    public function getOrderItemById($orderId, $itemId)
     {
         $order = $this->orderRepository->get($orderId);
         foreach ($order->getAllItems() as $item) {
-            if ($item->getQuoteItemId() === $itemId) {
+            if ($item->getItemId() === $itemId) {
                 return $item;
             }
         }
@@ -119,16 +121,15 @@ class Index extends Action
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
-     * @throws \Printess\Api\Exceptions\ApiException
+     * @return \Magento\Framework\App\ResponseInterface|ResultInterface|void
+     * @throws ApiException
      */
     public function execute()
     {
 
-        $orderId = $this->getRequest()->getParam('order_id');
-        $quoteItemId = $this->getRequest()->getParam('quote_item_id');
+        $params = $this->getRequest()->getParams();
 
-        $item = $this->getItemByQuoteItemId($orderId, $quoteItemId);
+        $item = $this->getOrderItemById($params['order_id'], $params['item_id']);
         $product = $this->productRepository->get($item->getSku());
 
         if (($options = $item->getProductOptions()) && isset($options['additional_options']['printess_save_token'])) {

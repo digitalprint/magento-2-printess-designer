@@ -4,17 +4,20 @@
         <referenceBlock name="order_items">
             <arguments>
                 <argument name="columns" xsi:type="array">
-                    <item name="download_column" xsi:type="string" translate="true">Printess</item>
+                    <item name="thumbnail" xsi:type="string" translate="true">Thumbnail</item>
+                    <item name="printess" xsi:type="string" translate="true">Printess</item>
                 </argument>
             </arguments>
             <referenceBlock name="default_order_items_renderer">
                 <arguments>
                     <argument name="columns" xsi:type="array">
-                        <item name="download_column" xsi:type="string" translate="true">col-download</item>
+                        <item name="thumbnail" xsi:type="string" translate="true">col-thumbnail</item>
+                        <item name="printess" xsi:type="string" translate="true">col-printess</item>
                     </argument>
                 </arguments>
             </referenceBlock>
-            <block class="Digitalprint\PrintessDesigner\Block\Sales\Items\Column\Download" name="column_download_column" template="Digitalprint_PrintessDesigner::items/column/download.phtml" group="column" />
+            <block class="Digitalprint\PrintessDesigner\Block\Sales\Items\Column\Thumbnail" name="column_thumbnail" template="Digitalprint_PrintessDesigner::sales/items/column/thumbnail.phtml" group="column"/>
+            <block class="Digitalprint\PrintessDesigner\Block\Sales\Items\Column\Printess" name="column_printess" template="Digitalprint_PrintessDesigner::sales/items/column/printess.phtml" group="column"/>
         </referenceBlock>
     </body>
 </page>
