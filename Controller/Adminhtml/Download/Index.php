@@ -142,7 +142,7 @@ class Index extends Action
             $printess = new PrintessApiClient();
             $printess->setAccessToken($serviceToken);
 
-            $cacheKey = implode("_", [self::CACHE_KEY, $orderId, $quoteItemId]);
+            $cacheKey = implode("_", [self::CACHE_KEY, $params['order_id'], $params['item_id']]);
             $cacheData = $this->cache->load($cacheKey);
 
             if (!$cacheData) {
