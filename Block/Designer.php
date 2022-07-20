@@ -4,6 +4,7 @@ namespace Digitalprint\PrintessDesigner\Block;
 
 use Magento\Backend\Model\Auth\Session as AuthSession;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\ConfigurableProduct\Api\LinkManagementInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
@@ -18,7 +19,6 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Integration\Model\Oauth\TokenFactory;
-use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
 
 class Designer extends Template
@@ -43,22 +43,32 @@ class Designer extends Template
      * @var SerializerInterface
      */
     protected $serializer;
+
+    /**
+     * @var Product
+     */
+    protected $productModel;
+
     /**
      * @var ProductRepositoryInterface
      */
     protected $productRepository;
+
     /**
      * @var Configurable
      */
-    private $configurable;
+    protected $configurable;
+
     /**
      * @var LinkManagementInterface
      */
     protected $linkManagement;
+
     /**
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
+    
     /**
      * @var TokenFactory
      */
@@ -77,16 +87,19 @@ class Designer extends Template
      */
     private const XML_PATH_DESIGNER_PRIMARY_COLOR_HOVER = 'designer/colors/primary_color_hover';
 
+
     /**
      * @param Context $context
      * @param State $state
+     * @param AuthSession $authSession
      * @param Session $customerSession
      * @param SerializerInterface $serializer
-     * @param OrderRepositoryInterface $orderRepository
+     * @param Product $productModel
      * @param ProductRepositoryInterface $productRepository
      * @param Configurable $configurable
      * @param LinkManagementInterface $linkManagement
      * @param ScopeConfigInterface $scopeConfig
+     * @param TokenFactory $tokenFactory
      * @param array $data
      */
     public function __construct(
@@ -95,7 +108,7 @@ class Designer extends Template
         AuthSession $authSession,
         Session $customerSession,
         SerializerInterface  $serializer,
-        OrderRepositoryInterface $orderRepository,
+        Product $productModel,
         ProductRepositoryInterface $productRepository,
         Configurable $configurable,
         LinkManagementInterface $linkManagement,
@@ -107,7 +120,7 @@ class Designer extends Template
         $this->authSession = $authSession;
         $this->customerSession = $customerSession;
         $this->serializer = $serializer;
-        $this->orderRepository = $orderRepository;
+        $this->productModel = $productModel;
         $this->productRepository = $productRepository;
         $this->configurable = $configurable;
         $this->linkManagement = $linkManagement;
@@ -206,13 +219,18 @@ class Designer extends Template
         $sku = $this->getRequest()->getParam('sku');
         $product = $this->productRepository->get($sku);
 
-        if ($product->getTypeId() === 'configurable') {
+        if ($product->getTypeId() === Configurable::TYPE_CODE) {
 
-            $children = $this->linkManagement->getChildren($product->getSku());
+            if ($this->state->getAreaCode() === Area::AREA_ADMINHTML) {
+                $configProduct = $this->productModel->load($product->getId());
+                $children = $configProduct->getTypeInstance()->getUsedProducts($configProduct);
+            } else {
+                $children = $this->linkManagement->getChildren($product->getSku());
+            }
 
             foreach($children as $child) {
 
-                $childProduct = $this->productRepository->get($child->getSku());
+                $childProduct = $this->productRepository->getById($child->getId());
 
                 $attributes = array();
 
