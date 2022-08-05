@@ -22,7 +22,7 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
                     domain: "api.printess.com",
                     div: document.getElementById("desktop-printess-container"),
                     token: config.printess.shopToken,
-                    basketId: session.session_id || config.session_id,
+                    basketId: session.session_id || config.session.session_id,
                     shopUserId: session.customer_id,
                     showBuyerSide: true,
                     noBasketThumbnail: true,
