@@ -294,7 +294,11 @@ class Designer extends Template
                 'value' => $product->getData('printess_document')
             );
 
-            $formFields = json_decode($product->getData('printess_form_fields'), true);
+            $formFields = $product->getData('printess_form_fields');
+
+            if(isset($formFields)) {
+                $formFields = json_decode($formFields, true);
+            }
 
             if (is_array($formFields)) {
 
