@@ -101,7 +101,7 @@ class InstallData implements InstallDataInterface
             'printess_form_fields',
             [
                 'group' => 'Printess',
-                'type' => 'varchar',
+                'type' => 'text',
                 'backend' => '',
                 'frontend' => '',
                 'label' => 'Form Fields (JSON)',
