@@ -7,62 +7,103 @@
 
     <?php if ($colors['primary_color'] && $colors['primary_color_hover']) :?>
 
-    .printess-designer a {
-        color: <?php echo $colors['primary_color']; ?>;
-    }
+        .printess-designer-preloader {
+            border-bottom-color: <?php echo $colors['primary_color']; ?>;
+        }
 
-    .printess-designer a:hover {
-        color: <?php echo $colors['primary_color_hover']; ?>;
-    }
 
-    .printess-designer .list-group-item.active {
-        background-color: <?php echo $colors['primary_color']; ?>;
-        border-color: <?php echo $colors['primary_color']; ?>;
-    }
+        .bg-primary {
+            background-color: <?php echo $colors['primary_color']; ?> !important;
+        }
 
-    .printess-designer .btn-primary {
-        background-color: <?php echo $colors['primary_color']; ?>;
-        border-color: <?php echo $colors['primary_color']; ?>;
-    }
+        .text-primary {
+            color: <?php echo $colors['primary_color']; ?> !important;
+        }
 
-    .printess-designer .btn-primary:active,
-    .printess-designer .btn-primary:hover {
-        background-color: <?php echo $colors['primary_color_hover']; ?>;
-        border-color: <?php echo $colors['primary_color_hover']; ?>;
-    }
+        .border-primary {
+            border-color: <?php echo $colors['primary_color']; ?> !important;
+        }
 
-    .printess-designer .btn-outline-primary {
-        color: <?php echo $colors['primary_color']; ?>;
-        border-color: <?php echo $colors['primary_color']; ?>;
-    }
+        .btn-primary {
+            background-color: <?php echo $colors['primary_color']; ?>;
+            border-color: <?php echo $colors['primary_color']; ?>;
+        }
 
-    .printess-designer .btn-outline-primary:active,
-    .printess-designer .btn-outline-primary:hover {
-        color: #ffffff;
-        background-color: <?php echo $colors['primary_color_hover']; ?>;
-        border-color: <?php echo $colors['primary_color_hover']; ?>;
-    }
+        .btn-primary:active,
+        .btn-primary:hover {
+            background-color: <?php echo $colors['primary_color_hover']; ?>;
+            border-color: <?php echo $colors['primary_color_hover']; ?>;
+        }
 
-    .mobile-navbar.bg-primary {
-        background-color: <?php echo $colors['primary_color']; ?> !important;
-    }
+        .btn-primary.disabled,
+        .btn-primary:disabled {
+            background-color: <?php echo $colors['primary_color']; ?>;
+        }
 
-    .mobile-ui .bg-primary {
-        background-color: <?php echo $colors['primary_color']; ?> !important;
-    }
+        .btn-outline-primary {
+            color: <?php echo $colors['primary_color']; ?>;
+            border-color: <?php echo $colors['primary_color']; ?>;
+        }
 
-    .mobile-ui .list-group-item.active {
-        background-color: <?php echo $colors['primary_color']; ?> !important;
-        border-color: <?php echo $colors['primary_color']; ?> !important;
-    }
+        .btn-outline-primary:active,
+        .btn-outline-primary:hover {
+            color: #ffffff;
+            background-color: <?php echo $colors['primary_color_hover']; ?>;
+            border-color: <?php echo $colors['primary_color_hover']; ?>;
+        }
 
-    .mobile-ui .mobile-property-button.selected .form-field-caption {
-        border-color: <?php echo $colors['primary_color']; ?> !important;
-    }
+        .btn-outline-primary.disabled,
+        .btn-outline-primary:disabled {
+            color: <?php echo $colors['primary_color_hover']; ?>;
+        }
 
-    .printess-designer-preloader {
-        border-bottom-color: <?php echo $colors['primary_color']; ?>;
-    }
+        .nav-link {
+            color: <?php echo $colors['primary_color']; ?>;
+        }
+
+        .nav-link:focus,
+        .nav-link:hover {
+            color: <?php echo $colors['primary_color_hover']; ?>;
+        }
+
+        .accordion-button:not(.collapsed) {
+            color: <?php echo $colors['primary_color']; ?>;
+        }
+
+        @media screen and (min-width: 897px) {
+            ul.step-tabs-desktop > .nav-item:first-child > .nav-link.active,
+            ul.step-tabs-desktop > .nav-item:first-child > .nav-link.active:hover {
+                color: <?php echo $colors['primary_color']; ?>;
+                border-color: <?php echo $colors['primary_color']; ?> <?php echo $colors['primary_color']; ?> transparent<?php echo $colors['primary_color']; ?>;
+            }
+
+            ul.step-tabs-desktop .nav-link.active {
+                color: <?php echo $colors['primary_color']; ?>;
+                border-color: <?php echo $colors['primary_color']; ?> <?php echo $colors['primary_color']; ?> transparent<?php echo $colors['primary_color']; ?>;
+
+            }
+        }
+
+        @media screen and (max-width: 896px) {
+            .nav-tabs .active-step-tablink {
+                border-bottom-color: <?php echo $colors['primary_color']; ?>;
+            }
+        }
+
+         .scroll-right-indicator {
+            background-image: linear-gradient(to right, rgba(168,168,168,0), <?php echo $colors['primary_color']; ?>) !important;
+        }
+
+        .list-group-item.active {
+            background-color: <?php echo $colors['primary_color']; ?>;
+            border-color: <?php echo $colors['primary_color']; ?>;
+        }
+
+        .mobile-property-button.selected .circular-image {
+            border-color: <?php echo $colors['primary_color']; ?> !important;
+        }
+
+
 
     <?php endif; ?>
 

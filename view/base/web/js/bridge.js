@@ -271,17 +271,9 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
     }
 
     Bridge.prototype.spreadChange = function(groupSnippets, layoutSnippets, tabs) {
-
-        // remember groupSnippets for showing as add-able items
         this.currentGroupSnippets = groupSnippets;
         this.currentLayoutSnippets = layoutSnippets;
         this.currentTabs = tabs;
-
-        const layoutSnippetsDiv = document.getElementById("layoutSnippets");
-        layoutSnippetsDiv.innerHTML = "";
-        layoutSnippetsDiv.appendChild(uiHelper.renderLayoutSnippets(this.printess, this.currentLayoutSnippets));
-        document.querySelector(".show-layouts-button").style.visibility = this.currentLayoutSnippets.length ? "visible" : "hidden";
-
     }
 
     Bridge.prototype.getOverlay = function(properties) {
@@ -297,7 +289,29 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
         this.cartOffcanvas.show();
     }
 
-    Bridge.prototype.formFieldChanged = function(name, value) {
+    Bridge.prototype.formFieldChanged = function(name, value, tag) {
+
+        if (tag && this.currentVariant) {
+            this.printess.persistExchangeState().then(() => {
+
+                fetch('/rest/V1/printess/designer/geturlbytag?' + new URLSearchParams({'tag': tag }),
+                {
+                    method: "GET"
+                })
+                    .then(response => response.json())
+                    .then((data) => {
+
+                        if (data.url) {
+                            location.href = data.url;
+                        }
+
+                    })
+
+            });
+
+            return;
+
+        }
 
         this.currentAttributeMap = updateCurrentAttributeMap.call(this, name, value);
         this.currentVariant = getVariantByAttributeMap.call(this, this.currentAttributeMap);

@@ -16,12 +16,13 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
             let session = customerData.get('printessdesigner')();
 
             window.WebComponents.waitFor(async () => {
-                const printessLoader = await import('https://editor.printess.com/v/1.2.0/printess-editor/printess-editor.js');
+                const printessLoader = await import('https://editor.printess.com/v/1.3.0/printess-editor/printess-editor.js');
                 printess = await printessLoader.attachPrintess({
-                    resourcePath: "https://editor.printess.com/v/1.2.0/printess-editor",
+                    resourcePath: "https://editor.printess.com/v/1.3.0/printess-editor",
                     domain: "api.printess.com",
                     div: document.getElementById("desktop-printess-container"),
                     token: config.printess.shopToken,
+                    translationKey: config.printess.translationKey,
                     basketId: session.session_id || config.session.session_id,
                     shopUserId: session.customer_id,
                     showBuyerSide: true,
@@ -35,7 +36,7 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
                     spreadChangeCallback: (groupSnippets, layoutSnippets, tabs) => { bridge.spreadChange(groupSnippets, layoutSnippets, tabs) },
                     getOverlayCallback: (properties) => { bridge.getOverlay(properties) },
                     addToBasketCallback: (saveToken, url) => { bridge.addToBasket(saveToken, url) },
-                    formFieldChangedCallback: (name, value) => { bridge.formFieldChanged(name, value) },
+                    formFieldChangedCallback: (name, value, tag) => { bridge.formFieldChanged(name, value, tag) },
                     refreshPaginationCallback: () => { bridge.refreshPagination() },
                     backButtonCallback: (saveToken) => { bridge.backButtonHandler(saveToken) }
                 });
