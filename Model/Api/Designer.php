@@ -4,7 +4,6 @@ namespace Digitalprint\PrintessDesigner\Model\Api;
 
 use Digitalprint\PrintessDesigner\Api\DesignerInterface;
 use Digitalprint\PrintessDesigner\Api\Data\DesignerInterface as DataDesignerInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\UrlInterface;
 
 class Designer implements DesignerInterface
@@ -12,12 +11,12 @@ class Designer implements DesignerInterface
     /**
      * @var DataDesignerInterface
      */
-    private $dataDesigner;
+    protected $dataDesigner;
 
     /**
      * @var UrlInterface
      */
-    private $urlBuilder;
+    protected $urlBuilder;
 
     public function __construct(
         DataDesignerInterface $dataDesigner,
