@@ -54,6 +54,14 @@ class CustomProductAttributes
             $extensionAttributes->setPrintessThumbnailUrl($options['additional_options']['printess_thumbnail_url']['value']);
         }
 
+        if (isset($options['additional_options']['printess_product_documents'])) {
+            $extensionAttributes->setPrintessProductDocuments($options['additional_options']['printess_product_documents']['value']);
+        }
+
+        if (isset($options['additional_options']['printess_product_priceInfo'])) {
+            $extensionAttributes->setPrintessProductPriceInfo($options['additional_options']['printess_product_priceInfo']['value']);
+        }
+
         $orderItem->setExtensionAttributes($extensionAttributes);
 
         return $orderItem;
@@ -82,6 +90,14 @@ class CustomProductAttributes
 
             if (isset($options['additional_options']['printess_thumbnail_url'])) {
                 $extensionAttributes->setPrintessThumbnailUrl($options['additional_options']['printess_thumbnail_url']['value']);
+            }
+
+            if (isset($options['additional_options']['printess_product_documents'])) {
+                $extensionAttributes->setPrintessProductDocuments($options['additional_options']['printess_product_documents']['value']);
+            }
+
+            if (isset($options['additional_options']['printess_product_priceInfo'])) {
+                $extensionAttributes->setPrintessProductPriceInfo($options['additional_options']['printess_product_priceInfo']['value']);
             }
 
             $orderItem->setExtensionAttributes($extensionAttributes);

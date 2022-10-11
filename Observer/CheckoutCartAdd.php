@@ -60,6 +60,20 @@ class CheckoutCartAdd implements ObserverInterface
             ];
         }
 
+        if (isset($params['documents'])) {
+            $additionalOptions['printess_product_documents'] = [
+                'label' => 'documents',
+                'value' => $params['documents']
+            ];
+        }
+
+        if (isset($params['priceInfo'])) {
+            $additionalOptions['printess_product_priceInfo'] = [
+                'label' => 'priceInfo',
+                'value' => $params['priceInfo']
+            ];
+        }
+
         if (count($additionalOptions) > 0) {
             $item->addOption(array(
                 'product_id' => $item->getProductId(),

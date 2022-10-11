@@ -36,7 +36,8 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
                     addToBasketCallback: (saveToken, url) => { bridge.addToBasket(saveToken, url) },
                     formFieldChangedCallback: (name, value, tag) => { bridge.formFieldChanged(name, value, tag) },
                     refreshPaginationCallback: () => { bridge.refreshPagination() },
-                    backButtonCallback: (saveToken) => { bridge.backButtonHandler(saveToken) }
+                    backButtonCallback: (saveToken) => { bridge.backButtonHandler(saveToken) },
+                    priceChangeCallback: (priceInfo) => { bridge.priceChange(priceInfo) }
                 });
 
                 bridge = new Bridge(printess, config.session, config.printess, config.variants);

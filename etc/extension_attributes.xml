@@ -3,5 +3,7 @@
     <extension_attributes for="Magento\Sales\Api\Data\OrderItemInterface">
         <attribute code="printess_save_token" type="string" />
         <attribute code="printess_thumbnail_url" type="string" />
+        <attribute code="printess_product_documents" type="string" />
+        <attribute code="printess_product_priceInfo" type="string" />
     </extension_attributes>
 </config>

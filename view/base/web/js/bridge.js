@@ -1,13 +1,15 @@
 
 define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/js/store/cart'], function(Cart, CartStore) {
 
-    function addToCart(sku, quantity, thumbnailUrl, saveToken, customerToken) {
+    function addToCart(sku, quantity, thumbnailUrl, saveToken, documents, priceInfo, customerToken) {
 
         let payload = {
             'sku': sku,
             'quantity': quantity,
             'thumbnailUrl': thumbnailUrl,
-            'saveToken': saveToken
+            'saveToken': saveToken,
+            'documents': JSON.stringify(documents),
+            'priceInfo': JSON.stringify(priceInfo)
         };
 
         let headers = {
@@ -25,15 +27,17 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
         });
     }
 
-    function updateOrderItem(orderId, itemId, sku, quantity, thumbnailUrl, saveToken, adminToken) {
+    function updateOrderItem(orderId, itemId, sku, quantity, thumbnailUrl, saveToken, documents, priceInfo, adminToken) {
 
         let payload = {
             'orderId': parseInt(orderId),
             'itemId': parseInt(itemId),
             'sku': sku,
             'qty': quantity,
-            'saveToken': saveToken,
             'thumbnailUrl': thumbnailUrl,
+            'saveToken': saveToken,
+            'documents': JSON.stringify(documents),
+            'priceInfo' : JSON.stringify(priceInfo)
         };
 
         let headers = {
@@ -66,10 +70,10 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
                     CartStore.setThumbnailUrl(thumbnailUrl);
 
                     if (config.areaCode === 'adminhtml') {
-                        return updateOrderItem(config.orderId, config.itemId, CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, session.admin_token)
+                        return updateOrderItem(config.orderId, config.itemId, CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, CartStore.documents, CartStore.priceInfo, session.admin_token)
                     }
 
-                    return addToCart(CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, session.customer_token);
+                    return addToCart(CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, CartStore.documents, CartStore.priceInfo, session.customer_token);
                 })
                 .then(response => response.json())
                 .then((data) => {
@@ -227,8 +231,6 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
 
         this.cartOffcanvas = createOffcanvas.call(this);
 
-
-
         setCurrentVariantByCode.call(this, config.variant);
         setAttributeMappingByVariant.call(this, this.currentVariant);
         setCurrentAttributeMapByVariant.call(this, this.currentVariant);
@@ -285,6 +287,7 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
         CartStore.setSku(this.currentVariant.sku);
         CartStore.setSaveToken(saveToken);
         CartStore.setThumbnailUrl(thumbnailUrl);
+        CartStore.setDocuments(this.printess.getBuyerFrameCountAndMarkers());
 
         this.cartOffcanvas.show();
     }
@@ -327,6 +330,14 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
 
     Bridge.prototype.backButtonHandler = function(saveToken) {
         window.history.back();
+    }
+
+    Bridge.prototype.priceChange = function(priceInfo) {
+        if (!this.currentVariant) {
+            return;
+        }
+
+        CartStore.setPriceInfo(priceInfo);
     }
 
     return Bridge;

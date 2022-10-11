@@ -6,6 +6,8 @@ define([], function() {
         this.quantity = 1;
         this.thumbnailUrl = null;
         this.saveToken = null;
+        this.documents = null;
+        this.priceInfo = null;
     }
 
     Cart.prototype.setSku = function(sku) {
@@ -38,6 +40,14 @@ define([], function() {
 
     Cart.prototype.setSaveToken = function(saveToken) {
         this.saveToken = saveToken;
+    }
+
+    Cart.prototype.setDocuments = function(documents) {
+        this.documents = documents;
+    }
+
+    Cart.prototype.setPriceInfo = function(priceInfo) {
+        this.priceInfo = priceInfo;
     }
 
     return new Cart();

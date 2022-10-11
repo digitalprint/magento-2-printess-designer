@@ -84,10 +84,12 @@ class Order implements OrderInterface
      * @param $qty
      * @param $saveToken
      * @param $thumbnailUrl
+     * @param $documents
+     * @param $priceInfo
      * @return DataOrderInterface
      * @throws NoSuchEntityException
      */
-    public function updateOrderItem($orderId, $itemId, $sku, $qty, $saveToken, $thumbnailUrl)
+    public function updateOrderItem($orderId, $itemId, $sku, $qty, $saveToken, $thumbnailUrl, $documents, $priceInfo)
     {
 
         $this->dataOrder->setStatus('error');
@@ -180,6 +182,16 @@ class Order implements OrderInterface
                         $additionalOptions['printess_thumbnail_url'] = [
                             'label' => 'thumbnail_url',
                             'value' => $thumbnailUrl
+                        ];
+
+                        $additionalOptions['printess_product_documents'] = [
+                            'label' => 'product_documents',
+                            'value' => $documents
+                        ];
+
+                        $additionalOptions['printess_product_priceInfo'] = [
+                            'label' => 'product_priceInfo',
+                            'value' => $priceInfo
                         ];
 
                         $updateOptions[] = [

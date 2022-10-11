@@ -11,9 +11,11 @@ interface CartInterface {
      * @param string $quantity
      * @param string $saveToken
      * @param string $thumbnailUrl
+     * @param string $documents
+     * @param string $priceInfo
      * @return Data\CartInterface
      *
      */
-    public function addToCart($sku, $quantity, $saveToken, $thumbnailUrl);
+    public function addToCart($sku, $quantity, $saveToken, $thumbnailUrl, $documents, $priceInfo);
 
 }

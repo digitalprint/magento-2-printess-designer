@@ -106,6 +106,8 @@ class Cart implements CartInterface
      * @param $quantity
      * @param $saveToken
      * @param $thumbnailUrl
+     * @param $documents
+     * @param $priceInfo
      * @return DataCartInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -113,7 +115,7 @@ class Cart implements CartInterface
      * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
      * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
      */
-    public function addToCart($sku, $quantity, $saveToken, $thumbnailUrl)
+    public function addToCart($sku, $quantity, $saveToken, $thumbnailUrl, $documents, $priceInfo)
     {
 
         $this->dataCart->setStatus('error');
