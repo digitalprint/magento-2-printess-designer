@@ -13,7 +13,7 @@ class PrintessProductPriceInfo extends AbstractExtensibleModel implements Printe
      */
     public function getValue()
     {
-        return json_decode($this->getData(self::VALUE), true, 512, JSON_THROW_ON_ERROR);
+        return array(json_decode($this->getData(self::VALUE), true, 512, JSON_THROW_ON_ERROR));
     }
 
     /**
