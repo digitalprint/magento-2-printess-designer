@@ -93,7 +93,6 @@ class Designer extends Template
      */
     private const XML_PATH_DESIGNER_PRIMARY_COLOR_HOVER = 'designer/colors/primary_color_hover';
 
-
     /**
      * @param Context $context
      * @param Resolver $store
@@ -448,9 +447,9 @@ class Designer extends Template
 
         $config['formFields'] = [];
 
-        if (is_null($params['save_token']) && !is_null($childProduct)) {
+        if (is_null($params['save_token'])) {
 
-            $formFields = json_decode($childProduct->getData('printess_form_fields'), true);
+            $formFields = !is_null($childProduct) ? json_decode($childProduct->getData('printess_form_fields'), true) : json_decode($product->getData('printess_form_fields'), true);
 
             if (is_array($formFields)) {
                 foreach ($formFields as $formField) {
