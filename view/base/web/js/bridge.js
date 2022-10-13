@@ -37,7 +37,7 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
             'thumbnailUrl': thumbnailUrl,
             'saveToken': saveToken,
             'documents': JSON.stringify(documents),
-            'priceInfo' : JSON.stringify(priceInfo)
+            'priceInfo': JSON.stringify(priceInfo)
         };
 
         let headers = {

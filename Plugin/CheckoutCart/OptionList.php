@@ -21,7 +21,7 @@ class OptionList {
             $result['printess_save_token'],
             $result['printess_thumbnail_url'],
             $result['printess_product_documents'],
-            $result['printess_product_priceInfo']
+            $result['printess_product_price_info']
         );
         return $result;
     }

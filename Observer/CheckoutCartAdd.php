@@ -68,7 +68,7 @@ class CheckoutCartAdd implements ObserverInterface
         }
 
         if (isset($params['priceInfo'])) {
-            $additionalOptions['printess_product_priceInfo'] = [
+            $additionalOptions['printess_product_price_info'] = [
                 'label' => 'priceInfo',
                 'value' => $params['priceInfo']
             ];

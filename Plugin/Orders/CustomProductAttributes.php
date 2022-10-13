@@ -2,6 +2,8 @@
 
 namespace Digitalprint\PrintessDesigner\Plugin\Orders;
 
+use Digitalprint\PrintessDesigner\Model\PrintessProductDocumentsFactory;
+use Digitalprint\PrintessDesigner\Model\PrintessProductPriceInfoFactory;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
@@ -22,16 +24,32 @@ class CustomProductAttributes
     protected $productFactory;
 
     /**
+     * @var PrintessProductDocumentsFactory
+     */
+    protected $printessProductDocumentsFactory;
+
+    /**
+     * @var PrintessProductPriceInfoFactory
+     */
+    protected $printessProductPriceInfoFactory;
+
+    /**
      * @param OrderItemExtensionFactory $orderItemExtensionFactory
      * @param ProductFactory $productFactory
+     * @param PrintessProductDocumentsFactory $printessProductDocumentsFactory
+     * @param PrintessProductPriceInfoFactory $printessProductPriceInfoFactory*
      */
     public function __construct(
         OrderItemExtensionFactory $orderItemExtensionFactory,
-        ProductFactory $productFactory
-    ) {
+        ProductFactory $productFactory,
+        PrintessProductDocumentsFactory $printessProductDocumentsFactory,
+        PrintessProductPriceInfoFactory $printessProductPriceInfoFactory
 
+    ) {
         $this->orderItemExtensionFactory = $orderItemExtensionFactory;
         $this->productFactory = $productFactory;
+        $this->printessProductDocumentsFactory = $printessProductDocumentsFactory;
+        $this->printessProductPriceInfoFactory = $printessProductPriceInfoFactory;
     }
 
     /**
@@ -44,6 +62,9 @@ class CustomProductAttributes
         $extensionAttributes = $orderItem->getExtensionAttributes();
         $extensionAttributes = $extensionAttributes ?: $this->orderItemExtensionFactory->create();
 
+        $printessProductDocuments = $this->printessProductDocumentsFactory->create();
+        $printessProductPriceInfo = $this->printessProductPriceInfoFactory->create();
+
         $options = $orderItem->getProductOptions();
 
         if (isset($options['additional_options']['printess_save_token'])) {
@@ -55,11 +76,13 @@ class CustomProductAttributes
         }
 
         if (isset($options['additional_options']['printess_product_documents'])) {
-            $extensionAttributes->setPrintessProductDocuments($options['additional_options']['printess_product_documents']['value']);
+            $printessProductDocuments->setValue($options['additional_options']['printess_product_documents']['value']);
+            $extensionAttributes->setPrintessProductDocuments($printessProductDocuments);
         }
 
-        if (isset($options['additional_options']['printess_product_priceInfo'])) {
-            $extensionAttributes->setPrintessProductPriceInfo($options['additional_options']['printess_product_priceInfo']['value']);
+        if (isset($options['additional_options']['printess_product_price_info'])) {
+            $printessProductPriceInfo->setValue($options['additional_options']['printess_product_price_info']['value']);
+            $extensionAttributes->setPrintessProductPriceInfo($printessProductPriceInfo);
         }
 
         $orderItem->setExtensionAttributes($extensionAttributes);
@@ -82,6 +105,9 @@ class CustomProductAttributes
             $extensionAttributes = $orderItem->getExtensionAttributes();
             $extensionAttributes = $extensionAttributes ?: $this->orderItemExtensionFactory->create();
 
+            $printessProductDocuments = $this->printessProductDocumentsFactory->create();
+            $printessProductPriceInfo = $this->printessProductPriceInfoFactory->create();
+
             $options = $orderItem->getProductOptions();
 
             if (isset($options['additional_options']['printess_save_token'])) {
@@ -93,11 +119,13 @@ class CustomProductAttributes
             }
 
             if (isset($options['additional_options']['printess_product_documents'])) {
-                $extensionAttributes->setPrintessProductDocuments($options['additional_options']['printess_product_documents']['value']);
+                $printessProductDocuments->setValue($options['additional_options']['printess_product_documents']['value']);
+                $extensionAttributes->setPrintessProductDocuments($printessProductDocuments);
             }
 
-            if (isset($options['additional_options']['printess_product_priceInfo'])) {
-                $extensionAttributes->setPrintessProductPriceInfo($options['additional_options']['printess_product_priceInfo']['value']);
+            if (isset($options['additional_options']['printess_product_price_info'])) {
+                $printessProductPriceInfo->setValue($options['additional_options']['printess_product_price_info']['value']);
+                $extensionAttributes->setPrintessProductPriceInfo($printessProductPriceInfo);
             }
 
             $orderItem->setExtensionAttributes($extensionAttributes);

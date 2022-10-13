@@ -189,7 +189,7 @@ class Order implements OrderInterface
                             'value' => $documents
                         ];
 
-                        $additionalOptions['printess_product_priceInfo'] = [
+                        $additionalOptions['printess_product_price_info'] = [
                             'label' => 'product_priceInfo',
                             'value' => $priceInfo
                         ];
