@@ -396,11 +396,11 @@ class Designer extends Template
 
         foreach($snippetFields as $snippetField) {
 
-            $data = [];
-
             $productConfig = $this->getPrintessConfig($snippetField, $params['sku'], $params['super_attribute']);
 
             foreach ($productConfig as $section) {
+
+                $data = [];
 
                 if (isset($section['id'])) {
 
