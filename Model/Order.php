@@ -244,23 +244,27 @@ class Order implements OrderInterface
                     $buyRequest = $this->serializer->unserialize($buyRequest->getValue());
 
                     $attributes = [];
+                    
+                    if (isset($buyRequest['super_attribute']) && is_array($buyRequest['super_attribute'])) {
 
-                    foreach ($buyRequest['super_attribute'] as $key => $val) {
+                        foreach ($buyRequest['super_attribute'] as $key => $val) {
 
-                        if (isset($productAttributeOptions[$key])) {
+                            if (isset($productAttributeOptions[$key])) {
 
-                            $res = array_merge(...array_filter($productAttributeOptions[$key]['values'], function ($v, $k) use ($val) {
-                                return $v['value_index'] === $val;
-                            }, ARRAY_FILTER_USE_BOTH));
+                                $res = array_merge(...array_filter($productAttributeOptions[$key]['values'], function ($v, $k) use ($val) {
+                                    return $v['value_index'] === $val;
+                                }, ARRAY_FILTER_USE_BOTH));
 
-                            if (isset($res['label'])) {
+                                if (isset($res['label'])) {
 
-                                $attributes[] = [
-                                    'label' => $productAttributeOptions[$key]['label'],
-                                    'value' => $res['label'],
-                                    'option_id' => $key,
-                                    'option_value' => $val
-                                ];
+                                    $attributes[] = [
+                                        'label' => $productAttributeOptions[$key]['label'],
+                                        'value' => $res['label'],
+                                        'option_id' => $key,
+                                        'option_value' => $val
+                                    ];
+
+                                }
 
                             }
 
