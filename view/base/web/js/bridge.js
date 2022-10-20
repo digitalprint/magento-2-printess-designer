@@ -1,5 +1,5 @@
 
-define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/js/store/cart'], function(Cart, CartStore) {
+define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/js/store/cart', 'Digitalprint_PrintessDesigner/js/store/ui'], function(Cart, CartStore, UiStore) {
 
     function addToCart(sku, quantity, thumbnailUrl, saveToken, documents, priceInfo, customerToken) {
 
@@ -252,6 +252,9 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
 
         const priceDiv = document.getElementById("designerProductPrice");
         priceDiv.innerHTML = this.currentVariant.price;
+
+        UiStore.setAppWasLoaded();
+
     }
 
     Bridge.prototype.selectionChange = function(properties, state)  {
@@ -294,7 +297,8 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
 
     Bridge.prototype.formFieldChanged = function(name, value, tag) {
 
-        if (tag && this.currentVariant) {
+        if (UiStore.isAppLoaded() && tag) {
+
             this.printess.persistExchangeState().then(() => {
 
                 fetch('/rest/V1/printess/designer/geturlbytag?' + new URLSearchParams({'tag': tag }),
