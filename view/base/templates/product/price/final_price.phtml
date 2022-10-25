@@ -1,40 +1,12 @@
-<?php
-/** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $block */
-
-/** ex: \Magento\Catalog\Pricing\Price\RegularPrice */
-/** @var \Magento\Framework\Pricing\Price\PriceInterface $priceModel */
-$priceModel = $block->getPriceType('regular_price');
-
-/** ex: \Magento\Catalog\Pricing\Price\FinalPrice */
-/** @var \Magento\Framework\Pricing\Price\PriceInterface $finalPriceModel */
-$finalPriceModel = $block->getPriceType('final_price');
-$idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
-
-?>
-<?php if ($block->hasSpecialPrice()) :?>
+<% if (data.special_price) { %>
     <div class="special-price mb-2 fs-3 lh-1 text-secondary">
-        <?= /* @noEscape */ $block->renderAmount($finalPriceModel->getAmount(), [
-            'display_label'     => false,
-            'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
-            'price_type'        => 'finalPrice',
-            'include_container' => false
-        ]); ?>
+        <%- data.special_price %>
     </div>
     <div class="old-price fs-5 lh-1 text-black-50">
-        <?= /* @noEscape */ $block->renderAmount($priceModel->getAmount(), [
-            'display_label'     => __('Regular Price'),
-            'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
-            'price_type'        => 'oldPrice',
-            'include_container' => false,
-            'skip_adjustments'  => true
-        ]); ?>
+        <?= __('Regular Price') ?> <%- data.regular_price %>
     </div>
-<?php else :?>
-<div class="special-price fs-3 lh-1 text-secondary">
-    <?= /* @noEscape */ $block->renderAmount($finalPriceModel->getAmount(), [
-        'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
-        'price_type'        => 'finalPrice',
-        'include_container' => false
-    ]); ?>
+<% } else { %>
+<div class="regular-price fs-3 lh-1 text-secondary">
+    <%- data.regular_price %>
 </div>
-<?php endif; ?>
+<% } %>

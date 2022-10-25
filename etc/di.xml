@@ -37,4 +37,6 @@
     <preference for="Digitalprint\PrintessDesigner\Api\Data\CartInterface" type="Digitalprint\PrintessDesigner\Model\Data\Cart"/>
     <preference for="Digitalprint\PrintessDesigner\Api\OrderInterface" type="Digitalprint\PrintessDesigner\Model\Order"/>
     <preference for="Digitalprint\PrintessDesigner\Api\Data\OrderInterface" type="Digitalprint\PrintessDesigner\Model\Data\Order"/>
+    <preference for="Digitalprint\PrintessDesigner\Api\ProductInterface" type="Digitalprint\PrintessDesigner\Model\Api\Product"/>
+    <preference for="Digitalprint\PrintessDesigner\Api\Data\ProductInterface" type="Digitalprint\PrintessDesigner\Model\Api\Data\Product" />
 </config>

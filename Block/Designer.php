@@ -21,9 +21,21 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Integration\Model\Oauth\TokenFactory;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Tax\Helper\Data as taxHelper;
 
 class Designer extends Template
 {
+
+    /**
+     * @var taxHelper
+     */
+    protected $taxHelper;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
 
     /**
      * @var Store
@@ -110,11 +122,13 @@ class Designer extends Template
      */
     public function __construct(
         Context $context,
+        taxHelper $taxHelper,
+        StoreManagerInterface $storeManager,
         Resolver $store,
         State $state,
         AuthSession $authSession,
         Session $customerSession,
-        SerializerInterface  $serializer,
+        SerializerInterface $serializer,
         Product $productModel,
         ProductRepositoryInterface $productRepository,
         Configurable $configurable,
@@ -123,6 +137,8 @@ class Designer extends Template
         TokenFactory $tokenFactory,
         array $data = []
     ) {
+        $this->taxHelper = $taxHelper;
+        $this->storeManager = $storeManager;
         $this->store = $store;
         $this->state = $state;
         $this->authSession = $authSession;
@@ -138,6 +154,10 @@ class Designer extends Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return Designer
+     * @throws NoSuchEntityException
+     */
     public function _prepareLayout()
     {
         $this->pageConfig->getTitle()->set(sprintf("%s - %s", $this->getName(), __('Designer')));
@@ -153,7 +173,6 @@ class Designer extends Template
         $sku = $this->getRequest()->getParam('sku');
         return $this->productRepository->get($sku)->getName();
     }
-
 
     /**
      * @param $product
@@ -217,137 +236,6 @@ class Designer extends Template
 
     /**
      * @return string
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
-     */
-    public function getJsonVariants(): string
-    {
-        $variants = array();
-
-        $sku = $this->getRequest()->getParam('sku');
-        $product = $this->productRepository->get($sku);
-
-        if ($product->getTypeId() === Configurable::TYPE_CODE) {
-
-            if ($this->state->getAreaCode() === Area::AREA_ADMINHTML) {
-                $configProduct = $this->productModel->load($product->getId());
-                $children = $configProduct->getTypeInstance()->getUsedProducts($configProduct);
-            } else {
-                $children = $this->linkManagement->getChildren($product->getSku());
-            }
-
-            foreach($children as $child) {
-
-                $childProduct = $this->productRepository->getById($child->getId());
-
-                $attributes = array();
-
-                $attributes[] = array(
-                    'code' => 'printess_template',
-                    'value' => $childProduct->getData('printess_template')
-                );
-
-                $attributes[] = array(
-                    'code' => 'printess_document',
-                    'value' => $childProduct->getData('printess_document')
-                );
-
-                $formFields = json_decode($childProduct->getData('printess_form_fields'), true);
-
-                if (is_array($formFields)) {
-
-                    foreach ($formFields as $formField) {
-
-                        $attributes[] = array(
-                            'code' => $formField['pim_attr_name'],
-                            'value' => $formField['value']
-                        );
-
-                        $attributes[] = array(
-                            'code' => $formField['printess_ff_name'],
-                            'value' => $formField['value']
-                        );
-
-                    }
-
-                    $attributes[] = array(
-                        'code' => 'printess_form_fields',
-                        'value' => $formFields
-                    );
-
-                }
-
-                $variants[] = array(
-                    'id' => $child->getId(),
-                    'product_id' => $product->getId(),
-                    'sku' => $child->getSku(),
-                    'name' => $child->getName(),
-                    'attributes' => $attributes,
-                    'price' => $this->renderPriceHtml($childProduct)
-                );
-
-            }
-
-        } else {
-
-            $attributes = array();
-
-            $attributes[] = array(
-                'code' => 'printess_template',
-                'value' => $product->getData('printess_template')
-            );
-
-            $attributes[] = array(
-                'code' => 'printess_document',
-                'value' => $product->getData('printess_document')
-            );
-
-            $formFields = $product->getData('printess_form_fields');
-
-            if(isset($formFields)) {
-                $formFields = json_decode($formFields, true);
-            }
-
-            if (is_array($formFields)) {
-
-                foreach ($formFields as $formField) {
-
-                    $attributes[] = array(
-                        'code' => $formField['pim_attr_name'],
-                        'value' => $formField['value']
-                    );
-
-                    $attributes[] = array(
-                        'code' => $formField['printess_ff_name'],
-                        'value' => $formField['value']
-                    );
-
-                }
-
-                $attributes[] = array(
-                    'code' => 'printess_form_fields',
-                    'value' => $formFields
-                );
-
-            }
-
-            $variants[] = array(
-                'id' => $product->getId(),
-                'product_id' => $product->getId(),
-                'sku' => $product->getSku(),
-                'name' => $product->getName(),
-                'attributes' => $attributes,
-                'price' => $this->renderPriceHtml($product)
-            );
-
-        }
-
-        return $this->serializer->serialize($variants);
-
-    }
-
-    /**
-     * @return string
      * @throws NoSuchEntityException
      * @throws \JsonException
      */
@@ -375,6 +263,8 @@ class Designer extends Template
         $config['areaCode'] = $this->state->getAreaCode();
 
         $config['translationKey'] = strstr($this->store->getLocale(), '_', true);
+
+        $config['priceFormat'] = $this->taxHelper->getPriceFormat($this->storeManager->getStore()->getId());
 
         $config['shopToken'] = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_SHOP_TOKEN, $storeScope);
 
@@ -496,6 +386,19 @@ class Designer extends Template
 
         return $this->serializer->serialize($config);
 
+    }
+
+    /**
+     * @return string
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    public function getPriceTemplate() {
+
+        $sku = $this->getRequest()->getParam('sku');
+        $product = $this->productRepository->get($sku);
+
+        return '<script id="designer-price-template" type="text/x-magento-template">' . $this->renderPriceHtml($product) . '</script>';
     }
 
 }

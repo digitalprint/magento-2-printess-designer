@@ -42,7 +42,7 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
                     priceChangeCallback: (priceInfo) => { bridge.priceChange(priceInfo) }
                 });
 
-                bridge = new Bridge(printess, session, config.printess, config.variants);
+                bridge = new Bridge(printess, session, config.printess);
 
                 // listen to visual viewport changes to detect virtual keyboard on iOs and Android
                 if (window.visualViewport) {

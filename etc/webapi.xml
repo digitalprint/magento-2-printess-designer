@@ -12,6 +12,12 @@
             <resource ref="Digitalprint_PrintessDesigner::edit_items"/>
         </resources>
     </route>
+    <route url="/V1/digitalprint-designer/product/" method="GET">
+        <service class="Digitalprint\PrintessDesigner\Api\ProductInterface" method="getProduct"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
     <route url="/V1/printess/designer/geturlbytag/" method="GET">
         <service class="Digitalprint\PrintessDesigner\Api\DesignerInterface" method="getUrlByTag"/>
         <resources>

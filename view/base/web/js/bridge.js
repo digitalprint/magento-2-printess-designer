@@ -1,5 +1,11 @@
 
-define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/js/store/cart', 'Digitalprint_PrintessDesigner/js/store/ui'], function(Cart, CartStore, UiStore) {
+define([
+        'mage/template',
+        'Magento_Catalog/js/price-utils',
+        'Digitalprint_PrintessDesigner/js/cart',
+        'Digitalprint_PrintessDesigner/js/store/cart',
+        'Digitalprint_PrintessDesigner/js/store/ui'
+    ], function(mageTemplate, priceUtils, Cart, CartStore, UiStore) {
 
     function addToCart(sku, quantity, thumbnailUrl, saveToken, documents, priceInfo, customerToken) {
 
@@ -49,6 +55,22 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
             method: "POST",
             headers: headers,
             body: JSON.stringify(payload),
+        });
+    }
+
+    function getProductWithVariants(sku, session) {
+
+        let headers = {
+            'Content-Type': 'application/json'
+        }
+
+        if (session.admin_token !== null) {
+            headers['Authorization'] = `Bearer ${session.admin_token}`
+        }
+
+        return fetch(`/rest/V1/digitalprint-designer/product?sku=${sku}`, {
+            method: 'GET',
+            headers: headers
         });
     }
 
@@ -206,11 +228,26 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
         this.printess.insertTemplateAsLayoutSnippet(this.startDesign.templateName, this.startDesign.templateVersion, this.startDesign.documentName, this.startDesign.mode);
     }
 
+    function updatePriceInfo(priceInfo) {
+
+        for (const key in priceInfo){
+            if (priceInfo.hasOwnProperty(key) && priceInfo[key]){
+                priceInfo[key] =priceUtils.formatPrice(priceInfo[key], JSON.parse(this.config.priceFormat), false);
+            }
+        }
+
+        let progressTmpl = mageTemplate('#designer-price-template');
+        document.getElementById("designerProductPrice").innerHTML = progressTmpl({
+            data: priceInfo
+        });
+
+    }
+
     function _structuredClone(obj) {
         return JSON.parse(JSON.stringify(obj));
     }
 
-    function Bridge(printess, session, config, variants) {
+    function Bridge(printess, session, config) {
 
         showLoader('printessDesigner');
 
@@ -219,7 +256,7 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
         this.session = session;
         this.config = config;
 
-        this.variants = variants;
+        this.variants = null;
         this.currentVariant = null;
 
         this.attributeMapping = null;
@@ -231,10 +268,6 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
 
         this.cartOffcanvas = createOffcanvas.call(this);
 
-        setCurrentVariantByCode.call(this, config.variant);
-        setAttributeMappingByVariant.call(this, this.currentVariant);
-        setCurrentAttributeMapByVariant.call(this, this.currentVariant);
-
         setStartDesign.call(this, config.startDesign);
 
     }
@@ -245,15 +278,26 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
 
         loadStartDesign.call(this);
 
-        hideLoader('printessDesigner');
+        getProductWithVariants(this.config.sku, this.session)
+        .then(response => response.json())
+        .then((product) => {
 
-        let event = new CustomEvent('processStop');
-        document.getElementById('printessDesigner').dispatchEvent(event);
+            this.variants = product.variants;
+            setCurrentVariantByCode.call(this, this.config.variant);
 
-        const priceDiv = document.getElementById("designerProductPrice");
-        priceDiv.innerHTML = this.currentVariant.price;
+            setAttributeMappingByVariant.call(this, this.currentVariant);
+            setCurrentAttributeMapByVariant.call(this, this.currentVariant);
 
-        UiStore.setAppWasLoaded();
+            hideLoader('printessDesigner');
+
+            let event = new CustomEvent('processStop');
+            document.getElementById('printessDesigner').dispatchEvent(event);
+
+            updatePriceInfo.call(this, this.currentVariant.price_info);
+
+            UiStore.setAppWasLoaded();
+
+        });
 
     }
 
@@ -305,14 +349,14 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
                 {
                     method: "GET"
                 })
-                    .then(response => response.json())
-                    .then((data) => {
+                .then(response => response.json())
+                .then((data) => {
 
-                        if (data.url) {
-                            location.href = data.url;
-                        }
+                    if (data.url) {
+                        location.href = data.url;
+                    }
 
-                    })
+                })
 
             });
 
@@ -320,11 +364,14 @@ define(['Digitalprint_PrintessDesigner/js/cart', 'Digitalprint_PrintessDesigner/
 
         }
 
+        if (null === this.currentAttributeMap) {
+            return;
+        }
+
         this.currentAttributeMap = updateCurrentAttributeMap.call(this, name, value);
         this.currentVariant = getVariantByAttributeMap.call(this, this.currentAttributeMap);
 
-        const priceDiv = document.getElementById("designerProductPrice");
-        priceDiv.innerHTML = this.currentVariant.price;
+        updatePriceInfo(this.currentVariant.price_info);
 
     }
 
