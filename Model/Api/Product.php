@@ -51,16 +51,13 @@ class Product implements ProductInterface
     private function getPrice($product) {
 
         if ($product->getTypeId() === Configurable::TYPE_CODE) {
-
             $basePrice = $product->getPriceInfo()->getPrice('regular_price');
-
             $regularPrice = $basePrice->getMinRegularAmount()->getValue();
-            $specialPrice = $product->getFinalPrice();
-
         } else {
             $regularPrice = $product->getPriceInfo()->getPrice('regular_price')->getValue();
-            $specialPrice = $product->getPriceInfo()->getPrice('special_price')->getValue();
         }
+
+        $specialPrice = $product->getFinalPrice();
 
         return [
             'regular_price' => $regularPrice,

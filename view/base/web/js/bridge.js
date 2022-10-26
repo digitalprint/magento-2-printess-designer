@@ -228,17 +228,19 @@ define([
         this.printess.insertTemplateAsLayoutSnippet(this.startDesign.templateName, this.startDesign.templateVersion, this.startDesign.documentName, this.startDesign.mode);
     }
 
-    function updatePriceInfo(priceInfo) {
+    function hasSpecialPrice(priceInfo) {
+        return priceInfo.regular_price > priceInfo.special_price;
+    }
 
-        for (const key in priceInfo){
-            if (priceInfo.hasOwnProperty(key) && priceInfo[key]){
-                priceInfo[key] =priceUtils.formatPrice(priceInfo[key], JSON.parse(this.config.priceFormat), false);
-            }
-        }
+    function updatePriceInfo(priceInfo) {
 
         let progressTmpl = mageTemplate('#designer-price-template');
         document.getElementById("designerProductPrice").innerHTML = progressTmpl({
-            data: priceInfo
+            data: {
+                has_special_price: hasSpecialPrice(priceInfo),
+                regular_price: priceUtils.formatPrice(priceInfo.regular_price, JSON.parse(this.config.priceFormat), false),
+                special_price: priceUtils.formatPrice(priceInfo.special_price, JSON.parse(this.config.priceFormat), false),
+            }
         });
 
     }
