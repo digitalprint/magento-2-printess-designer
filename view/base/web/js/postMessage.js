@@ -1,5 +1,5 @@
 
-define(['Digitalprint_PrintessDesigner/js/penpal'], function() {
+define(['penpal'], function() {
 
     let iframeInstance = null;
     let isChildConnected = false;
