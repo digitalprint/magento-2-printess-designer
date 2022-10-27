@@ -11,7 +11,7 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
             }
         };
 
-        require(['Magento_Customer/js/customer-data', 'Digitalprint_PrintessDesigner/js/bridge'], function(customerData, Bridge) {
+        require(['Magento_Customer/js/customer-data', 'Digitalprint_PrintessDesigner/js/bridge', 'Digitalprint_PrintessDesigner/js/postMessage'], function(customerData, Bridge, postMessage) {
 
             let session = customerData.get('printessdesigner')();
 
@@ -50,6 +50,18 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
                     window.visualViewport.addEventListener("resize", () => uiHelper.viewPortResize(printess)); // android
                 } else {
                     window.addEventListener("resize", () => uiHelper.resize(printess));
+                }
+
+                if (config.designPicker.isEnabled) {
+
+                    postMessage = new postMessage({
+                        'path': config.designPicker.path,
+                        'locale': config.designPicker.locale,
+                        'client': config.designPicker.client,
+                        'attributes': config.designPicker.attributes,
+                        'designFormat': config.designPicker.designFormat
+                    });
+
                 }
 
             });

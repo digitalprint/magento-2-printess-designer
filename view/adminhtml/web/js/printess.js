@@ -11,7 +11,7 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
             }
         };
 
-        require(['Digitalprint_PrintessDesigner/js/bridge'], function(Bridge) {
+        require(['Digitalprint_PrintessDesigner/js/bridge', 'Digitalprint_PrintessDesigner/js/postMessage'], function(Bridge, postMessage) {
 
             window.WebComponents.waitFor(async () => {
                 const printessLoader = await import('https://editor.printess.com/v/1.3.0/printess-editor/printess-editor.js');
@@ -48,6 +48,18 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
                     window.visualViewport.addEventListener("resize", () => uiHelper.viewPortResize(printess)); // android
                 } else {
                     window.addEventListener("resize", () => uiHelper.resize(printess));
+                }
+
+                if (config.designPicker.isEnabled) {
+
+                    postMessage = new postMessage({
+                        'path': config.designPicker.path,
+                        'locale': config.designPicker.locale,
+                        'client': config.designPicker.client,
+                        'attributes': config.designPicker.attributes,
+                        'designFormat': config.designPicker.designFormat
+                    });
+
                 }
 
             });

@@ -96,17 +96,36 @@ class Designer extends Template
      * @var string
      */
     private const XML_PATH_DESIGNER_SHOP_TOKEN = 'designer/api_token/shop_token';
+
     /**
      * @var string
      */
     private const XML_PATH_DESIGNER_PRIMARY_COLOR = 'designer/colors/primary_color';
+
     /**
      * @var string
      */
     private const XML_PATH_DESIGNER_PRIMARY_COLOR_HOVER = 'designer/colors/primary_color_hover';
 
     /**
+     * @var string
+     */
+    private const XML_PATH_DESIGNER_DESIGNPICKER_ENABLED = 'designer/designpicker/is_designpicker_enabled';
+
+    /**
+     * @var string
+     */
+    private const XML_PATH_DESIGNER_DESIGNPICKER_PATH = 'designer/designpicker/path';
+
+    /**
+     * @var string
+     */
+    private const XML_PATH_DESIGNER_DESIGNPICKER_CLIENT= 'designer/designpicker/client';
+
+    /**
      * @param Context $context
+     * @param taxHelper $taxHelper
+     * @param StoreManagerInterface $storeManager
      * @param Resolver $store
      * @param State $state
      * @param AuthSession $authSession
@@ -350,6 +369,49 @@ class Designer extends Template
                 }
             }
 
+        }
+
+        return $this->serializer->serialize($config);
+
+    }
+
+    public function getDesignPickerConfig() {
+
+        $config = [
+            'isEnabled' => false,
+            'path' => null,
+            'locale' => null,
+            'client' => null,
+            'attributes' => [],
+            'designFormat' => 'square'
+        ];
+
+        $storeScope = ScopeInterface::SCOPE_STORE;
+
+        if ($this->scopeConfig->getValue(self::XML_PATH_DESIGNER_DESIGNPICKER_ENABLED, $storeScope)) {
+
+            $sku = $this->getRequest()->getParam('sku');
+            $superAttribute = $this->getRequest()->getParam('super_attribute');
+
+            $product = $this->productRepository->get($sku);
+            $childProduct = $this->configurable->getProductByAttributes($superAttribute, $product);
+
+            $attributes = !is_null($childProduct) && !is_null($childProduct->getData('printess_design_picker_attributes')) ? $childProduct->getData('printess_design_picker_attributes') : $product->getData('printess_design_picker_attributes');
+
+            if (!is_null($attributes)) {
+
+                $designFormat = !is_null($childProduct) && !is_null($childProduct->getData('printess_design_picker_design_format')) ? $childProduct->getData('printess_design_picker_design_format') : $product->getData('printess_design_picker_design_format');
+                if (is_null($designFormat)) {
+                    $designFormat = 'square';
+                }
+
+                $config['isEnabled'] = true;
+                $config['path'] = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_DESIGNPICKER_PATH, $storeScope);
+                $config['locale'] = strstr($this->store->getLocale(), '_', true);
+                $config['client'] = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_DESIGNPICKER_CLIENT, $storeScope);
+                $config['attributes'] = json_decode($attributes);
+                $config['designFormat'] = $designFormat;
+            }
         }
 
         return $this->serializer->serialize($config);

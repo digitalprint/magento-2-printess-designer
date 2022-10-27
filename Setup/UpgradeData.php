@@ -131,7 +131,65 @@ class UpgradeData implements UpgradeDataInterface
 
         }
 
+        if (version_compare($context->getVersion(), '1.9', '<')) {
 
+            // Printess Design Picker Attributes
+            $eavSetup->addAttribute(
+                Product::ENTITY,
+                'printess_design_picker_attributes',
+                [
+                    'group' => 'Printess',
+                    'type' => 'varchar',
+                    'backend' => '',
+                    'frontend' => '',
+                    'label' => 'Design Auswahl Parameter',
+                    'input' => 'text',
+                    'class' => '',
+                    'source' => '',
+                    'global' => ScopedAttributeInterface::SCOPE_STORE,
+                    'visible' => true,
+                    'required' => false,
+                    'user_defined' => false,
+                    'default' => '',
+                    'searchable' => false,
+                    'filterable' => false,
+                    'comparable' => false,
+                    'visible_on_front' => false,
+                    'used_in_product_listing' => false,
+                    'unique' => false,
+                    'apply_to' => ''
+                ]
+            );
+
+            // Printess Design Picker Design Format
+            $eavSetup->addAttribute(
+                Product::ENTITY,
+                'printess_design_picker_design_format',
+                [
+                    'group' => 'Printess',
+                    'type' => 'varchar',
+                    'backend' => '',
+                    'frontend' => '',
+                    'label' => 'Design Format',
+                    'input' => 'text',
+                    'class' => '',
+                    'source' => '',
+                    'global' => ScopedAttributeInterface::SCOPE_STORE,
+                    'visible' => true,
+                    'required' => false,
+                    'user_defined' => false,
+                    'default' => '',
+                    'searchable' => false,
+                    'filterable' => false,
+                    'comparable' => false,
+                    'visible_on_front' => false,
+                    'used_in_product_listing' => false,
+                    'unique' => false,
+                    'apply_to' => ''
+                ]
+            );
+
+        }
 
     }
 }

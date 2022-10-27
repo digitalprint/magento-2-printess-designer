@@ -55,6 +55,29 @@
                     <comment><![CDATA[Global setting. Enable images optimization during the rendering of print files.]]></comment>
                 </field>
             </group>
+            <group id="designpicker" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Designs</label>
+                <comment><![CDATA[Configure design picker settings.]]></comment>
+                <field id="is_designpicker_enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Enables design picker features at this Magento scope.]]></comment>
+                </field>
+                <field id="path" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Path</label>
+                    <comment><![CDATA[Path of the design picker application.]]></comment>
+                    <depends>
+                        <field id="is_designpicker_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="client" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client</label>
+                    <comment><![CDATA[Parameter to pass a client name to the design picker.]]></comment>
+                    <depends>
+                        <field id="is_designpicker_enabled">1</field>
+                    </depends>
+                </field>
+            </group>
         </section>
     </system>
 </config>
