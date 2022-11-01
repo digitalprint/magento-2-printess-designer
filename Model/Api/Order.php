@@ -1,6 +1,6 @@
 <?php
 
-namespace Digitalprint\PrintessDesigner\Model;
+namespace Digitalprint\PrintessDesigner\Model\Api;
 
 use Digitalprint\PrintessDesigner\Api\OrderInterface;
 use Digitalprint\PrintessDesigner\Api\Data\OrderInterface as DataOrderInterface;
@@ -244,7 +244,7 @@ class Order implements OrderInterface
                     $buyRequest = $this->serializer->unserialize($buyRequest->getValue());
 
                     $attributes = [];
-                    
+
                     if (isset($buyRequest['super_attribute']) && is_array($buyRequest['super_attribute'])) {
 
                         foreach ($buyRequest['super_attribute'] as $key => $val) {

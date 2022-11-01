@@ -1,6 +1,6 @@
 <?php
 
-namespace Digitalprint\PrintessDesigner\Model;
+namespace Digitalprint\PrintessDesigner\Model\Api;
 
 use Digitalprint\PrintessDesigner\Api\CartInterface;
 use Digitalprint\PrintessDesigner\Api\Data\CartInterface as DataCartInterface;
