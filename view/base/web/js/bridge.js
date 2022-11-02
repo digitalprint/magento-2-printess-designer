@@ -7,7 +7,7 @@ define([
         'Digitalprint_PrintessDesigner/js/store/ui'
     ], function(mageTemplate, priceUtils, Cart, CartStore, UiStore) {
 
-    function addToCart(sku, quantity, thumbnailUrl, saveToken, documents, priceInfo, customerToken) {
+    function addToCart(storeCode, sku, quantity, thumbnailUrl, saveToken, documents, priceInfo, customerToken) {
 
         let payload = {
             'sku': sku,
@@ -26,7 +26,7 @@ define([
             headers['Authorization'] = `Bearer ${customerToken}`
         }
 
-        return fetch('/rest/V1/digitalprint-designer/addtocart', {
+        return fetch(`/rest/${storeCode}/V1/digitalprint-designer/addtocart`, {
             method: "POST",
             headers: headers,
             body: JSON.stringify(payload),
@@ -58,7 +58,7 @@ define([
         });
     }
 
-    function getProductWithVariants(sku, session) {
+    function getProductWithVariants(storeCode, sku, session) {
 
         let headers = {
             'Content-Type': 'application/json'
@@ -68,7 +68,7 @@ define([
             headers['Authorization'] = `Bearer ${session.admin_token}`
         }
 
-        return fetch(`/rest/V1/digitalprint-designer/product?sku=${sku}`, {
+        return fetch(`/rest/${storeCode}/V1/digitalprint-designer/product?sku=${sku}`, {
             method: 'GET',
             headers: headers
         });
@@ -95,7 +95,7 @@ define([
                         return updateOrderItem(config.orderId, config.itemId, CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, CartStore.documents, CartStore.priceInfo, session.admin_token)
                     }
 
-                    return addToCart(CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, CartStore.documents, CartStore.priceInfo, session.customer_token);
+                    return addToCart(config.storeCode, CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, CartStore.documents, CartStore.priceInfo, session.customer_token);
                 })
                 .then(response => response.json())
                 .then((data) => {
@@ -280,7 +280,7 @@ define([
 
         loadStartDesign.call(this);
 
-        getProductWithVariants(this.config.sku, this.session)
+        getProductWithVariants(this.config.storeCode, this.config.sku, this.session)
         .then(response => response.json())
         .then((product) => {
 

@@ -280,6 +280,7 @@ class Designer extends Template
         $config = array();
 
         $config['areaCode'] = $this->state->getAreaCode();
+        $config['storeCode'] = $this->storeManager->getstore()->getCode();
 
         $config['translationKey'] = strstr($this->store->getLocale(), '_', true);
 
