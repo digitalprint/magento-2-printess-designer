@@ -386,9 +386,6 @@ define([
     }
 
     Bridge.prototype.priceChange = function(priceInfo) {
-        if (!this.currentVariant) {
-            return;
-        }
 
         CartStore.setPriceInfo(priceInfo);
     }
