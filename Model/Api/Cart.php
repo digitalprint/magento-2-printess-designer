@@ -10,11 +10,17 @@ use Magento\Checkout\Model\Session;
 use Magento\Checkout\Model\SessionFactory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
+use Magento\Framework\Stdlib\Cookie\FailureToSendException;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Cart implements CartInterface
 {
@@ -25,9 +31,9 @@ class Cart implements CartInterface
     private $dataCart;
 
     /**
-     * @var Json
+     * @var StoreManagerInterface
      */
-    private $json;
+    private $storeManager;
 
     /**
      * @var ProductFactory
@@ -70,36 +76,37 @@ class Cart implements CartInterface
     private $configurableType;
 
     /**
-     * @var UrlInterface
+     * @param DataCartInterface $dataCart
+     * @param StoreManagerInterface $storeManager
+     * @param SessionManagerInterface $sessionManager
+     * @param CookieManagerInterface $cookieManager
+     * @param StoreManagerInterface $cookieMetadataFactory
+     * @param \Magento\Checkout\Model\Cart $cart
+     * @param ProductFactory $productFactory
+     * @param ProductRepositoryInterface $productRepository
+     * @param Configurable $configurableType
      */
-    private $urlBuilder;
-
     public function __construct(
         DataCartInterface $dataCart,
-        Json $json,
-        ProductFactory $productFactory,
-        Session $checkoutSession,
+        StoreManagerInterface $storeManager,
         SessionManagerInterface $sessionManager,
         CookieManagerInterface $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Checkout\Model\Cart $cart,
+        ProductFactory $productFactory,
         ProductRepositoryInterface $productRepository,
-        Configurable $configurableType,
-        UrlInterface $urlBuilder
+        Configurable $configurableType
     ) {
         $this->dataCart = $dataCart;
-        $this->json = $json;
-        $this->productFactory = $productFactory;
-        $this->checkoutSession = $checkoutSession;
+        $this->storeManager = $storeManager;
         $this->sessionManager = $sessionManager;
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->cart = $cart;
+        $this->productFactory = $productFactory;
         $this->productRepository = $productRepository;
         $this->configurableType = $configurableType;
-        $this->urlBuilder = $urlBuilder;
     }
-
 
     /**
      * @param $sku
@@ -109,11 +116,11 @@ class Cart implements CartInterface
      * @param $documents
      * @param $priceInfo
      * @return DataCartInterface
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
-     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
+     * @throws InputException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     * @throws CookieSizeLimitReachedException
+     * @throws FailureToSendException
      */
     public function addToCart($sku, $quantity, $saveToken, $thumbnailUrl, $documents, $priceInfo)
     {
@@ -155,7 +162,11 @@ class Cart implements CartInterface
                 $this->dataCart->setStatus('success');
             }
 
-            $this->dataCart->setRedirectUrl($this->urlBuilder->getUrl('checkout/cart', ['_secure' => true]));
+            $this->dataCart->setRedirectUrl(
+                $this->storeManager->getStore()->getUrl('checkout/cart', [
+                    '_secure' => true
+                ])
+            );
 
         }
 
@@ -164,9 +175,9 @@ class Cart implements CartInterface
     }
 
     /**
-     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
-     * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws FailureToSendException
+     * @throws CookieSizeLimitReachedException
+     * @throws InputException
      */
     public function invalidateCartCookie(): void
     {
