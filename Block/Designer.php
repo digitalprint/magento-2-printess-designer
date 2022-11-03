@@ -372,6 +372,8 @@ class Designer extends Template
 
         }
 
+        $config['snippetPriceCategoryLabels'] = ['', '', '', '', ''];
+
         return $this->serializer->serialize($config);
 
     }

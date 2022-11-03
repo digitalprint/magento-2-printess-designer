@@ -28,6 +28,7 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
                     templateName: config.printess.templateName,
                     mergeTemplates: config.printess.mergeTemplates,
                     formFields: config.printess.formFields,
+                    snippetPriceCategoryLabels: config.printess.snippetPriceCategoryLabels,
                     singleSpreadView: true,
                     loadingDoneCallback: (spreads, title) => { bridge.loadingDone(spreads, title) },
                     selectionChangeCallback: (properties, state) => { bridge.selectionChange(properties, state) },
