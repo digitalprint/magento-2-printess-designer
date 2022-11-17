@@ -8,13 +8,14 @@ class Cart implements CartInterface
 {
 
     /**
-     * @var
+     * @var string|null
      */
-    private $status;
+    private ?string $status;
+
     /**
-     * @var
+     * @var string|null
      */
-    private $redirectUrl;
+    private ?string $redirectUrl;
 
     /**
      * Get status
@@ -30,7 +31,7 @@ class Cart implements CartInterface
      * @param string $status
      * @return CartInterface
      */
-    public function setStatus($status)
+    public function setStatus(string $status)
     {
         $this->status = $status;
     }
@@ -46,10 +47,10 @@ class Cart implements CartInterface
 
     /**
      * Set redirect url
-     * @param string $checkoutUrl
+     * @param string $redirectUrl
      * @return CartInterface
      */
-    public function setRedirectUrl($redirectUrl)
+    public function setRedirectUrl(string $redirectUrl)
     {
         $this->redirectUrl = $redirectUrl;
     }

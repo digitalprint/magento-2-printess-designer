@@ -19,7 +19,7 @@ interface ProductInterface
      * @param string $sku
      * @return ProductInterface
      */
-    public function setSku($sku);
+    public function setSku(string $sku);
 
     /**
      * Get name
@@ -32,7 +32,7 @@ interface ProductInterface
      * @param string $name
      * @return ProductInterface
      */
-    public function setName($title);
+    public function setName(string $name);
 
     /**
      * Get variants
@@ -45,6 +45,6 @@ interface ProductInterface
      * @param array $title
      * @return ProductInterface
      */
-    public function setVariants($title);
+    public function setVariants(array $title);
 
 }

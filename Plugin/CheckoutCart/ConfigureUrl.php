@@ -6,6 +6,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -20,19 +21,22 @@ class ConfigureUrl {
     /**
      * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    protected ScopeConfigInterface $scopeConfig;
+
     /**
      * @var Json|mixed
      */
     protected $serializer;
+
     /**
      * @var UrlInterface
      */
-    protected $urlBuilder;
+    protected UrlInterface $urlBuilder;
+
     /**
      * @var ProductRepositoryInterface
      */
-    protected $productRepository;
+    protected ProductRepositoryInterface $productRepository;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
@@ -56,17 +60,16 @@ class ConfigureUrl {
     /**
      * @param Edit $subject
      * @param $result
-     * @return mixed|string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return string
+     * @throws NoSuchEntityException
      */
-    public function afterGetConfigureUrl(Edit $subject, $result)
+    public function afterGetConfigureUrl(Edit $subject, $result): string
     {
 
         if ($this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ENABLE, ScopeInterface::SCOPE_STORE)) {
 
             $item = $subject->getItem();
 
-            $additionalOptions = [];
             if ($additionalOptions = $item->getOptionByCode('additional_options')) {
                 $additionalOptions = (array) $this->serializer->unserialize($additionalOptions->getValue());
             }
@@ -80,7 +83,6 @@ class ConfigureUrl {
                 $urlParams['sku'] = $product->getSku();
                 $urlParams['save_token'] = $additionalOptions['printess_save_token']['value'];
 
-                $buyRequest = [];
                 if ($buyRequest = $item->getOptionByCode('info_buyRequest')) {
                     $buyRequest = (array) $this->serializer->unserialize($buyRequest->getValue());
                 }
@@ -88,7 +90,7 @@ class ConfigureUrl {
                 if (isset($buyRequest['super_attribute'])) {
 
                     foreach($buyRequest['super_attribute'] as $key => $val) {
-                        $urlParams["super_attribute[{$key}]"] = $val;
+                        $urlParams["super_attribute[$key]"] = $val;
                     }
 
                 }

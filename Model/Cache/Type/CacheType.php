@@ -12,6 +12,7 @@ class CacheType extends TagScope
      * @var string
      */
     public const TYPE_IDENTIFIER = 'printessdesigner';
+
     /**
      * @var string
      */

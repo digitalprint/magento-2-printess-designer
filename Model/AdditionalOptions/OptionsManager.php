@@ -6,17 +6,18 @@ use Exception;
 use Magento\Framework\Serialize\SerializerInterface;
 use Psr\Log\LoggerInterface;
 
+
 Class OptionsManager {
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
     /**
      * @var SerializerInterface
      */
-    protected $serializer;
+    protected SerializerInterface $serializer;
 
     public function __construct(
         SerializerInterface $serializer,
@@ -27,7 +28,13 @@ Class OptionsManager {
         $this->logger = $logger;
     }
 
-    public function transferAdditionalOptions($source, $destination) {
+    /**
+     * @param $source
+     * @param $destination
+     * @return void
+     */
+    public function transferAdditionalOptions($source, $destination): void
+    {
 
         try {
 

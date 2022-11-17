@@ -11,6 +11,6 @@ interface ProductInterface
      * @return Data\ProductInterface
      */
 
-    public function getProduct($sku);
+    public function getProduct(string $sku);
 
 }

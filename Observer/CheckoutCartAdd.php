@@ -1,7 +1,8 @@
 <?php
 
-namespace DigitalPrint\PrintessDesigner\Observer;
+namespace Digitalprint\PrintessDesigner\Observer;
 
+use JsonException;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
@@ -13,11 +14,11 @@ class CheckoutCartAdd implements ObserverInterface
     /**
      * @var RequestInterface
      */
-    protected $request;
+    protected RequestInterface $request;
     /**
      * @var SerializerInterface
      */
-    protected $serializer;
+    protected SerializerInterface $serializer;
 
     /**
      * @param RequestInterface $request
@@ -35,12 +36,13 @@ class CheckoutCartAdd implements ObserverInterface
     /**
      * @param EventObserver $observer
      * @return void
-     * @throws \JsonException
+     * @throws JsonException
      */
-    public function execute(EventObserver $observer) {
+    public function execute(EventObserver $observer)
+    {
 
         $item = $observer->getQuoteItem();
-        $params = json_decode($this->request->getContent(), true);
+        $params = json_decode($this->request->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         $additionalOptions = array();
 

@@ -11,7 +11,7 @@ interface DesignerInterface
      * @return Data\DesignerInterface
      */
 
-    public function getUrlByTag($tag);
+    public function getUrlByTag(string $tag);
 
 
 

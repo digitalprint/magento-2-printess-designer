@@ -30,7 +30,7 @@ class Order implements OrderInterface
      * @param string $status
      * @return \Digitalprint\PrintessDesigner\Api\Data\OrderInterface
      */
-    public function setStatus($status)
+    public function setStatus(string $status)
     {
         $this->status = $status;
     }
@@ -46,10 +46,10 @@ class Order implements OrderInterface
 
     /**
      * Set redirect url
-     * @param string $checkoutUrl
+     * @param string $redirectUrl
      * @return \Digitalprint\PrintessDesigner\Api\Data\OrderInterface
      */
-    public function setRedirectUrl($redirectUrl)
+    public function setRedirectUrl(string $redirectUrl)
     {
         $this->redirectUrl = $redirectUrl;
     }

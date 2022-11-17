@@ -15,7 +15,7 @@ interface OrderInterface
      * @param string $status
      * @return OrderInterface
      */
-    public function setStatus($status);
+    public function setStatus(string $status);
 
     /**
      * Get redirect url
@@ -28,5 +28,5 @@ interface OrderInterface
      * @param string $redirectUrl
      * @return OrderInterface
      */
-    public function setRedirectUrl($redirectUrl);
+    public function setRedirectUrl(string $redirectUrl);
 }

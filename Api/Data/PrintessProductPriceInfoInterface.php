@@ -4,12 +4,12 @@ namespace Digitalprint\PrintessDesigner\Api\Data;
 
 interface PrintessProductPriceInfoInterface
 {
-    const VALUE = 'printess_product_price_info';
+    public const VALUE = 'printess_product_price_info';
 
     /**
      * Return value.
      *
-     * @return \Digitalprint\PrintessDesigner\Api\Data\AssociativeArrayItemInterface[]
+     * @return AssociativeArrayItemInterface[]
      */
     public function getValue();
 
@@ -19,6 +19,6 @@ interface PrintessProductPriceInfoInterface
      * @param string|null $value
      * @return $this
      */
-    public function setValue($value);
+    public function setValue(?string $value);
 
 }

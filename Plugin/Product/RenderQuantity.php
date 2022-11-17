@@ -11,7 +11,7 @@ class RenderQuantity {
     /**
      * @var Printess
      */
-    protected $helperPrintess;
+    protected Printess $helperPrintess;
 
     /**
      * @param Printess $helperPrintess
@@ -25,10 +25,10 @@ class RenderQuantity {
     /**
      * @param View $subject
      * @param $result
-     * @return false|mixed
+     * @return false
      * @throws NoSuchEntityException
      */
-    public function afterShouldRenderQuantity(View $subject, $result)
+    public function afterShouldRenderQuantity(View $subject, $result): bool
     {
         if ($this->helperPrintess->hasTemplate($subject->getProduct()->getSku())) {
             return false;

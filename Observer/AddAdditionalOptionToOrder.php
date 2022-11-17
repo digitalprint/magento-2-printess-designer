@@ -1,6 +1,6 @@
 <?php
 
-namespace DigitalPrint\PrintessDesigner\Observer;
+namespace Digitalprint\PrintessDesigner\Observer;
 
 use Digitalprint\PrintessDesigner\Model\AdditionalOptions\OptionsManager;
 use Magento\Framework\Event\Observer;
@@ -11,9 +11,9 @@ use Magento\Sales\Model\Order;
 class AddAdditionalOptionToOrder implements ObserverInterface {
 
     /**
-     * @var TotalsManager
+     * @var OptionsManager
      */
-    private $optionsManager;
+    private OptionsManager $optionsManager;
 
     /**
      * @param OptionsManager $optionsManager
@@ -29,7 +29,8 @@ class AddAdditionalOptionToOrder implements ObserverInterface {
      *
      * @return void
      */
-    public function execute(Observer $observer) {
+    public function execute(Observer $observer)
+    {
 
         /** @var Quote $quote */
         $quote = $observer->getData('quote');
@@ -37,7 +38,6 @@ class AddAdditionalOptionToOrder implements ObserverInterface {
         $order = $observer->getData('order');
 
         $this->optionsManager->transferAdditionalOptions($quote, $order);
-
     }
 
 }

@@ -14,9 +14,9 @@ class LinkParser {
      * @param $result
      * @param $priceCode
      * @param SaleableInterface $saleableItem
-     * @return array|mixed|string|string[]
+     * @return string
      */
-    public function afterRender(Render $subject, $result, $priceCode, SaleableInterface $saleableItem)
+    public function afterRender(Render $subject, $result, $priceCode, SaleableInterface $saleableItem): string
     {
 
         if ($subject->getPriceRenderHandle() === 'designer_product_prices') {

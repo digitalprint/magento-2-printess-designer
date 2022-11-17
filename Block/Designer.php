@@ -2,6 +2,7 @@
 
 namespace Digitalprint\PrintessDesigner\Block;
 
+use JsonException;
 use Magento\Backend\Model\Auth\Session as AuthSession;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
@@ -30,67 +31,68 @@ class Designer extends Template
     /**
      * @var taxHelper
      */
-    protected $taxHelper;
+    protected taxHelper $taxHelper;
 
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    protected StoreManagerInterface $storeManager;
+
 
     /**
-     * @var Store
+     * @var Resolver
      */
-    protected $store;
+    protected Resolver $store;
 
     /**
      * @var State
      */
-    protected $state;
+    protected State $state;
 
     /**
      * @var AuthSession
      */
-    protected $authSession;
+    protected AuthSession $authSession;
 
     /**
      * @var Session
      */
-    protected $customerSession;
+    protected Session $customerSession;
 
     /**
      * @var SerializerInterface
      */
-    protected $serializer;
+    protected SerializerInterface $serializer;
 
     /**
      * @var Product
      */
-    protected $productModel;
+    protected Product $productModel;
 
     /**
      * @var ProductRepositoryInterface
      */
-    protected $productRepository;
+    protected ProductRepositoryInterface $productRepository;
 
     /**
      * @var Configurable
      */
-    protected $configurable;
+    protected Configurable $configurable;
 
     /**
      * @var LinkManagementInterface
      */
-    protected $linkManagement;
+    protected LinkManagementInterface $linkManagement;
 
     /**
      * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    protected ScopeConfigInterface $scopeConfig;
 
     /**
      * @var TokenFactory
      */
-    protected $tokenFactory;
+    protected TokenFactory $tokenFactory;
 
     /**
      * @var string
@@ -177,7 +179,7 @@ class Designer extends Template
      * @return Designer
      * @throws NoSuchEntityException
      */
-    public function _prepareLayout()
+    public function _prepareLayout(): Designer
     {
         $this->pageConfig->getTitle()->set(sprintf("%s - %s", $this->getName(), __('Designer')));
         return parent::_prepareLayout();
@@ -231,7 +233,7 @@ class Designer extends Template
 
     /**
      * @throws NoSuchEntityException
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function getPrintessConfig($path = null, $sku = null, $superAttribute = null) {
 
@@ -256,7 +258,7 @@ class Designer extends Template
     /**
      * @return string
      * @throws NoSuchEntityException
-     * @throws \JsonException
+     * @throws JsonException|LocalizedException
      */
     public function getJsonConfig(): string
     {
@@ -359,7 +361,7 @@ class Designer extends Template
 
         if (is_null($params['save_token'])) {
 
-            $formFields = !is_null($childProduct) ? json_decode($childProduct->getData('printess_form_fields'), true) : json_decode($product->getData('printess_form_fields'), true);
+            $formFields = !is_null($childProduct) ? json_decode($childProduct->getData('printess_form_fields'), true, 512, JSON_THROW_ON_ERROR) : json_decode($product->getData('printess_form_fields'), true, 512, JSON_THROW_ON_ERROR);
 
             if (is_array($formFields)) {
                 foreach ($formFields as $formField) {
@@ -378,6 +380,11 @@ class Designer extends Template
 
     }
 
+    /**
+     * @return bool|string
+     * @throws JsonException
+     * @throws NoSuchEntityException
+     */
     public function getDesignPickerConfig() {
 
         $config = [
@@ -412,7 +419,7 @@ class Designer extends Template
                 $config['path'] = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_DESIGNPICKER_PATH, $storeScope);
                 $config['locale'] = strstr($this->store->getLocale(), '_', true);
                 $config['client'] = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_DESIGNPICKER_CLIENT, $storeScope);
-                $config['attributes'] = json_decode($attributes);
+                $config['attributes'] = json_decode($attributes, false, 512, JSON_THROW_ON_ERROR);
                 $config['designFormat'] = $designFormat;
             }
         }
@@ -458,7 +465,8 @@ class Designer extends Template
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    public function getPriceTemplate() {
+    public function getPriceTemplate(): string
+    {
 
         $sku = $this->getRequest()->getParam('sku');
         $product = $this->productRepository->get($sku);

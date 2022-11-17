@@ -14,12 +14,12 @@ class Printess extends AbstractHelper
     /**
      * @var ProductRepositoryInterface
      */
-    protected $productRepositoryInterface;
+    protected ProductRepositoryInterface $productRepositoryInterface;
 
     /**
      * @var LinkManagementInterface
      */
-    protected $linkManagement;
+    protected LinkManagementInterface $linkManagement;
 
     /**
      * @param Context $context
@@ -40,11 +40,12 @@ class Printess extends AbstractHelper
 
     /**
      * @param $sku
-     * @return array|mixed
+     * @return array
      * @throws NoSuchEntityException
      * @throws \JsonException
      */
-    public function getStartDesign($sku = null) {
+    public function getStartDesign($sku = null): array
+    {
 
         if (!is_null($sku)) {
 
@@ -69,7 +70,7 @@ class Printess extends AbstractHelper
      * @return bool
      * @throws NoSuchEntityException
      */
-    public function hasTemplate($sku = null)
+    public function hasTemplate($sku = null): bool
     {
 
         if (!is_null($sku)) {
@@ -105,7 +106,8 @@ class Printess extends AbstractHelper
     /**
      * @return string
      */
-    public function getDesignerUrl() {
+    public function getDesignerUrl(): string
+    {
         return $this->_getUrl('designer/page/view');
     }
 

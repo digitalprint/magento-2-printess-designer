@@ -15,7 +15,7 @@ interface CartInterface
      * @param string $status
      * @return CartInterface
      */
-    public function setStatus($status);
+    public function setStatus(string $status);
 
     /**
      * Get redirect url

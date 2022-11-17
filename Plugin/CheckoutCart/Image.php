@@ -18,7 +18,7 @@ class Image {
     /**
      * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    protected ScopeConfigInterface $scopeConfig;
     /**
      * @var Json|mixed
      */
@@ -48,8 +48,7 @@ class Image {
         if ($this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ENABLE, ScopeInterface::SCOPE_STORE)) {
 
             $item = $subject->getItem();
-
-            $additionalOptions = [];
+            
             if ($additionalOptions = $item->getOptionByCode('additional_options')) {
                 $additionalOptions = (array) $this->serializer->unserialize($additionalOptions->getValue());
             }

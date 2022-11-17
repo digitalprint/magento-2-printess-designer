@@ -4,6 +4,7 @@ namespace Digitalprint\PrintessDesigner\Model\Api;
 
 use Digitalprint\PrintessDesigner\Api\CartInterface;
 use Digitalprint\PrintessDesigner\Api\Data\CartInterface as DataCartInterface;
+use JsonException;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Checkout\Model\Session;
@@ -13,13 +14,11 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
 use Magento\Framework\Stdlib\Cookie\FailureToSendException;
 use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 class Cart implements CartInterface
@@ -109,20 +108,21 @@ class Cart implements CartInterface
     }
 
     /**
-     * @param $sku
-     * @param $quantity
-     * @param $saveToken
-     * @param $thumbnailUrl
-     * @param $documents
-     * @param $priceInfo
+     * @param string|null $sku
+     * @param int|null $quantity
+     * @param string|null $saveToken
+     * @param string|null $thumbnailUrl
+     * @param string|null $documents
+     * @param string|null $priceInfo
      * @return DataCartInterface
-     * @throws InputException
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      * @throws CookieSizeLimitReachedException
      * @throws FailureToSendException
+     * @throws InputException
+     * @throws JsonException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
-    public function addToCart($sku, $quantity, $saveToken, $thumbnailUrl, $documents, $priceInfo)
+    public function addToCart(?string $sku, ?int $quantity, ?string $saveToken, ?string $thumbnailUrl, ?string $documents, ?string $priceInfo)
     {
 
         $this->dataCart->setStatus('error');
@@ -144,23 +144,20 @@ class Cart implements CartInterface
                 $buyRequest = new DataObject(['product_id' => $product->getId(), 'qty' => $quantity, 'super_attribute' => $options]);
 
                 $this->cart->addProduct($parentProduct, $buyRequest);
-                $this->cart->save();
-
-                $this->invalidateCartCookie();
-
-                $this->dataCart->setStatus('success');
 
             } else {
 
                 $buyRequest = new DataObject(['product_id' => $product->getId(), 'qty' => $quantity]);
 
                 $this->cart->addProduct($product, $buyRequest);
-                $this->cart->save();
 
-                $this->invalidateCartCookie();
-
-                $this->dataCart->setStatus('success');
             }
+
+            $this->cart->save();
+
+            $this->invalidateCartCookie();
+
+            $this->dataCart->setStatus('success');
 
             $this->dataCart->setRedirectUrl(
                 $this->storeManager->getStore()->getUrl('checkout/cart', [
@@ -175,9 +172,10 @@ class Cart implements CartInterface
     }
 
     /**
-     * @throws FailureToSendException
      * @throws CookieSizeLimitReachedException
+     * @throws FailureToSendException
      * @throws InputException
+     * @throws JsonException
      */
     public function invalidateCartCookie(): void
     {

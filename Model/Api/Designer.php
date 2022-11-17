@@ -29,7 +29,7 @@ class Designer implements DesignerInterface
     /**
      * @inheritdoc
      */
-    public function getUrlByTag($tag) {
+    public function getUrlByTag(string $tag) {
 
         $dataDesigner = clone $this->dataDesigner;
 

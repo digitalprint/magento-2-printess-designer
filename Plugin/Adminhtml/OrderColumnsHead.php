@@ -13,7 +13,7 @@ class OrderColumnsHead
      * @param $b
      * @return array
      */
-    private function changeColumnPosition($items, $a, $b)
+    private function changeColumnPosition($items, $a, $b): array
     {
         $elem1 = array_splice($items, $a, 1);
         $elem2 = array_splice($items, 0, $b);
@@ -21,11 +21,11 @@ class OrderColumnsHead
         return array_merge($elem2, $elem1, $items);
     }
 
-    public function afterGetColumns(Items $subject, $result) {
+    public function afterGetColumns(Items $subject, $result): array
+    {
 
         $result = $this->changeColumnPosition($result, 10, 0);
-        $result = $this->changeColumnPosition($result, 11, 2);
-
-        return $result;
+        return $this->changeColumnPosition($result, 11, 2);
     }
 }
+

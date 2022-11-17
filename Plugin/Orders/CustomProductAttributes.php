@@ -16,22 +16,22 @@ class CustomProductAttributes
     /**
      * @var OrderItemExtensionFactory
      */
-    protected $orderItemExtensionFactory;
+    protected OrderItemExtensionFactory $orderItemExtensionFactory;
 
     /**
      * @var ProductFactory
      */
-    protected $productFactory;
+    protected ProductFactory $productFactory;
 
     /**
      * @var PrintessProductDocumentsFactory
      */
-    protected $printessProductDocumentsFactory;
+    protected PrintessProductDocumentsFactory $printessProductDocumentsFactory;
 
     /**
      * @var PrintessProductPriceInfoFactory
      */
-    protected $printessProductPriceInfoFactory;
+    protected PrintessProductPriceInfoFactory $printessProductPriceInfoFactory;
 
     /**
      * @param OrderItemExtensionFactory $orderItemExtensionFactory
@@ -57,7 +57,7 @@ class CustomProductAttributes
      * @param OrderItemInterface $orderItem
      * @return OrderItemInterface
      */
-    public function afterGet(OrderItemRepositoryInterface $subject, OrderItemInterface $orderItem)
+    public function afterGet(OrderItemRepositoryInterface $subject, OrderItemInterface $orderItem): OrderItemInterface
     {
         $extensionAttributes = $orderItem->getExtensionAttributes();
         $extensionAttributes = $extensionAttributes ?: $this->orderItemExtensionFactory->create();
@@ -95,7 +95,7 @@ class CustomProductAttributes
      * @param OrderItemSearchResultInterface $result
      * @return OrderItemSearchResultInterface
      */
-    public function afterGetList(OrderItemRepositoryInterface $subject, OrderItemSearchResultInterface $result)
+    public function afterGetList(OrderItemRepositoryInterface $subject, OrderItemSearchResultInterface $result): OrderItemSearchResultInterface
     {
 
         $orderItems = $result->getItems();

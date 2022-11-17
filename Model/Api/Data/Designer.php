@@ -24,7 +24,7 @@ class Designer extends AbstractExtensibleModel implements DesignerInterface
      * @param string $url
      * @return DesignerInterface
      */
-    public function setUrl($url)
+    public function setUrl(string $url)
     {
         return $this->setData(self::URL, $url);
     }

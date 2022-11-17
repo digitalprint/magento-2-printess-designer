@@ -2,21 +2,20 @@
 
 namespace Digitalprint\PrintessDesigner\Model\Config\Source;
 
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory;
-use Magento\Framework\DB\Ddl\Table;
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 
-class Dpi extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
+class Dpi extends AbstractSource
 {
 
     /**
      * @var string
      */
-    protected $optionFactory;
+    protected string $optionFactory;
 
     /**
-     * @return array|null
+     * @return array
      */
-    public function getAllOptions()
+    public function getAllOptions(): array
     {
 
         $this->_options = [

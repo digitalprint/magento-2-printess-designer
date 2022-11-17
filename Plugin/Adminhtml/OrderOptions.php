@@ -6,7 +6,13 @@ use Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn;
 
 class OrderOptions {
 
-    public function afterGetOrderOptions(DefaultColumn $subject, $result) {
+    /**
+     * @param DefaultColumn $subject
+     * @param $result
+     * @return array
+     */
+    public function afterGetOrderOptions(DefaultColumn $subject, $result): array
+    {
 
         unset(
             $result['printess_save_token'],

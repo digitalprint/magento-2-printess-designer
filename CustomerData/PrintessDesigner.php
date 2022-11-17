@@ -10,12 +10,26 @@ use Magento\Integration\Model\Oauth\TokenFactory;
 class PrintessDesigner implements SectionSourceInterface
 {
 
-    protected $sessionManager;
+    /**
+     * @var SessionManager
+     */
+    protected SessionManager $sessionManager;
 
-    protected $customerSession;
+    /**
+     * @var Session
+     */
+    protected Session $customerSession;
 
-    protected $tokenModelFactory;
+    /**
+     * @var TokenFactory
+     */
+    protected TokenFactory $tokenModelFactory;
 
+    /**
+     * @param Session $customerSession
+     * @param SessionManager $sessionManager
+     * @param TokenFactory $tokenModelFactory
+     */
     public function __construct(
         Session $customerSession,
         SessionManager $sessionManager,
@@ -29,7 +43,7 @@ class PrintessDesigner implements SectionSourceInterface
     /**
      * {@inheritdoc}
      */
-    public function getSectionData()
+    public function getSectionData(): array
     {
 
         $customerId = 'anonymous';

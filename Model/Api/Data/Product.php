@@ -24,7 +24,7 @@ class Product extends AbstractExtensibleModel implements ProductInterface
      * @param string $sku
      * @return ProductInterface
      */
-    public function setSku($sku)
+    public function setSku(string $sku)
     {
         return $this->setData(self::SKU, $sku);
     }
@@ -45,7 +45,7 @@ class Product extends AbstractExtensibleModel implements ProductInterface
      * @param string $name
      * @return ProductInterface
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         return $this->setData(self::NAME, $name);
     }
@@ -66,9 +66,9 @@ class Product extends AbstractExtensibleModel implements ProductInterface
      * @param array variants
      * @return ProductInterface
      */
-    public function setVariants($variants)
+    public function setVariants(array $title)
     {
-        return $this->setData(self::VARIANTS, $variants);
+        return $this->setData(self::VARIANTS, $title);
     }
 
 }

@@ -19,12 +19,12 @@ class Thumbnail extends DefaultColumn
     /**
      * @var Image
      */
-    protected $imageHelper;
+    protected Image $imageHelper;
 
     /**
      * @var ProductRepositoryInterface
      */
-    protected $productRepository;
+    protected ProductRepositoryInterface $productRepository;
 
     public function __construct(
         Context $context,
@@ -52,7 +52,7 @@ class Thumbnail extends DefaultColumn
             return $options['additional_options']['printess_thumbnail_url']['value'];
         }
 
-        if ($this->getItem()->getProductType() == Configurable::TYPE_CODE) {
+        if ($this->getItem()->getProductType() === Configurable::TYPE_CODE) {
             $product = $this->productRepository->get($this->getItem()->getSku());
         } else {
             $product = $this->getItem()->getProduct();

@@ -20,40 +20,59 @@ class Order implements OrderInterface
     /**
      * @var DataOrderInterface
      */
-    private $dataOrder;
+    private DataOrderInterface $dataOrder;
+
     /**
      * @var ProductFactory
      */
-    private $productFactory;
+    private ProductFactory $productFactory;
+
     /**
      * @var ProductRepositoryInterface
      */
-    private $productRepository;
+    private ProductRepositoryInterface $productRepository;
+
     /**
      * @var Configurable
      */
-    private $configurableType;
+    private Configurable $configurableType;
+
     /**
      * @var OrderRepositoryInterface
      */
-    private $orderRepository;
+    private OrderRepositoryInterface $orderRepository;
+
     /**
      * @var CartRepositoryInterface
      */
-    private $quoteRepository;
+    private CartRepositoryInterface $quoteRepository;
+
     /**
      * @var ToOrderItem
      */
-    private $quoteToOrder;
+    private ToOrderItem $quoteToOrder;
+
     /**
      * @var UrlInterface
      */
-    private $urlBuilder;
+    private UrlInterface $urlBuilder;
+
     /**
      * @var SerializerInterface
      */
-    private $serializer;
+    private SerializerInterface $serializer;
 
+    /**
+     * @param DataOrderInterface $dataOrder
+     * @param ProductFactory $productFactory
+     * @param ProductRepositoryInterface $productRepository
+     * @param Configurable $configurableType
+     * @param OrderRepositoryInterface $orderRepository
+     * @param CartRepositoryInterface $quoteRepository
+     * @param ToOrderItem $quoteToOrder
+     * @param UrlInterface $urlBuilder
+     * @param SerializerInterface $serializer
+     */
     public function __construct(
         DataOrderInterface $dataOrder,
         ProductFactory $productFactory,
@@ -78,18 +97,18 @@ class Order implements OrderInterface
     }
 
     /**
-     * @param $orderId
-     * @param $itemId
-     * @param $sku
-     * @param $qty
-     * @param $saveToken
-     * @param $thumbnailUrl
-     * @param $documents
-     * @param $priceInfo
+     * @param string|null $orderId
+     * @param string|null $itemId
+     * @param string|null $sku
+     * @param int|null $qty
+     * @param string|null $saveToken
+     * @param string|null $thumbnailUrl
+     * @param string|null $documents
+     * @param string|null $priceInfo
      * @return DataOrderInterface
      * @throws NoSuchEntityException
      */
-    public function updateOrderItem($orderId, $itemId, $sku, $qty, $saveToken, $thumbnailUrl, $documents, $priceInfo)
+    public function updateOrderItem(?string $orderId, ?string $itemId, ?string $sku, ?int $qty, ?string $saveToken, ?string $thumbnailUrl, ?string $documents, ?string $priceInfo)
     {
 
         $this->dataOrder->setStatus('error');
@@ -109,7 +128,7 @@ class Order implements OrderInterface
 
                     $orderItemId = $origOrderItem->getItemId();
 
-                    if ($orderItemId === (string)$itemId) {
+                    if ($orderItemId === $itemId) {
 
                         $updateOptions = [];
 
@@ -240,10 +259,10 @@ class Order implements OrderInterface
                 $product = $this->productFactory->create()->load($orderItem->getProductId());
                 $productAttributeOptions = $this->configurableType->getConfigurableAttributesAsArray($product);
 
+                $attributes = [];
+
                 if ($buyRequest = $quoteItem->getOptionByCode('info_buyRequest')) {
                     $buyRequest = $this->serializer->unserialize($buyRequest->getValue());
-
-                    $attributes = [];
 
                     if (isset($buyRequest['super_attribute']) && is_array($buyRequest['super_attribute'])) {
 
@@ -251,7 +270,7 @@ class Order implements OrderInterface
 
                             if (isset($productAttributeOptions[$key])) {
 
-                                $res = array_merge(...array_filter($productAttributeOptions[$key]['values'], function ($v, $k) use ($val) {
+                                $res = array_merge(...array_filter($productAttributeOptions[$key]['values'], static function ($v, $k) use ($val) {
                                     return $v['value_index'] === $val;
                                 }, ARRAY_FILTER_USE_BOTH));
 

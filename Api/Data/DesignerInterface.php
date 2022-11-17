@@ -17,6 +17,6 @@ interface DesignerInterface
      * @param string $url
      * @return DesignerInterface
      */
-    public function setUrl($url);
+    public function setUrl(string $url);
 
 }

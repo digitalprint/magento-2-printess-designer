@@ -6,14 +6,13 @@ use Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer;
 
 class OrderColumnsBody
 {
-
     /**
      * @param $items
      * @param $a
      * @param $b
      * @return array
      */
-    private function changeColumnPosition($items, $a, $b)
+    private function changeColumnPosition($items, $a, $b): array
     {
         $elem1 = array_splice($items, $a, 1);
         $elem2 = array_splice($items, 0, $b);
@@ -21,11 +20,9 @@ class OrderColumnsBody
         return array_merge($elem2, $elem1, $items);
     }
 
-    public function afterGetColumns(DefaultRenderer $subject, $result) {
-
+    public function afterGetColumns(DefaultRenderer $subject, $result): array
+    {
         $result = $this->changeColumnPosition($result, 10, 0);
-        $result = $this->changeColumnPosition($result, 11, 2);
-
-        return $result;
+        return $this->changeColumnPosition($result, 11, 2);
     }
 }

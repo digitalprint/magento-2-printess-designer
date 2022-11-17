@@ -10,7 +10,7 @@ class Dpi implements OptionSourceInterface
     /**
      * @return array[]
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         $arr = $this->toArray();
         $ret = [];
@@ -23,7 +23,10 @@ class Dpi implements OptionSourceInterface
         return $ret;
     }
 
-    public function toArray()
+    /**
+     * @return string[]
+     */
+    public function toArray(): array
     {
         return [
             72 => '72 dpi',

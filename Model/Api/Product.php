@@ -4,6 +4,7 @@ namespace Digitalprint\PrintessDesigner\Model\Api;
 
 use Digitalprint\PrintessDesigner\Api\ProductInterface;
 use Digitalprint\PrintessDesigner\Api\Data\ProductInterface as DataProductInterface;
+use JsonException;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\ConfigurableProduct\Api\LinkManagementInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
@@ -48,7 +49,8 @@ class Product implements ProductInterface
      * @param $product
      * @return array
      */
-    private function getPrice($product) {
+    private function getPrice($product): array
+    {
 
         if ($product->getTypeId() === Configurable::TYPE_CODE) {
             $basePrice = $product->getPriceInfo()->getPrice('regular_price');
@@ -69,8 +71,10 @@ class Product implements ProductInterface
     /**
      * @param $product
      * @return array
+     * @throws JsonException
      */
-    private function getAttributes($product) {
+    private function getAttributes($product): array
+    {
 
         $attributes = array();
 
@@ -88,7 +92,7 @@ class Product implements ProductInterface
 
         if (isset($formFields)) {
 
-            $formFields = json_decode($formFields, true);
+            $formFields = json_decode($formFields, true, 512, JSON_THROW_ON_ERROR);
 
             if (is_array($formFields)) {
 
@@ -122,7 +126,8 @@ class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function getProduct($sku) {
+    public function getProduct(string $sku): DataProductInterface
+    {
 
         $dataProduct = clone $this->dataProduct;
 

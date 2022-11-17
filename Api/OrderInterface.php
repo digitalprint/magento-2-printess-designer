@@ -6,16 +6,16 @@ interface OrderInterface {
 
 
     /**
-     * @param string $orderId
-     * @param string $itemId
-     * @param string $sku
-     * @param string $qty
-     * @param string $saveToken
-     * @param string $thumbnailUrl
-     * @param string $documents
-     * @param string $priceInfo
+     * @param string|null $orderId
+     * @param string|null $itemId
+     * @param string|null $sku
+     * @param integer $qty
+     * @param string|null $saveToken
+     * @param string|null $thumbnailUrl
+     * @param string|null $documents
+     * @param string|null $priceInfo
      * @return Data\OrderInterface
      */
-    public function updateOrderItem($orderId, $itemId, $sku, $qty, $saveToken, $thumbnailUrl, $documents, $priceInfo);
+    public function updateOrderItem(?string $orderId, ?string $itemId, ?string $sku, int $qty, ?string $saveToken, ?string $thumbnailUrl, ?string $documents, ?string $priceInfo);
 
 }

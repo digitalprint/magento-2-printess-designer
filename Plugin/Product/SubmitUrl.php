@@ -11,7 +11,7 @@ class SubmitUrl {
     /**
      * @var Printess
      */
-    protected $helperPrintess;
+    protected Printess $helperPrintess;
 
     /**
      * @param Printess $helperPrintess
@@ -25,10 +25,10 @@ class SubmitUrl {
     /**
      * @param View $subject
      * @param $result
-     * @return mixed|string
+     * @return string
      * @throws NoSuchEntityException
      */
-    public function afterGetSubmitUrl(View $subject, $result)
+    public function afterGetSubmitUrl(View $subject, $result): string
     {
         if ($this->helperPrintess->hasTemplate($subject->getProduct()->getSku())) {
             return $this->helperPrintess->getDesignerUrl();

@@ -8,13 +8,17 @@ use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order\Item;
 use Magento\Store\Model\ScopeInterface;
 use Printess\Api\Exceptions\ApiException;
 use Printess\Api\PrintessApiClient;
+use RuntimeException;
 
 /**
  *
@@ -51,28 +55,32 @@ class Index extends Action
     /**
      * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    protected ScopeConfigInterface $scopeConfig;
+
     /**
      * @var CacheInterface
      */
-    protected $cache;
+    protected CacheInterface $cache;
+
     /**
      * @var SerializerInterface
      */
-    protected $serializer;
+    protected SerializerInterface $serializer;
+
     /**
      * @var OrderRepositoryInterface
      */
-    protected $orderRepository;
+    protected OrderRepositoryInterface $orderRepository;
+
     /**
      * @var ProductRepositoryInterface
      */
-    protected $productRepository;
+    protected ProductRepositoryInterface $productRepository;
+
     /**
      * @var Redirect
      */
     protected $resultRedirectFactory;
-
 
     /**
      * @param ScopeConfigInterface $scopeConfig
@@ -106,9 +114,9 @@ class Index extends Action
     /**
      * @param $orderId
      * @param $itemId
-     * @return mixed|null
+     * @return Item|null
      */
-    public function getOrderItemById($orderId, $itemId)
+    public function getOrderItemById($orderId, $itemId): ?Item
     {
         $order = $this->orderRepository->get($orderId);
         foreach ($order->getAllItems() as $item) {
@@ -121,8 +129,8 @@ class Index extends Action
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|ResultInterface|void
-     * @throws ApiException
+     * @return ResponseInterface|ResultInterface|void
+     * @throws NoSuchEntityException
      */
     public function execute()
     {
@@ -193,7 +201,7 @@ class Index extends Action
             }
 
             if (false === $status->isSuccess) {
-                throw new \Exception('Something went wrong during printfile creating. Error: ' . $status->errorDetails);
+                throw new RuntimeException('Something went wrong during printfile creating. Error: ' . $status->errorDetails);
             }
 
             if (isset($status->result->r->myDocument)) {
