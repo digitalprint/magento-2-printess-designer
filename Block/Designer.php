@@ -29,6 +29,11 @@ class Designer extends Template
 {
 
     /**
+     * @var \Digitalprint\PrintessDesigner\Helper\Data
+     */
+    protected \Digitalprint\PrintessDesigner\Helper\Data $helper;
+
+    /**
      * @var taxHelper
      */
     protected taxHelper $taxHelper;
@@ -126,6 +131,7 @@ class Designer extends Template
 
     /**
      * @param Context $context
+     * @param \Digitalprint\PrintessDesigner\Helper\Data $helper
      * @param taxHelper $taxHelper
      * @param StoreManagerInterface $storeManager
      * @param Resolver $store
@@ -143,6 +149,7 @@ class Designer extends Template
      */
     public function __construct(
         Context $context,
+        \Digitalprint\PrintessDesigner\Helper\Data $helper,
         taxHelper $taxHelper,
         StoreManagerInterface $storeManager,
         Resolver $store,
@@ -158,6 +165,7 @@ class Designer extends Template
         TokenFactory $tokenFactory,
         array $data = []
     ) {
+        $this->helper = $helper;
         $this->taxHelper = $taxHelper;
         $this->storeManager = $storeManager;
         $this->store = $store;
@@ -247,7 +255,7 @@ class Designer extends Template
             $value = $product->getData($path);
         }
 
-        if (is_null($value)) {
+        if (!$this->helper->isJson($value)) {
             return [];
         }
 
@@ -361,7 +369,11 @@ class Designer extends Template
 
         if (is_null($params['save_token'])) {
 
-            $formFields = !is_null($childProduct) ? json_decode($childProduct->getData('printess_form_fields'), true, 512, JSON_THROW_ON_ERROR) : json_decode($product->getData('printess_form_fields'), true, 512, JSON_THROW_ON_ERROR);
+            $formFields = !is_null($childProduct) ? $childProduct->getData('printess_form_fields') : $product->getData('printess_form_fields');
+
+            if ($this->helper->isJson($formFields)) {
+                $formFields = json_decode($formFields, true, 512, JSON_THROW_ON_ERROR);
+            }
 
             if (is_array($formFields)) {
                 foreach ($formFields as $formField) {
@@ -419,7 +431,12 @@ class Designer extends Template
                 $config['path'] = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_DESIGNPICKER_PATH, $storeScope);
                 $config['locale'] = strstr($this->store->getLocale(), '_', true);
                 $config['client'] = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_DESIGNPICKER_CLIENT, $storeScope);
-                $config['attributes'] = json_decode($attributes, false, 512, JSON_THROW_ON_ERROR);
+
+                $config['attributes'] = [];
+                if ($this->helper->isJson($attributes)) {
+                    $config['attributes'] = json_decode($attributes, false, 512, JSON_THROW_ON_ERROR);
+                }
+
                 $config['designFormat'] = $designFormat;
             }
         }
