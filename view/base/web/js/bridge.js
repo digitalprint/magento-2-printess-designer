@@ -87,7 +87,7 @@ define([
             const fileName = `${CartStore.saveToken}.png`.replace(/st:/i, '');
 
             printess
-                .renderFirstPageImage(fileName)
+                .renderFirstPageImage(fileName, 'preview', 1000, 1000)
                 .then((thumbnailUrl) => {
                     CartStore.setThumbnailUrl(thumbnailUrl);
 
