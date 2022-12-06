@@ -23,7 +23,7 @@ class Data extends AbstractHelper
     public function isJson($value): bool
     {
 
-        if (is_null($value)) {
+        if (is_null($value) || empty($value)) {
             return false;
         }
 
