@@ -9,7 +9,7 @@ interface PrintessProductDocumentsInterface
     /**
      * Return value.
      *
-     * @return AssociativeArrayItemInterface[]
+     * @return \Digitalprint\PrintessDesigner\Api\Data\AssociativeArrayItemInterface[]
      */
     public function getValue();
 
