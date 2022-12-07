@@ -384,7 +384,7 @@ define([
             return;
         }
 
-        this.currentAttributeMap = updateCurrentAttributeMap.call(this, name, value);
+        updateCurrentAttributeMap.call(this, name, value);
         this.currentVariant = getVariantByAttributeMap.call(this, this.currentAttributeMap);
 
         updatePriceInfo(this.config.priceFormat, this.currentVariant.price_info);
