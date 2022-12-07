@@ -167,6 +167,10 @@ define([
             return;
         }
 
+        if (! Object.hasOwn(this.currentAttributeMap, name)) {
+            return;
+        }
+
         this.currentAttributeMap[name].value = value;
 
         return this.currentAttributeMap;
