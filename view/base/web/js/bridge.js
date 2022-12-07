@@ -222,7 +222,7 @@ define([
 
     function variantHasAttribute(variant, attrName, attrValue) {
         let attribute = variant.attributes.find((attribute) => {
-            return attribute.code === attrName && attribute.value === attrValue;
+            return attribute.code === attrName && attribute.value === attrValue.toLowerCase();
         });
 
         return attribute !== undefined;
