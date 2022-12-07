@@ -194,13 +194,23 @@ define([
 
     function getVariantByAttributeMap(attributeMap) {
 
-        let filteredVariants = [];
+        let filteredVariants = _structuredClone(this.variants);
         const variants = _structuredClone(this.variants);
 
+        if (0 === Object.keys(attributeMap).length) {
+            return variants[0];
+        }
+
         for (const [name, map] of Object.entries(attributeMap)) {
-            filteredVariants = variants.filter((variant) => {
-                return variantHasAttribute(variant, map.code, map.value);
-            });
+
+            if (map) {
+                filteredVariants = filteredVariants.filter((variant) => {
+                    return variantHasAttribute(variant, map.code, map.value);
+                });
+            }
+            else {
+                filteredVariants = variants;
+            }
         }
 
         return filteredVariants[0];
