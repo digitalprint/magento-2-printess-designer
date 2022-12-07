@@ -360,7 +360,7 @@ class Designer extends Template
 
         }
 
-        $config['sku'] = !is_null($childProduct) ? $childProduct->getSku() : $product->getSku();
+        $config['sku'] = $product->getSku();
         $config['variant'] = !is_null($childProduct) ? $childProduct->getSku() : $product->getSku();
 
         $config['qty'] = $params['qty'];
