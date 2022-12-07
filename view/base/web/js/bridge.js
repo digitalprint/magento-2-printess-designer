@@ -242,14 +242,14 @@ define([
         return priceInfo.regular_price > priceInfo.special_price;
     }
 
-    function updatePriceInfo(priceInfo) {
+    function updatePriceInfo(priceFormat, priceInfo) {
 
         let progressTmpl = mageTemplate('#designer-price-template');
         document.getElementById("designerProductPrice").innerHTML = progressTmpl({
             data: {
                 has_special_price: hasSpecialPrice(priceInfo),
-                regular_price: priceUtils.formatPrice(priceInfo.regular_price, JSON.parse(this.config.priceFormat), false),
-                special_price: priceUtils.formatPrice(priceInfo.special_price, JSON.parse(this.config.priceFormat), false),
+                regular_price: priceUtils.formatPrice(priceInfo.regular_price, JSON.parse(priceFormat), false),
+                special_price: priceUtils.formatPrice(priceInfo.special_price, JSON.parse(priceFormat), false),
             }
         });
 
@@ -305,7 +305,7 @@ define([
             let event = new CustomEvent('processStop');
             document.getElementById('printessDesigner').dispatchEvent(event);
 
-            updatePriceInfo.call(this, this.currentVariant.price_info);
+            updatePriceInfo.call(this, this.config.priceFormat, this.currentVariant.price_info);
 
             UiStore.setAppWasLoaded();
 
@@ -383,7 +383,7 @@ define([
         this.currentAttributeMap = updateCurrentAttributeMap.call(this, name, value);
         this.currentVariant = getVariantByAttributeMap.call(this, this.currentAttributeMap);
 
-        updatePriceInfo(this.currentVariant.price_info);
+        updatePriceInfo(this.config.priceFormat, this.currentVariant.price_info);
 
     }
 
