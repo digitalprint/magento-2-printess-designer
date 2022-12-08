@@ -12,7 +12,7 @@
 
 <div class="product-add-form">
     <form data-product-sku="<?= $block->escapeHtml($_product->getSku()) ?>"
-          action="<?= $block->escapeUrl($block->getSubmitUrl($_product)) ?>" method="<?php if ($_printess->hasTemplate($_sku)) :?>get<?php else :?>post <?php endif; ?>"
+          action="<?= $block->escapeUrl($block->getSubmitUrl($_product)) ?>" method="<?php if ($_printess->hasTemplate($_sku)) :?>get<?php else :?>post<?php endif; ?>"
           id="product_addtocart_form"
           <?php if ($_product->getOptions() && !$_printess->hasTemplate($_sku)) :?> enctype="multipart/form-data"<?php endif; ?>>
         <?php if (!$_printess->hasTemplate($_sku)) :?>
