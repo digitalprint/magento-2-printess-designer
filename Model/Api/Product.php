@@ -14,32 +14,25 @@ class Product implements ProductInterface
 {
 
     /**
-     * @var AuthorizationInterface
-     */
-    private $authorization;
-
-    /**
      * @var DataProductInterface
      */
-    private $dataProduct;
+    private DataProductInterface $dataProduct;
 
     /**
      * @var ProductRepositoryInterface
      */
-    private $productRepository;
+    private ProductRepositoryInterface $productRepository;
 
     /**
      * @var LinkManagementInterface
      */
-    private $linkManagement;
+    private LinkManagementInterface $linkManagement;
 
     public function __construct(
-        AuthorizationInterface $authorization,
         DataProductInterface $dataProduct,
         ProductRepositoryInterface $productRepository,
         LinkManagementInterface $linkManagement
     ){
-        $this->authorization = $authorization;
         $this->dataProduct = $dataProduct;
         $this->productRepository = $productRepository;
         $this->linkManagement = $linkManagement;
@@ -140,12 +133,7 @@ class Product implements ProductInterface
 
         if ($product->getTypeId() === Configurable::TYPE_CODE) {
 
-            if ($this->authorization->isAllowed('Digitalprint_PrintessDesigner::edit_items')) {
-                $configProduct = $this->productModel->load($product->getId());
-                $children = $configProduct->getTypeInstance()->getUsedProducts($configProduct);
-            } else {
-                $children = $this->linkManagement->getChildren($product->getSku());
-            }
+            $children = $this->linkManagement->getChildren($product->getSku());
 
             foreach($children as $child) {
                 $childProduct = $this->productRepository->getById($child->getId());
