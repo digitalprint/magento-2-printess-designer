@@ -2,9 +2,9 @@
 
 namespace Digitalprint\PrintessDesigner\Helper;
 
-use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\ConfigurableProduct\Api\LinkManagementInterface;
+use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -30,8 +30,7 @@ class Printess extends AbstractHelper
         Context $context,
         ProductRepositoryInterface $productRepositoryInterface,
         LinkManagementInterface $linkManagement
-    )
-    {
+    ) {
         $this->productRepository = $productRepositoryInterface;
         $this->linkManagement = $linkManagement;
 
@@ -46,9 +45,7 @@ class Printess extends AbstractHelper
      */
     public function getStartDesign($sku = null): array
     {
-
         if (!is_null($sku)) {
-
             $product = $this->productRepository->get($sku);
             $config = $product->getData('printess_start_design');
 
@@ -58,11 +55,9 @@ class Printess extends AbstractHelper
                     return $config;
                 }
             }
-
         }
 
         return [];
-
     }
 
     /**
@@ -72,9 +67,7 @@ class Printess extends AbstractHelper
      */
     public function hasTemplate($sku = null): bool
     {
-
         if (!is_null($sku)) {
-
             $product = $this->productRepository->get($sku);
 
             $printessTemplate = $product->getData('printess_template');
@@ -83,10 +76,9 @@ class Printess extends AbstractHelper
             }
 
             if ($product->getTypeId() === 'configurable') {
-
                 $children = $this->linkManagement->getChildren($product->getSku());
 
-                foreach($children as $child) {
+                foreach ($children as $child) {
                     $childProduct = $this->productRepository->get($child->getSku());
 
                     $printessTemplate = $childProduct->getData('printess_template');
@@ -95,9 +87,7 @@ class Printess extends AbstractHelper
                         return true;
                     }
                 }
-
             }
-
         }
 
         return false;
@@ -110,5 +100,4 @@ class Printess extends AbstractHelper
     {
         return $this->_getUrl('designer/page/view');
     }
-
 }

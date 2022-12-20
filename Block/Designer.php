@@ -43,7 +43,6 @@ class Designer extends Template
      */
     protected StoreManagerInterface $storeManager;
 
-
     /**
      * @var Resolver
      */
@@ -243,8 +242,8 @@ class Designer extends Template
      * @throws NoSuchEntityException
      * @throws JsonException
      */
-    public function getPrintessConfig($path = null, $sku = null, $superAttribute = null) {
-
+    public function getPrintessConfig($path = null, $sku = null, $superAttribute = null)
+    {
         $product = $this->productRepository->get($sku);
         $childProduct = $this->configurable->getProductByAttributes($superAttribute, $product);
 
@@ -260,7 +259,6 @@ class Designer extends Template
         }
 
         return json_decode($value, true, 512, JSON_THROW_ON_ERROR);
-
     }
 
     /**
@@ -274,7 +272,7 @@ class Designer extends Template
 
         $params = $this->getRequest()->getParams();
 
-        foreach(['sku', 'super_attribute', 'startDesign', 'save_token'] as $key) {
+        foreach (['sku', 'super_attribute', 'startDesign', 'save_token'] as $key) {
             if (!array_key_exists($key, $params)) {
                 $params[$key] = null;
             }
@@ -287,7 +285,7 @@ class Designer extends Template
         $product = $this->productRepository->get($params['sku']);
         $childProduct = $this->configurable->getProductByAttributes($params['super_attribute'], $product);
 
-        $config = array();
+        $config = [];
 
         $config['areaCode'] = $this->state->getAreaCode();
         $config['storeCode'] = $this->storeManager->getstore()->getCode();
@@ -314,16 +312,13 @@ class Designer extends Template
         $config['mergeTemplates'] = [];
         $snippetFields = ['printess_layout_snippets', 'printess_group_snippets'];
 
-        foreach($snippetFields as $snippetField) {
-
+        foreach ($snippetFields as $snippetField) {
             $productConfig = $this->getPrintessConfig($snippetField, $params['sku'], $params['super_attribute']);
 
             foreach ($productConfig as $section) {
-
                 $data = [];
 
                 if (isset($section['id'])) {
-
                     foreach ($section as $key => $val) {
                         $data[$key] = $val;
                     }
@@ -334,16 +329,13 @@ class Designer extends Template
                     }
 
                     $config['mergeTemplates'][] = $data;
-
                 }
             }
-
         }
 
         $config['startDesign'] = null;
 
         if (is_null($params['save_token'])) {
-
             $startDesign = !is_null($params['startDesign']) ? $params['startDesign'] : $this->getPrintessConfig('printess_start_design', $params['sku'], $params['super_attribute']);
 
             if (!is_null($startDesign) && isset($startDesign['templateName'], $startDesign['documentName'])) {
@@ -355,9 +347,7 @@ class Designer extends Template
                 if (!isset($config['startDesign']['mode'])) {
                     $config['startDesign']['mode'] = 'layout';
                 }
-
             }
-
         }
 
         $config['sku'] = $product->getSku();
@@ -368,7 +358,6 @@ class Designer extends Template
         $config['formFields'] = [];
 
         if (is_null($params['save_token'])) {
-
             $formFields = !is_null($childProduct) ? $childProduct->getData('printess_form_fields') : $product->getData('printess_form_fields');
 
             if ($this->helper->isJson($formFields)) {
@@ -377,19 +366,17 @@ class Designer extends Template
 
             if (is_array($formFields)) {
                 foreach ($formFields as $formField) {
-                    $config['formFields'][] = array(
+                    $config['formFields'][] = [
                         'name' => $formField['printess_ff_name'],
                         'value' => $formField['value']
-                    );
+                    ];
                 }
             }
-
         }
 
         $config['snippetPriceCategoryLabels'] = ['', '', '', '', ''];
 
         return $this->serializer->serialize($config);
-
     }
 
     /**
@@ -397,8 +384,8 @@ class Designer extends Template
      * @throws JsonException
      * @throws NoSuchEntityException
      */
-    public function getDesignPickerConfig() {
-
+    public function getDesignPickerConfig()
+    {
         $config = [
             'isEnabled' => false,
             'path' => null,
@@ -411,7 +398,6 @@ class Designer extends Template
         $storeScope = ScopeInterface::SCOPE_STORE;
 
         if ($this->scopeConfig->getValue(self::XML_PATH_DESIGNER_DESIGNPICKER_ENABLED, $storeScope)) {
-
             $sku = $this->getRequest()->getParam('sku');
             $superAttribute = $this->getRequest()->getParam('super_attribute');
 
@@ -421,7 +407,6 @@ class Designer extends Template
             $attributes = !is_null($childProduct) && !is_null($childProduct->getData('printess_design_picker_attributes')) ? $childProduct->getData('printess_design_picker_attributes') : $product->getData('printess_design_picker_attributes');
 
             if (!is_null($attributes)) {
-
                 $designFormat = !is_null($childProduct) && !is_null($childProduct->getData('printess_design_picker_design_format')) ? $childProduct->getData('printess_design_picker_design_format') : $product->getData('printess_design_picker_design_format');
                 if (is_null($designFormat)) {
                     $designFormat = 'square';
@@ -442,17 +427,15 @@ class Designer extends Template
         }
 
         return $this->serializer->serialize($config);
-
     }
 
     /**
      * @return bool|string
      * @throws LocalizedException
      */
-    public function getSession() {
-
+    public function getSession()
+    {
         if ($this->state->getAreaCode() === Area::AREA_ADMINHTML) {
-
             $userId = $this->authSession->getUser()->getId();
 
             $config = [
@@ -464,7 +447,6 @@ class Designer extends Template
             $adminToken = $tokenFactory->createAdminToken($userId)->getToken();
 
             $config['admin_token'] = $adminToken;
-
         } else {
             $config = [
                 'session_id' => $this->customerSession->getSessionId(),
@@ -474,7 +456,6 @@ class Designer extends Template
         }
 
         return $this->serializer->serialize($config);
-
     }
 
     /**
@@ -484,11 +465,9 @@ class Designer extends Template
      */
     public function getPriceTemplate(): string
     {
-
         $sku = $this->getRequest()->getParam('sku');
         $product = $this->productRepository->get($sku);
 
         return '<script id="designer-price-template" type="text/x-magento-template">' . $this->renderPriceHtml($product) . '</script>';
     }
-
 }

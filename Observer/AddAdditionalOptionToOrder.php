@@ -8,7 +8,8 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Sales\Model\Order;
 
-class AddAdditionalOptionToOrder implements ObserverInterface {
+class AddAdditionalOptionToOrder implements ObserverInterface
+{
 
     /**
      * @var OptionsManager
@@ -18,7 +19,8 @@ class AddAdditionalOptionToOrder implements ObserverInterface {
     /**
      * @param OptionsManager $optionsManager
      */
-    public function __construct(OptionsManager $optionsManager) {
+    public function __construct(OptionsManager $optionsManager)
+    {
         $this->optionsManager = $optionsManager;
     }
 
@@ -39,5 +41,4 @@ class AddAdditionalOptionToOrder implements ObserverInterface {
 
         $this->optionsManager->transferAdditionalOptions($quote, $order);
     }
-
 }

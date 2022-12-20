@@ -6,8 +6,8 @@ use Exception;
 use Magento\Framework\Serialize\SerializerInterface;
 use Psr\Log\LoggerInterface;
 
-
-Class OptionsManager {
+class OptionsManager
+{
 
     /**
      * @var LoggerInterface
@@ -22,8 +22,7 @@ Class OptionsManager {
     public function __construct(
         SerializerInterface $serializer,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->serializer = $serializer;
         $this->logger = $logger;
     }
@@ -35,9 +34,7 @@ Class OptionsManager {
      */
     public function transferAdditionalOptions($source, $destination): void
     {
-
         try {
-
             $sourceItems = [];
 
             foreach ($source->getItems() as $sourceItem) {
@@ -47,13 +44,10 @@ Class OptionsManager {
             }
 
             foreach ($destination->getItems() as $destinationItem) {
-
                 if (!$destinationItem->getParentItemId()) {
-
                     $quoteItemId = $destinationItem->getQuoteItemId();
 
                     if (isset($sourceItems[$quoteItemId])) {
-
                         $sourceItem = $sourceItems[$quoteItemId];
 
                         if ($additionalOptions = $sourceItem->getOptionByCode('additional_options')) {
@@ -63,13 +57,9 @@ Class OptionsManager {
                         }
                     }
                 }
-
             }
-
         } catch (Exception $e) {
             $this->logger->critical($e);
         }
-
     }
-
 }

@@ -8,11 +8,9 @@ use Magento\Framework\App\Helper\Context;
 
 class Data extends AbstractHelper
 {
-
     public function __construct(
         Context $context
-    )
-    {
+    ) {
         parent::__construct($context);
     }
 
@@ -22,7 +20,6 @@ class Data extends AbstractHelper
      */
     public function isJson($value): bool
     {
-
         if (is_null($value) || empty($value)) {
             return false;
         }
@@ -35,5 +32,4 @@ class Data extends AbstractHelper
 
         return true;
     }
-
 }

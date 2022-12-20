@@ -35,8 +35,7 @@ class CheckoutCartAdd implements ObserverInterface
         \Digitalprint\PrintessDesigner\Helper\Data $helper,
         RequestInterface $request,
         SerializerInterface $serializer
-    )
-    {
+    ) {
         $this->helper = $helper;
         $this->request = $request;
         $this->serializer = $serializer;
@@ -49,14 +48,12 @@ class CheckoutCartAdd implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-
         $item = $observer->getQuoteItem();
 
         if ($this->helper->isJson($this->request->getContent())) {
-
             $params = json_decode($this->request->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
-            $additionalOptions = array();
+            $additionalOptions = [];
 
             if ($additionalOption = $item->getOptionByCode('additional_options')) {
                 $additionalOptions = $this->serializer->unserialize($additionalOption->getValue());
@@ -89,15 +86,12 @@ class CheckoutCartAdd implements ObserverInterface
             }
 
             if (count($additionalOptions) > 0) {
-                $item->addOption(array(
+                $item->addOption([
                     'product_id' => $item->getProductId(),
                     'code' => 'additional_options',
                     'value' => $this->serializer->serialize($additionalOptions)
-                ));
+                ]);
             }
-
         }
-
     }
-
 }

@@ -99,8 +99,7 @@ class Index extends Action
         ProductRepositoryInterface $productRepository,
         Redirect $resultRedirectFactory,
         Context $context
-    )
-    {
+    ) {
         $this->scopeConfig = $scopeConfig;
         $this->cache = $cache;
         $this->serializer = $serializer;
@@ -109,7 +108,6 @@ class Index extends Action
         $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
-
 
     /**
      * @param $orderId
@@ -134,14 +132,12 @@ class Index extends Action
      */
     public function execute()
     {
-
         $params = $this->getRequest()->getParams();
 
         $item = $this->getOrderItemById($params['order_id'], $params['item_id']);
         $product = $this->productRepository->get($item->getSku());
 
         if (($options = $item->getProductOptions()) && isset($options['additional_options']['printess_save_token'])) {
-
             $storeScope = ScopeInterface::SCOPE_STORE;
             $serviceToken = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_SERVICE_TOKEN, $storeScope);
 
@@ -154,7 +150,6 @@ class Index extends Action
             $cacheData = $this->cache->load($cacheKey);
 
             if (!$cacheData) {
-
                 $job = $printess->production->produce([
                     'templateName' => $options['additional_options']['printess_save_token']['value'],
                     'outputSettings' => [
@@ -175,7 +170,6 @@ class Index extends Action
                     [self::CACHE_TAG],
                     86400 * 30
                 );
-
             } else {
                 $data = $this->serializer->unserialize($cacheData);
             }
@@ -205,17 +199,14 @@ class Index extends Action
             }
 
             if (isset($status->result->r->myDocument)) {
-
                 header('Content-Type: application/pdf');
                 header('Content-disposition: attachment;filename=' . $status->result->d->myDocument);
                 readfile($status->result->r->myDocument);
 
                 die();
-
             }
 
             die('file not found');
-
         }
     }
 }

@@ -11,7 +11,8 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
 
-class ItemData {
+class ItemData
+{
 
     /**
      * @var string
@@ -49,8 +50,7 @@ class ItemData {
         Json $serializer = null,
         UrlInterface $urlBuilder,
         ProductRepositoryInterface $productRepository
-    )
-    {
+    ) {
         $this->scopeConfig = $scopeConfig;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->urlBuilder = $urlBuilder;
@@ -66,11 +66,9 @@ class ItemData {
      */
     public function aroundGetItemData(AbstractItem $subject, $proceed, $item): array
     {
-
         $result = $proceed($item);
 
         if ($this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ENABLE, ScopeInterface::SCOPE_STORE)) {
-
             if ($additionalOptions = $item->getOptionByCode('additional_options')) {
                 $additionalOptions = (array) $this->serializer->unserialize($additionalOptions->getValue());
             }
@@ -82,7 +80,6 @@ class ItemData {
             }
 
             if (isset($additionalOptions['printess_save_token']['value'])) {
-
                 $urlParams = [
                     'sku' => $product->getSku(),
                     'save_token' => $additionalOptions['printess_save_token']['value']
@@ -93,19 +90,15 @@ class ItemData {
                 }
 
                 if (isset($buyRequest['super_attribute'])) {
-
-                    foreach($buyRequest['super_attribute'] as $key => $val) {
+                    foreach ($buyRequest['super_attribute'] as $key => $val) {
                         $urlParams["super_attribute[$key]"] = $val;
                     }
-
                 }
 
                 $result['configure_url'] = $this->urlBuilder->getUrl('designer/page/view', ['_query' => $urlParams]);
             }
-
         }
 
         return $result;
     }
-
 }

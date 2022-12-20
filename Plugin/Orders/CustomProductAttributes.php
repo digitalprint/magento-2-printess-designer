@@ -5,10 +5,10 @@ namespace Digitalprint\PrintessDesigner\Plugin\Orders;
 use Digitalprint\PrintessDesigner\Model\PrintessProductDocumentsFactory;
 use Digitalprint\PrintessDesigner\Model\PrintessProductPriceInfoFactory;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Api\Data\OrderItemExtensionFactory;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\OrderItemSearchResultInterface;
+use Magento\Sales\Api\OrderItemRepositoryInterface;
 
 class CustomProductAttributes
 {
@@ -44,7 +44,6 @@ class CustomProductAttributes
         ProductFactory $productFactory,
         PrintessProductDocumentsFactory $printessProductDocumentsFactory,
         PrintessProductPriceInfoFactory $printessProductPriceInfoFactory
-
     ) {
         $this->orderItemExtensionFactory = $orderItemExtensionFactory;
         $this->productFactory = $productFactory;
@@ -97,11 +96,9 @@ class CustomProductAttributes
      */
     public function afterGetList(OrderItemRepositoryInterface $subject, OrderItemSearchResultInterface $result): OrderItemSearchResultInterface
     {
-
         $orderItems = $result->getItems();
 
-        foreach($orderItems as $orderItem) {
-
+        foreach ($orderItems as $orderItem) {
             $extensionAttributes = $orderItem->getExtensionAttributes();
             $extensionAttributes = $extensionAttributes ?: $this->orderItemExtensionFactory->create();
 
@@ -129,7 +126,6 @@ class CustomProductAttributes
             }
 
             $orderItem->setExtensionAttributes($extensionAttributes);
-
         }
 
         return $result;

@@ -2,7 +2,8 @@
 
 namespace Digitalprint\PrintessDesigner\Api;
 
-interface CartInterface {
+interface CartInterface
+{
 
     /**
      * Add to cart
@@ -17,5 +18,4 @@ interface CartInterface {
      *
      */
     public function addToCart(?string $sku, ?int $quantity, ?string $saveToken, ?string $thumbnailUrl, ?string $documents, ?string $priceInfo);
-
 }

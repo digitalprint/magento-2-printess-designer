@@ -11,7 +11,8 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
 
-class ConfigureUrl {
+class ConfigureUrl
+{
 
     /**
      * @var string
@@ -49,8 +50,7 @@ class ConfigureUrl {
         Json $serializer = null,
         UrlInterface $urlBuilder,
         ProductRepositoryInterface $productRepository
-    )
-    {
+    ) {
         $this->scopeConfig = $scopeConfig;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->urlBuilder = $urlBuilder;
@@ -65,9 +65,7 @@ class ConfigureUrl {
      */
     public function afterGetConfigureUrl(Edit $subject, $result): string
     {
-
         if ($this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ENABLE, ScopeInterface::SCOPE_STORE)) {
-
             $item = $subject->getItem();
 
             if ($additionalOptions = $item->getOptionByCode('additional_options')) {
@@ -75,7 +73,6 @@ class ConfigureUrl {
             }
 
             if (isset($additionalOptions['printess_save_token']['value'])) {
-
                 $urlParams = [];
 
                 $product = $this->productRepository->getById($item->getProduct()->getId());
@@ -88,21 +85,15 @@ class ConfigureUrl {
                 }
 
                 if (isset($buyRequest['super_attribute'])) {
-
-                    foreach($buyRequest['super_attribute'] as $key => $val) {
+                    foreach ($buyRequest['super_attribute'] as $key => $val) {
                         $urlParams["super_attribute[$key]"] = $val;
                     }
-
                 }
 
-                return $this->urlBuilder->getUrl('designer/page/view', array('_query' => $urlParams));
-
+                return $this->urlBuilder->getUrl('designer/page/view', ['_query' => $urlParams]);
             }
-
         }
 
         return $result;
-
     }
-
 }

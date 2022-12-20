@@ -4,8 +4,8 @@ namespace Digitalprint\PrintessDesigner\Plugin\CheckoutCart;
 
 use Magento\Checkout\Block\Cart\Item\Renderer;
 
-class OptionList {
-
+class OptionList
+{
     public function __construct()
     {
     }
@@ -25,5 +25,4 @@ class OptionList {
         );
         return $result;
     }
-
 }

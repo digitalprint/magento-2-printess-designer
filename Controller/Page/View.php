@@ -11,7 +11,9 @@ use Magento\Framework\View\Result\PageFactory;
 
 class View extends Action
 {
-
+    /**
+     * @var PageFactory
+     */
     protected PageFactory $pageFactory;
 
     /**
@@ -21,8 +23,7 @@ class View extends Action
     public function __construct(
         Context $context,
         PageFactory $pageFactory
-    )
-    {
+    ) {
         $this->pageFactory = $pageFactory;
         parent::__construct($context);
     }
@@ -34,5 +35,4 @@ class View extends Action
     {
         return $this->pageFactory->create();
     }
-
 }

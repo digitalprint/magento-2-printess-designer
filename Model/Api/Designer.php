@@ -2,8 +2,8 @@
 
 namespace Digitalprint\PrintessDesigner\Model\Api;
 
-use Digitalprint\PrintessDesigner\Api\DesignerInterface;
 use Digitalprint\PrintessDesigner\Api\Data\DesignerInterface as DataDesignerInterface;
+use Digitalprint\PrintessDesigner\Api\DesignerInterface;
 use Magento\Framework\UrlInterface;
 
 class Designer implements DesignerInterface
@@ -21,7 +21,7 @@ class Designer implements DesignerInterface
     public function __construct(
         DataDesignerInterface $dataDesigner,
         UrlInterface $urlBuilder
-    ){
+    ) {
         $this->dataDesigner = $dataDesigner;
         $this->urlBuilder = $urlBuilder;
     }
@@ -29,8 +29,8 @@ class Designer implements DesignerInterface
     /**
      * @inheritdoc
      */
-    public function getUrlByTag(string $tag) {
-
+    public function getUrlByTag(string $tag)
+    {
         $dataDesigner = clone $this->dataDesigner;
 
         $queryParams = [
@@ -41,7 +41,5 @@ class Designer implements DesignerInterface
         $dataDesigner->setUrl($designerUrl);
 
         return $dataDesigner;
-
     }
-
 }

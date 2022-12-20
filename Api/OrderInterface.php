@@ -2,8 +2,8 @@
 
 namespace Digitalprint\PrintessDesigner\Api;
 
-interface OrderInterface {
-
+interface OrderInterface
+{
 
     /**
      * @param string|null $orderId
@@ -17,5 +17,4 @@ interface OrderInterface {
      * @return Data\OrderInterface
      */
     public function updateOrderItem(?string $orderId, ?string $itemId, ?string $sku, int $qty, ?string $saveToken, ?string $thumbnailUrl, ?string $documents, ?string $priceInfo);
-
 }

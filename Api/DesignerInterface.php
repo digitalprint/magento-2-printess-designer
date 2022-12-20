@@ -12,7 +12,4 @@ interface DesignerInterface
      */
 
     public function getUrlByTag(string $tag);
-
-
-
 }

@@ -2,8 +2,8 @@
 
 namespace Digitalprint\PrintessDesigner\Model\Api;
 
-use Digitalprint\PrintessDesigner\Api\OrderInterface;
 use Digitalprint\PrintessDesigner\Api\Data\OrderInterface as DataOrderInterface;
+use Digitalprint\PrintessDesigner\Api\OrderInterface;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ProductFactory;
@@ -83,8 +83,7 @@ class Order implements OrderInterface
         ToOrderItem $quoteToOrder,
         UrlInterface $urlBuilder,
         SerializerInterface $serializer
-    )
-    {
+    ) {
         $this->dataOrder = $dataOrder;
         $this->productFactory = $productFactory;
         $this->productRepository = $productRepository;
@@ -110,26 +109,21 @@ class Order implements OrderInterface
      */
     public function updateOrderItem(?string $orderId, ?string $itemId, ?string $sku, ?int $qty, ?string $saveToken, ?string $thumbnailUrl, ?string $documents, ?string $priceInfo)
     {
-
         $this->dataOrder->setStatus('error');
 
         if (!is_null($orderId) && !is_null($itemId) && !is_null($sku) && !is_null($qty) && !is_null($saveToken) && !is_null($thumbnailUrl)) {
-
             $order = $this->orderRepository->get($orderId);
             $quote = $this->quoteRepository->get($order->getQuoteId());
 
             $quoteItems = $quote->getAllVisibleItems();
 
             foreach ($quoteItems as $quoteItem) {
-
                 $origOrderItem = $order->getItemByQuoteItemId($quoteItem->getId());
 
                 if ($origOrderItem) {
-
                     $orderItemId = $origOrderItem->getItemId();
 
                     if ($orderItemId === $itemId) {
-
                         $updateOptions = [];
 
                         $product = $this->productRepository->get($sku);
@@ -137,7 +131,6 @@ class Order implements OrderInterface
                         $parentId = $this->configurableType->getParentIdsByChild($product->getId());
 
                         if (($parentId = reset($parentId)) !== false) {
-
                             $parentProduct = $this->productFactory->create()->load($parentId);
                             $productAttributeOptions = $this->configurableType->getConfigurableAttributesAsArray($parentProduct);
 
@@ -169,9 +162,7 @@ class Order implements OrderInterface
                                 'code' => 'product_qty_' . $product->getId(),
                                 'value' => $qty
                             ];
-
                         } else {
-
                             $buyRequest = $this->serializer->unserialize($quoteItem->getOptionByCode('info_buyRequest')->getValue());
 
                             $buyRequest['product_id'] = $product->getId();
@@ -182,12 +173,11 @@ class Order implements OrderInterface
                                 'code' => 'info_buyRequest',
                                 'value' => $this->serializer->serialize($buyRequest)
                             ];
-
                         }
 
                         // Additional Options
 
-                        $additionalOptions = array();
+                        $additionalOptions = [];
 
                         if ($additionalOption = $quoteItem->getOptionByCode('additional_options')) {
                             $additionalOptions = $this->serializer->unserialize($additionalOption->getValue());
@@ -229,7 +219,6 @@ class Order implements OrderInterface
 
                         if ($quoteItem->getChildren()) {
                             foreach ($quoteItem->getChildren() as $childQuoteItem) {
-
                                 $childQuoteItem->setProduct($product);
 
                                 $childQuoteItem->setQty($qty);
@@ -247,7 +236,6 @@ class Order implements OrderInterface
 
             $quoteItems = $quote->getAllVisibleItems();
             foreach ($quoteItems as $quoteItem) {
-
                 $orderItem = $this->quoteToOrder->convert($quoteItem);
 
                 $options = $orderItem->getProductOptions();
@@ -265,31 +253,23 @@ class Order implements OrderInterface
                     $buyRequest = $this->serializer->unserialize($buyRequest->getValue());
 
                     if (isset($buyRequest['super_attribute']) && is_array($buyRequest['super_attribute'])) {
-
                         foreach ($buyRequest['super_attribute'] as $key => $val) {
-
                             if (isset($productAttributeOptions[$key])) {
-
                                 $res = array_merge(...array_filter($productAttributeOptions[$key]['values'], static function ($v, $k) use ($val) {
                                     return $v['value_index'] === $val;
                                 }, ARRAY_FILTER_USE_BOTH));
 
                                 if (isset($res['label'])) {
-
                                     $attributes[] = [
                                         'label' => $productAttributeOptions[$key]['label'],
                                         'value' => $res['label'],
                                         'option_id' => $key,
                                         'option_value' => $val
                                     ];
-
                                 }
-
                             }
-
                         }
                     }
-
                 }
 
                 $options['attributes_info'] = $attributes;
@@ -301,15 +281,12 @@ class Order implements OrderInterface
 
                 if ($quoteItem->getChildren()) {
                     foreach ($quoteItem->getChildren() as $childQuoteItem) {
-
                         $childOrderItem = $this->quoteToOrder->convert($childQuoteItem);
 
                         $origChildOrderItem = $order->getItemByQuoteItemId($childQuoteItem->getId());
                         $origChildOrderItem->addData($childOrderItem->getData());
-
                     }
                 }
-
             }
 
             $order->setSubtotal($quote->getSubtotal());
@@ -326,11 +303,8 @@ class Order implements OrderInterface
             );
 
             $this->dataOrder->setStatus('success');
-
         }
 
         return $this->dataOrder;
-
     }
-
 }

@@ -2,8 +2,8 @@
 
 namespace Digitalprint\PrintessDesigner\Model;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
 use Digitalprint\PrintessDesigner\Api\Data\PrintessProductPriceInfoInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
 
 class PrintessProductPriceInfo extends AbstractExtensibleModel implements PrintessProductPriceInfoInterface
 {
@@ -13,7 +13,7 @@ class PrintessProductPriceInfo extends AbstractExtensibleModel implements Printe
      */
     public function getValue(): array
     {
-        return array(json_decode($this->getData(self::VALUE), true, 512, JSON_THROW_ON_ERROR));
+        return [json_decode($this->getData(self::VALUE), true, 512, JSON_THROW_ON_ERROR)];
     }
 
     /**
@@ -23,5 +23,4 @@ class PrintessProductPriceInfo extends AbstractExtensibleModel implements Printe
     {
         return $this->setData(self::VALUE, $value);
     }
-
 }

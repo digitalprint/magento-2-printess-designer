@@ -8,7 +8,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\ScopeInterface;
 
-class Image {
+class Image
+{
 
     /**
      * @var string;
@@ -31,10 +32,9 @@ class Image {
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         Json $serializer = null
-    )
-    {
+    ) {
         $this->scopeConfig = $scopeConfig;
-        $this->serializer = $serializer ?: ObjectManager::getInstance() ->get(Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -44,11 +44,9 @@ class Image {
      */
     public function afterGetImage(Renderer $subject, $result)
     {
-
         if ($this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ENABLE, ScopeInterface::SCOPE_STORE)) {
-
             $item = $subject->getItem();
-            
+
             if ($additionalOptions = $item->getOptionByCode('additional_options')) {
                 $additionalOptions = (array) $this->serializer->unserialize($additionalOptions->getValue());
             }
@@ -56,11 +54,8 @@ class Image {
             if (isset($additionalOptions['printess_thumbnail_url']['value'])) {
                 $result->setImageUrl($additionalOptions['printess_thumbnail_url']['value']);
             }
-
         }
 
         return $result;
-
     }
-
 }

@@ -6,7 +6,8 @@ use Digitalprint\PrintessDesigner\Helper\Printess;
 use Magento\Catalog\Block\Product\View;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class SubmitUrl {
+class SubmitUrl
+{
 
     /**
      * @var Printess
@@ -36,5 +37,4 @@ class SubmitUrl {
 
         return $result;
     }
-
 }
