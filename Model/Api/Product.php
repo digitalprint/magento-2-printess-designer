@@ -6,8 +6,8 @@ use Digitalprint\PrintessDesigner\Api\Data\ProductInterface as DataProductInterf
 use Digitalprint\PrintessDesigner\Api\ProductInterface;
 use JsonException;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\ConfigurableProduct\Api\LinkManagementInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
 
 class Product implements ProductInterface
 {
@@ -23,18 +23,18 @@ class Product implements ProductInterface
     private ProductRepositoryInterface $productRepository;
 
     /**
-     * @var LinkManagementInterface
+     * @var CollectionFactory
      */
-    private LinkManagementInterface $linkManagement;
+    private $productCollectionFactory;
 
     public function __construct(
         DataProductInterface $dataProduct,
         ProductRepositoryInterface $productRepository,
-        LinkManagementInterface $linkManagement
+        CollectionFactory $productCollectionFactory,
     ) {
         $this->dataProduct = $dataProduct;
         $this->productRepository = $productRepository;
-        $this->linkManagement = $linkManagement;
+        $this->productCollectionFactory = $productCollectionFactory;
     }
 
     /**
@@ -120,7 +120,12 @@ class Product implements ProductInterface
         $variants = [];
 
         if ($product->getTypeId() === Configurable::TYPE_CODE) {
-            $children = $this->linkManagement->getChildren($product->getSku());
+            $children = $this->productCollectionFactory->create()->setFlag(
+                'product_children',
+                true
+            )->setProductFilter(
+                $product
+            );
 
             foreach ($children as $child) {
                 $childProduct = $this->productRepository->getById($child->getId());
@@ -130,7 +135,7 @@ class Product implements ProductInterface
                     'product_id' => $product->getId(),
                     'sku' => $child->getSku(),
                     'name' => $child->getName(),
-                    'attributes' =>  $this->getAttributes($childProduct),
+                    'attributes' => $this->getAttributes($childProduct),
                     'price_info' => $this->getPrice($childProduct)
                 ];
             }
