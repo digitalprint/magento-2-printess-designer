@@ -30,7 +30,7 @@ class Product implements ProductInterface
     public function __construct(
         DataProductInterface $dataProduct,
         ProductRepositoryInterface $productRepository,
-        CollectionFactory $productCollectionFactory,
+        CollectionFactory $productCollectionFactory
     ) {
         $this->dataProduct = $dataProduct;
         $this->productRepository = $productRepository;
