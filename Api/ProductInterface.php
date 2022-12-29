@@ -10,7 +10,6 @@ interface ProductInterface
      * @param string $sku
      * @return Data\ProductInterface
      */
-
     public function getProduct(string $sku);
 
 }

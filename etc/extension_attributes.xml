@@ -3,7 +3,8 @@
     <extension_attributes for="Magento\Sales\Api\Data\OrderItemInterface">
         <attribute code="printess_save_token" type="string" />
         <attribute code="printess_thumbnail_url" type="string" />
-        <attribute code="printess_product_documents" type="Digitalprint\PrintessDesigner\Api\Data\PrintessProductDocumentsInterface" />
-        <attribute code="printess_product_priceInfo" type="Digitalprint\PrintessDesigner\Api\Data\PrintessProductPriceInfoInterface" />
+        <attribute code="printess_product_documents" type="Digitalprint\PrintessDesigner\Api\Data\DocumentsInterface" />
+        <attribute code="printess_product_priceInfo" type="Digitalprint\PrintessDesigner\Api\Data\PriceInfoInterface" />
+        <attribute code="printess_supplier_parameter" type="Digitalprint\PrintessDesigner\Api\Data\SupplierParameterInterface" />
     </extension_attributes>
 </config>

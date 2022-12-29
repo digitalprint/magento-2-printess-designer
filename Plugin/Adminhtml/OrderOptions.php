@@ -17,8 +17,9 @@ class OrderOptions {
         unset(
             $result['printess_save_token'],
             $result['printess_thumbnail_url'],
-            $result['printess_product_documents'],
-            $result['printess_product_price_info']
+            $result['printess_documents'],
+            $result['printess_price_info'],
+            $result['printess_supplier_parameter']
         );
 
         return $result;

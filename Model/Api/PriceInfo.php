@@ -1,11 +1,11 @@
 <?php
 
-namespace Digitalprint\PrintessDesigner\Model;
+namespace Digitalprint\PrintessDesigner\Model\Api;
 
-use Digitalprint\PrintessDesigner\Api\Data\PrintessProductPriceInfoInterface;
+use Digitalprint\PrintessDesigner\Api\Data\PriceInfoInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
-class PrintessProductPriceInfo extends AbstractExtensibleModel implements PrintessProductPriceInfoInterface
+class PriceInfo extends AbstractExtensibleModel implements PriceInfoInterface
 {
 
     /**
@@ -13,6 +13,7 @@ class PrintessProductPriceInfo extends AbstractExtensibleModel implements Printe
      */
     public function getValue(): array
     {
+
         return [json_decode($this->getData(self::VALUE), true, 512, JSON_THROW_ON_ERROR)];
     }
 

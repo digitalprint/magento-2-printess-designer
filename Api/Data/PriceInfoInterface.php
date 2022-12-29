@@ -2,9 +2,9 @@
 
 namespace Digitalprint\PrintessDesigner\Api\Data;
 
-interface PrintessProductDocumentsInterface
+interface PriceInfoInterface
 {
-    public const VALUE = 'printess_product_documents';
+    public const VALUE = 'printess_price_info';
 
     /**
      * Return value.

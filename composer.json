@@ -12,7 +12,8 @@
     "license": "BSD-2-Clause",
     "require": {
         "php": "~7.4.0||~8.1.0",
-        "digitalprint/printess-api-php": "^1.0"
+        "digitalprint/printess-api-php": "^1.0",
+        "twig/twig": "^2.0"
     },
     "autoload": {
         "files": [ "registration.php" ],

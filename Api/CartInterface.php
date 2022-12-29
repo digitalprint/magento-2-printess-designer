@@ -8,14 +8,13 @@ interface CartInterface
     /**
      * Add to cart
      *
-     * @param string|null $sku
-     * @param integer|null $quantity
-     * @param string|null $saveToken
-     * @param string|null $thumbnailUrl
-     * @param string|null $documents
-     * @param string|null $priceInfo
+     * @param string $sku
+     * @param int $quantity
+     * @param string $saveToken
+     * @param string $thumbnailUrl
+     * @param mixed $documents
+     * @param mixed $priceInfo
      * @return Data\CartInterface
-     *
      */
-    public function addToCart(?string $sku, ?int $quantity, ?string $saveToken, ?string $thumbnailUrl, ?string $documents, ?string $priceInfo);
+    public function addToCart(string $sku, int $quantity, string $saveToken, string $thumbnailUrl, mixed $documents, mixed $priceInfo);
 }

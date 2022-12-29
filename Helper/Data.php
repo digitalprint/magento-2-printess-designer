@@ -20,6 +20,10 @@ class Data extends AbstractHelper
      */
     public function isJson($value): bool
     {
+        if (is_array($value)) {
+            return false;
+        }
+
         if (is_null($value) || empty($value)) {
             return false;
         }

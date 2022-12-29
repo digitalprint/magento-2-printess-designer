@@ -14,11 +14,12 @@ define([
             'quantity': quantity,
             'thumbnailUrl': thumbnailUrl,
             'saveToken': saveToken,
-            'documents': JSON.stringify(documents),
-            'priceInfo': JSON.stringify(priceInfo)
+            'documents': documents,
+            'priceInfo': priceInfo
         };
 
         let headers = {
+            'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
 
@@ -42,11 +43,12 @@ define([
             'qty': quantity,
             'thumbnailUrl': thumbnailUrl,
             'saveToken': saveToken,
-            'documents': JSON.stringify(documents),
-            'priceInfo': JSON.stringify(priceInfo)
+            'documents': documents,
+            'priceInfo': priceInfo
         };
 
         let headers = {
+            'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${adminToken}`
         }
@@ -54,7 +56,7 @@ define([
         return fetch('/rest/V1/digitalprint-designer/updateorderitem', {
             method: "POST",
             headers: headers,
-            body: JSON.stringify(payload),
+            body: JSON.stringify(payload)
         });
     }
 

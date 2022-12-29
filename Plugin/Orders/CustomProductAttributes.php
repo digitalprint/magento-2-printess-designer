@@ -2,8 +2,9 @@
 
 namespace Digitalprint\PrintessDesigner\Plugin\Orders;
 
-use Digitalprint\PrintessDesigner\Model\PrintessProductDocumentsFactory;
-use Digitalprint\PrintessDesigner\Model\PrintessProductPriceInfoFactory;
+use Digitalprint\PrintessDesigner\Model\Api\DocumentsFactory;
+use Digitalprint\PrintessDesigner\Model\Api\PriceInfoFactory;
+use Digitalprint\PrintessDesigner\Model\Api\SupplierParameterFactory;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Sales\Api\Data\OrderItemExtensionFactory;
 use Magento\Sales\Api\Data\OrderItemInterface;
@@ -24,31 +25,39 @@ class CustomProductAttributes
     protected ProductFactory $productFactory;
 
     /**
-     * @var PrintessProductDocumentsFactory
+     * @var DocumentsFactory
      */
-    protected PrintessProductDocumentsFactory $printessProductDocumentsFactory;
+    protected DocumentsFactory $documentsFactory;
 
     /**
-     * @var PrintessProductPriceInfoFactory
+     * @var PriceInfoFactory
      */
-    protected PrintessProductPriceInfoFactory $printessProductPriceInfoFactory;
+    protected PriceInfoFactory $priceInfoFactory;
+
+    /**
+     * @var SupplierParameterFactory
+     */
+    protected SupplierParameterFactory $supplierParameterFactory;
 
     /**
      * @param OrderItemExtensionFactory $orderItemExtensionFactory
      * @param ProductFactory $productFactory
-     * @param PrintessProductDocumentsFactory $printessProductDocumentsFactory
-     * @param PrintessProductPriceInfoFactory $printessProductPriceInfoFactory*
+     * @param DocumentsFactory $documentsFactory
+     * @param PriceInfoFactory $priceInfoFactory
+     * @param SupplierParameterFactory $suplierParameterFactory
      */
     public function __construct(
         OrderItemExtensionFactory $orderItemExtensionFactory,
         ProductFactory $productFactory,
-        PrintessProductDocumentsFactory $printessProductDocumentsFactory,
-        PrintessProductPriceInfoFactory $printessProductPriceInfoFactory
+        DocumentsFactory $documentsFactory,
+        PriceInfoFactory $priceInfoFactory,
+        SupplierParameterFactory $supplierParameterFactory
     ) {
         $this->orderItemExtensionFactory = $orderItemExtensionFactory;
         $this->productFactory = $productFactory;
-        $this->printessProductDocumentsFactory = $printessProductDocumentsFactory;
-        $this->printessProductPriceInfoFactory = $printessProductPriceInfoFactory;
+        $this->documentsFactory = $documentsFactory;
+        $this->priceInfoFactory = $priceInfoFactory;
+        $this->supplierParameterFactory = $supplierParameterFactory;
     }
 
     /**
@@ -61,9 +70,6 @@ class CustomProductAttributes
         $extensionAttributes = $orderItem->getExtensionAttributes();
         $extensionAttributes = $extensionAttributes ?: $this->orderItemExtensionFactory->create();
 
-        $printessProductDocuments = $this->printessProductDocumentsFactory->create();
-        $printessProductPriceInfo = $this->printessProductPriceInfoFactory->create();
-
         $options = $orderItem->getProductOptions();
 
         if (isset($options['additional_options']['printess_save_token'])) {
@@ -74,14 +80,25 @@ class CustomProductAttributes
             $extensionAttributes->setPrintessThumbnailUrl($options['additional_options']['printess_thumbnail_url']['value']);
         }
 
-        if (isset($options['additional_options']['printess_product_documents'])) {
-            $printessProductDocuments->setValue($options['additional_options']['printess_product_documents']['value']);
-            $extensionAttributes->setPrintessProductDocuments($printessProductDocuments);
+        if (isset($options['additional_options']['printess_documents'])) {
+            $documents = $this->documentsFactory->create();
+            $documents->setValue($options['additional_options']['printess_documents']['value']);
+
+            $extensionAttributes->setPrintessProductDocuments($documents);
         }
 
-        if (isset($options['additional_options']['printess_product_price_info'])) {
-            $printessProductPriceInfo->setValue($options['additional_options']['printess_product_price_info']['value']);
-            $extensionAttributes->setPrintessProductPriceInfo($printessProductPriceInfo);
+        if (isset($options['additional_options']['printess_price_info'])) {
+            $priceInfo = $this->priceInfoFactory->create();
+            $priceInfo->setValue($options['additional_options']['printess_price_info']['value']);
+
+            $extensionAttributes->setPrintessProductPriceInfo($priceInfo);
+        }
+
+        if (isset($options['additional_options']['printess_supplier_parameter'])) {
+            $supplierParameter = $this->supplierParameterFactory->create();
+            $supplierParameter->setValue($options['additional_options']['printess_supplier_parameter']['value']);
+
+            $extensionAttributes->setPrintessSupplierParameter($supplierParameter);
         }
 
         $orderItem->setExtensionAttributes($extensionAttributes);
@@ -102,9 +119,6 @@ class CustomProductAttributes
             $extensionAttributes = $orderItem->getExtensionAttributes();
             $extensionAttributes = $extensionAttributes ?: $this->orderItemExtensionFactory->create();
 
-            $printessProductDocuments = $this->printessProductDocumentsFactory->create();
-            $printessProductPriceInfo = $this->printessProductPriceInfoFactory->create();
-
             $options = $orderItem->getProductOptions();
 
             if (isset($options['additional_options']['printess_save_token'])) {
@@ -115,14 +129,25 @@ class CustomProductAttributes
                 $extensionAttributes->setPrintessThumbnailUrl($options['additional_options']['printess_thumbnail_url']['value']);
             }
 
-            if (isset($options['additional_options']['printess_product_documents'])) {
-                $printessProductDocuments->setValue($options['additional_options']['printess_product_documents']['value']);
-                $extensionAttributes->setPrintessProductDocuments($printessProductDocuments);
+            if (isset($options['additional_options']['printess_documents'])) {
+                $documents = $this->documentsFactory->create();
+                $documents->setValue($options['additional_options']['printess_documents']['value']);
+
+                $extensionAttributes->setPrintessProductDocuments($documents);
             }
 
-            if (isset($options['additional_options']['printess_product_price_info'])) {
-                $printessProductPriceInfo->setValue($options['additional_options']['printess_product_price_info']['value']);
-                $extensionAttributes->setPrintessProductPriceInfo($printessProductPriceInfo);
+            if (isset($options['additional_options']['printess_price_info'])) {
+                $priceInfo = $this->priceInfoFactory->create();
+                $priceInfo->setValue($options['additional_options']['printess_price_info']['value']);
+
+                $extensionAttributes->setPrintessProductPriceInfo($priceInfo);
+            }
+
+            if (isset($options['additional_options']['printess_supplier_parameter'])) {
+                $supplierParameter = $this->supplierParameterFactory->create();
+                $supplierParameter->setValue($options['additional_options']['printess_supplier_parameter']['value']);
+
+                $extensionAttributes->setPrintessSupplierParameter($supplierParameter);
             }
 
             $orderItem->setExtensionAttributes($extensionAttributes);

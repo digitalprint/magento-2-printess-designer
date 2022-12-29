@@ -4,6 +4,6 @@
         <observer name="digitalprint_printessdesigner_quote_to_order" instance="Digitalprint\PrintessDesigner\Observer\AddAdditionalOptionToOrder" />
     </event>
     <event name="checkout_cart_product_add_after">
-        <observer name="digitalprint_printessdesigner_checkout_cart_product_add_after" instance="Digitalprint\PrintessDesigner\Observer\CheckoutCartAdd" />
+        <observer name="digitalprint_printessdesigner_checkout_cart_product_add_after" instance="Digitalprint\PrintessDesigner\Observer\AddAdditionalOptionsToCart" />
     </event>
 </config>

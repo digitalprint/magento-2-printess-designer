@@ -1,11 +1,11 @@
 <?php
 
-namespace Digitalprint\PrintessDesigner\Model;
+namespace Digitalprint\PrintessDesigner\Model\Api;
 
+use Digitalprint\PrintessDesigner\Api\Data\DocumentsInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
-use Digitalprint\PrintessDesigner\Api\Data\PrintessProductDocumentsInterface;
 
-class PrintessProductDocuments extends AbstractExtensibleModel implements PrintessProductDocumentsInterface
+class Documents extends AbstractExtensibleModel implements DocumentsInterface
 {
 
     /**
