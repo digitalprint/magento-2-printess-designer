@@ -46,6 +46,10 @@ define([], function() {
         this.documents = documents;
     }
 
+    Cart.prototype.setFormFields = function(formFields) {
+        this.formFields = formFields;
+    }
+
     Cart.prototype.setPriceInfo = function(priceInfo) {
         this.priceInfo = priceInfo;
     }

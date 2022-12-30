@@ -104,11 +104,16 @@ class AddAdditionalOptionsToCart implements ObserverInterface
                     'value' => json_encode($params['documents'], JSON_THROW_ON_ERROR)
                 ];
 
+                $productConfiguration = [
+                    'documents' => $params['documents'],
+                    'formFields' => $params['formFields']
+                ];
+
                 if (($parentId = reset($parentId)) !== false) {
                     $parentProduct = $this->productFactory->create()->load($parentId);
-                    $supplierParameter  = $this->supplierParameter->createSupplierParameter(!is_null($product->getData('printess_supplier_parameter')) ? $product : $parentProduct, $params['documents']);
+                    $supplierParameter  = $this->supplierParameter->createSupplierParameter(!is_null($product->getData('printess_supplier_parameter')) ? $product : $parentProduct, $productConfiguration);
                 } else {
-                    $supplierParameter = $this->supplierParameter->createSupplierParameter($product, $params['documents']);
+                    $supplierParameter = $this->supplierParameter->createSupplierParameter($product, $productConfiguration);
                 }
 
                 $additionalOptions['printess_supplier_parameter'] = [

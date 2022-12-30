@@ -7,7 +7,7 @@ define([
         'Digitalprint_PrintessDesigner/js/store/ui'
     ], function(mageTemplate, priceUtils, Cart, CartStore, UiStore) {
 
-    function addToCart(storeCode, sku, quantity, thumbnailUrl, saveToken, documents, priceInfo, customerToken) {
+    function addToCart(storeCode, sku, quantity, thumbnailUrl, saveToken, documents, formFields, priceInfo, customerToken) {
 
         let payload = {
             'sku': sku,
@@ -15,6 +15,7 @@ define([
             'thumbnailUrl': thumbnailUrl,
             'saveToken': saveToken,
             'documents': documents,
+            'formFields': formFields,
             'priceInfo': priceInfo
         };
 
@@ -34,7 +35,7 @@ define([
         });
     }
 
-    function updateOrderItem(orderId, itemId, sku, quantity, thumbnailUrl, saveToken, documents, priceInfo, adminToken) {
+    function updateOrderItem(orderId, itemId, sku, quantity, thumbnailUrl, saveToken, documents, formFields, priceInfo, adminToken) {
 
         let payload = {
             'orderId': parseInt(orderId),
@@ -44,6 +45,7 @@ define([
             'thumbnailUrl': thumbnailUrl,
             'saveToken': saveToken,
             'documents': documents,
+            'formFields': formFields,
             'priceInfo': priceInfo
         };
 
@@ -94,10 +96,10 @@ define([
                     CartStore.setThumbnailUrl(thumbnailUrl);
 
                     if (config.areaCode === 'adminhtml') {
-                        return updateOrderItem(config.orderId, config.itemId, CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, CartStore.documents, CartStore.priceInfo, session.admin_token)
+                        return updateOrderItem(config.orderId, config.itemId, CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, CartStore.documents, CartStore.formFields, CartStore.priceInfo, session.admin_token)
                     }
 
-                    return addToCart(config.storeCode, CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, CartStore.documents, CartStore.priceInfo, session.customer_token);
+                    return addToCart(config.storeCode, CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, CartStore.documents, CartStore.formFields, CartStore.priceInfo, session.customer_token);
                 })
                 .then(response => response.json())
                 .then((data) => {
@@ -353,6 +355,7 @@ define([
         CartStore.setSaveToken(saveToken);
         CartStore.setThumbnailUrl(thumbnailUrl);
         CartStore.setDocuments(this.printess.getBuyerFrameCountAndMarkers());
+        CartStore.setFormFields(this.printess.getAllPriceRelevantFormFields());
 
         this.cartOffcanvas.show();
     }
@@ -402,7 +405,6 @@ define([
     }
 
     Bridge.prototype.priceChange = function(priceInfo) {
-
         CartStore.setPriceInfo(priceInfo);
     }
 

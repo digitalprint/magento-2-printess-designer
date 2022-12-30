@@ -106,6 +106,7 @@ class Cart implements CartInterface
      * @param string $saveToken
      * @param string $thumbnailUrl
      * @param mixed $documents
+     * @param mixed $formFields
      * @param mixed $priceInfo
      * @return DataCartInterface
      * @throws CookieSizeLimitReachedException
@@ -115,7 +116,7 @@ class Cart implements CartInterface
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    public function addToCart(string $sku, int $quantity, string $saveToken, string $thumbnailUrl, mixed $documents, mixed $priceInfo)
+    public function addToCart(string $sku, int $quantity, string $saveToken, string $thumbnailUrl, mixed $documents, mixed $formFields, mixed $priceInfo)
     {
         $this->dataCart->setStatus('error');
 

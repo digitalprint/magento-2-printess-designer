@@ -14,6 +14,8 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote\Item\ToOrderItem;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Twig\Error\LoaderError;
+use Twig\Error\SyntaxError;
 
 class Order implements OrderInterface
 {
@@ -112,11 +114,15 @@ class Order implements OrderInterface
      * @param string $saveToken
      * @param string $thumbnailUrl
      * @param mixed $documents
+     * @param mixed $formFields
      * @param mixed $priceInfo
      * @return DataOrderInterface
      * @throws NoSuchEntityException
+     * @throws \JsonException
+     * @throws LoaderError
+     * @throws SyntaxError
      */
-    public function updateOrderItem(string $orderId, string $itemId, string $sku, int $qty, string $saveToken, string $thumbnailUrl, mixed $documents, mixed $priceInfo)
+    public function updateOrderItem(string $orderId, string $itemId, string $sku, int $qty, string $saveToken, string $thumbnailUrl, mixed $documents, mixed $formFields, mixed $priceInfo)
     {
         $this->dataOrder->setStatus('error');
 
@@ -137,6 +143,11 @@ class Order implements OrderInterface
                     $product = $this->productRepository->get($sku);
 
                     $parentId = $this->configurableType->getParentIdsByChild($product->getId());
+
+                    $productConfiguration = [
+                        'documents' => $documents,
+                        'formFields' => $formFields
+                    ];
 
                     if (($parentId = reset($parentId)) !== false) {
                         $parentProduct = $this->productFactory->create()->load($parentId);
@@ -171,8 +182,7 @@ class Order implements OrderInterface
                                 'value' => $qty
                             ];
 
-                        $supplierParameter  = $this->supplierParameter->createSupplierParameter(!is_null($product->getData('printess_supplier_parameter')) ? $product : $parentProduct, $documents);
-
+                        $supplierParameter = $this->supplierParameter->createSupplierParameter(!is_null($product->getData('printess_supplier_parameter')) ? $product : $parentProduct, $productConfiguration);
                     } else {
                         $buyRequest = $this->serializer->unserialize($quoteItem->getOptionByCode('info_buyRequest')->getValue());
 
@@ -185,8 +195,7 @@ class Order implements OrderInterface
                                 'value' => $this->serializer->serialize($buyRequest)
                             ];
 
-                        $supplierParameter = $this->supplierParameter->createSupplierParameter($product, $documents);
-
+                        $supplierParameter = $this->supplierParameter->createSupplierParameter($product, $productConfiguration);
                     }
 
                     // Additional Options

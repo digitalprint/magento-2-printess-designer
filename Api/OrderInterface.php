@@ -12,8 +12,9 @@ interface OrderInterface
      * @param string $saveToken
      * @param string $thumbnailUrl
      * @param mixed $documents
+     * @param mixed $formFields
      * @param mixed $priceInfo
      * @return Data\OrderInterface
      */
-    public function updateOrderItem(string $orderId, string $itemId, string $sku, int $qty, string $saveToken, string $thumbnailUrl, mixed $documents, mixed $priceInfo);
+    public function updateOrderItem(string $orderId, string $itemId, string $sku, int $qty, string $saveToken, string $thumbnailUrl, mixed $documents, mixed $formFields, mixed $priceInfo);
 }
