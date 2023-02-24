@@ -16,9 +16,9 @@ interface ProcessorInterface
     public function getType(): string;
 
     /**
-     * @param $productConfiguration
+     * @param $params
      * @return string|null
      */
-    public function process($productConfiguration): ?string;
+    public function process($params): mixed;
 
 }

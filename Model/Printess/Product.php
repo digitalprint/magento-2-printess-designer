@@ -175,7 +175,7 @@ class Product {
             }
 
             if ($option->getType() === Adjustment::TYPE_NAME) {
-                $customOptions[$option->getOptionId()] = $this->adjustment->getAdjustment($option->getTitle(), $productConfiguration);
+                $customOptions[$option->getOptionId()] = $this->adjustment->getAdjustment($option->getTitle(), $supplierParameter);
             }
 
         }

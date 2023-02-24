@@ -34,10 +34,10 @@ class Adjustment
 
     /**
      * @param $name
-     * @param array $productConfiguration
-     * @return array|mixed|string
+     * @param array $params
+     * @return mixed
      */
-    public function getAdjustment($name, array $productConfiguration = [])
+    public function getAdjustment($name, array $params = [])
     {
         $processors = $this->registeredProcessors();
 
@@ -46,12 +46,11 @@ class Adjustment
             $processorInstance = $this->processorFactory->create($processor);
 
             if (self::TYPE_NAME === $processorInstance->getType() && $name === $processorInstance->getName()) {
-                return $processorInstance->process($productConfiguration);
+                return $processorInstance->process($params);
             }
         }
 
         throw new RuntimeException('The parameter with the name [' . $name . '] cannot be processed.');
     }
-
 
 }

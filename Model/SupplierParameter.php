@@ -68,10 +68,10 @@ class SupplierParameter
 
     /**
      * @param $name
-     * @param array $productConfiguration
+     * @param array $params
      * @return mixed
      */
-    public function getSupplierParameter($name, array $productConfiguration = [])
+    public function getSupplierParameter($name, array $params = [])
     {
         $processors = $this->registeredProcessors();
 
@@ -79,7 +79,7 @@ class SupplierParameter
             $processorInstance = $this->processorFactory->create($processor);
 
             if (self::TYPE_NAME === $processorInstance->getType() && $name === $processorInstance->getName()) {
-                return $processorInstance->process($productConfiguration);
+                return $processorInstance->process($params);
             }
         }
 

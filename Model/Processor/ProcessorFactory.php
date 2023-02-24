@@ -21,6 +21,7 @@ class ProcessorFactory
 
     /**
      * @param $className
+     * @return mixed
      */
     public function create($className)
     {
