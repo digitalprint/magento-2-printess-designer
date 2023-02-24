@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Catalog:etc/product_options.xsd">
+    <option name="supplierparameter" label="Supplier Parameter" renderer="Digitalprint\PrintessDesigner\Block\Adminhtml\Product\Edit\Tab\Options\Type\SupplierParameter">
+        <inputType name="supplierparameter" label="Supplier Parameter" />
+    </option>
+    <option name="adjustment" label="Adjustment" renderer="Digitalprint\PrintessDesigner\Block\Adminhtml\Product\Edit\Tab\Options\Type\Adjustment">
+        <inputType name="adjustment" label="Adjustment" />
+    </option>
+</config>

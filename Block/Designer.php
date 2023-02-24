@@ -2,6 +2,7 @@
 
 namespace Digitalprint\PrintessDesigner\Block;
 
+use Digitalprint\PrintessDesigner\Model\Printess\Product as PrintessProduct;
 use JsonException;
 use Magento\Backend\Model\Auth\Session as AuthSession;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -16,6 +17,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\Resolver;
+use Magento\Framework\Phrase;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Element\Template;
@@ -59,6 +61,11 @@ class Designer extends Template
     protected AuthSession $authSession;
 
     /**
+     * @var
+     */
+    protected $groupRepository;
+
+    /**
      * @var Session
      */
     protected Session $customerSession;
@@ -77,6 +84,11 @@ class Designer extends Template
      * @var ProductRepositoryInterface
      */
     protected ProductRepositoryInterface $productRepository;
+
+    /**
+     * @var PrintessProduct
+     */
+    protected PrintessProduct $printessProduct;
 
     /**
      * @var Configurable
@@ -128,10 +140,10 @@ class Designer extends Template
      */
     private const XML_PATH_DESIGNER_DESIGNPICKER_CLIENT= 'designer/designpicker/client';
 
+
     /**
      * @param Context $context
      * @param \Digitalprint\PrintessDesigner\Helper\Data $helper
-     * @param taxHelper $taxHelper
      * @param StoreManagerInterface $storeManager
      * @param Resolver $store
      * @param State $state
@@ -140,16 +152,17 @@ class Designer extends Template
      * @param SerializerInterface $serializer
      * @param Product $productModel
      * @param ProductRepositoryInterface $productRepository
+     * @param PrintessProduct $printessProduct
      * @param Configurable $configurable
      * @param LinkManagementInterface $linkManagement
      * @param ScopeConfigInterface $scopeConfig
      * @param TokenFactory $tokenFactory
+     * @param taxHelper $taxHelper
      * @param array $data
      */
     public function __construct(
         Context $context,
         \Digitalprint\PrintessDesigner\Helper\Data $helper,
-        taxHelper $taxHelper,
         StoreManagerInterface $storeManager,
         Resolver $store,
         State $state,
@@ -158,14 +171,15 @@ class Designer extends Template
         SerializerInterface $serializer,
         Product $productModel,
         ProductRepositoryInterface $productRepository,
+        PrintessProduct $printessProduct,
         Configurable $configurable,
         LinkManagementInterface $linkManagement,
         ScopeConfigInterface $scopeConfig,
         TokenFactory $tokenFactory,
+        taxHelper $taxHelper,
         array $data = []
     ) {
         $this->helper = $helper;
-        $this->taxHelper = $taxHelper;
         $this->storeManager = $storeManager;
         $this->store = $store;
         $this->state = $state;
@@ -174,10 +188,12 @@ class Designer extends Template
         $this->serializer = $serializer;
         $this->productModel = $productModel;
         $this->productRepository = $productRepository;
+        $this->printessProduct = $printessProduct;
         $this->configurable = $configurable;
         $this->linkManagement = $linkManagement;
         $this->scopeConfig = $scopeConfig;
         $this->tokenFactory = $tokenFactory;
+        $this->taxHelper = $taxHelper;
 
         parent::__construct($context, $data);
     }
@@ -293,6 +309,7 @@ class Designer extends Template
         $config['translationKey'] = strstr($this->store->getLocale(), '_', true);
 
         $config['priceFormat'] = $this->taxHelper->getPriceFormat($this->storeManager->getStore()->getId());
+        $config['legalNotice'] = $this->getLegalNotice();
 
         $config['shopToken'] = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_SHOP_TOKEN, $storeScope);
 
@@ -459,15 +476,22 @@ class Designer extends Template
     }
 
     /**
-     * @return string
+     * @return Phrase
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    public function getPriceTemplate(): string
-    {
-        $sku = $this->getRequest()->getParam('sku');
-        $product = $this->productRepository->get($sku);
+    private function getLegalNotice() {
 
-        return '<script id="designer-price-template" type="text/x-magento-template">' . $this->renderPriceHtml($product) . '</script>';
+        $sku = $this->getRequest()->getParam('sku');
+
+        $taxPercent = $this->printessProduct->getTaxRatePercent($sku);
+
+        if ($this->taxHelper->getPriceDisplayType() === \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX) {
+            return __('Excl. %1 VAT', $taxPercent);
+        }
+
+        return __('Incl. %1 VAT', $taxPercent);
+
     }
+
 }

@@ -11,6 +11,11 @@ interface ProcessorInterface
     public function getName(): string;
 
     /**
+     * @return string
+     */
+    public function getType(): string;
+
+    /**
      * @param $productConfiguration
      * @return string|null
      */

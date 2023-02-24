@@ -2,11 +2,14 @@
 
 namespace Digitalprint\PrintessDesigner\Api\Data;
 
-interface ProductInterface
+interface VariantInterface
 {
+
     public const SKU = 'sku';
+
     public const NAME = 'name';
-    public const VARIANTS = 'variants';
+
+    public const PRICE = 'price';
 
     /**
      * Get sku
@@ -17,7 +20,7 @@ interface ProductInterface
     /**
      * Set sku
      * @param string $sku
-     * @return ProductInterface
+     * @return VariantInterface
      */
     public function setSku(string $sku);
 
@@ -30,21 +33,21 @@ interface ProductInterface
     /**
      * Set name
      * @param string $name
-     * @return ProductInterface
+     * @return VariantInterface
      */
     public function setName(string $name);
 
     /**
-     * Get variants
+     * Get name
      * @return \Digitalprint\PrintessDesigner\Api\Data\AssociativeArrayItemInterface[]
      */
-    public function getVariants();
+    public function getPrices();
 
     /**
-     * Set variants
-     * @param array $variants
-     * @return ProductInterface
+     * Set name
+     * @param array $price
+     * @return VariantInterface
      */
-    public function setVariants(array $variants);
+    public function setPrices(array $price);
 
 }

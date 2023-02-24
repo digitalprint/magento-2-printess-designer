@@ -68,7 +68,7 @@ define([
             'Content-Type': 'application/json'
         }
 
-        if (session.admin_token !== null) {
+        if (typeof session.admin_token !=='undefined' && session.admin_token !== null) {
             headers['Authorization'] = `Bearer ${session.admin_token}`
         }
 
@@ -76,6 +76,23 @@ define([
             method: 'GET',
             headers: headers
         });
+    }
+
+    function getVariant(storeCode, sku, documents, formFields, priceInfo, session) {
+
+        let headers = {
+            'Content-Type': 'application/json'
+        }
+
+        if (typeof session.admin_token !=='undefined' && session.admin_token !== null) {
+            headers['Authorization'] = `Bearer ${session.admin_token}`
+        }
+
+        return fetch(`/rest/${storeCode}/V1/digitalprint-designer/variant?sku=${sku}&documents=${encodeURI(JSON.stringify(documents))}&formFields=${JSON.stringify(encodeURI(formFields))}&priceInfo=${JSON.stringify(encodeURI(priceInfo))}`, {
+            method: 'GET',
+            headers: headers
+        });
+
     }
 
     function createOffcanvas() {
@@ -93,13 +110,14 @@ define([
             printess
                 .renderFirstPageImage(fileName, 'preview', 1000, 1000)
                 .then((thumbnailUrl) => {
+
                     CartStore.setThumbnailUrl(thumbnailUrl);
 
                     if (config.areaCode === 'adminhtml') {
-                        return updateOrderItem(config.orderId, config.itemId, CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, CartStore.documents, CartStore.formFields, CartStore.priceInfo, session.admin_token)
+                        return updateOrderItem(config.orderId, config.itemId, CartStore.getSku(), CartStore.getQuantity(), CartStore.getThumbnailUrl(), CartStore.getSaveToken(), CartStore.getDocuments(), CartStore.getFormFields(), CartStore.getPriceInfo(), session.admin_token)
                     }
 
-                    return addToCart(config.storeCode, CartStore.sku, CartStore.quantity, CartStore.thumbnailUrl, CartStore.saveToken, CartStore.documents, CartStore.formFields, CartStore.priceInfo, session.customer_token);
+                    return addToCart(config.storeCode, CartStore.getSku(), CartStore.getQuantity(), CartStore.getThumbnailUrl(), CartStore.getSaveToken(), CartStore.getDocuments(), CartStore.getFormFields(), CartStore.getPriceInfo(), session.customer_token);
                 })
                 .then(response => response.json())
                 .then((data) => {
@@ -115,11 +133,11 @@ define([
 
         });
 
-        return new Cart('cartOffcanvas', this.config.qty);
+        return new Cart('cartOffcanvas', this.config);
     }
 
      function showLoader(elm) {
-         var list = document.getElementById(elm).getElementsByClassName('printess-designer-preloader-wrapper');
+         let list = document.getElementById(elm).getElementsByClassName('printess-designer-preloader-wrapper');
          if (list && list.length > 0) {
              list[0].classList.remove('hidden');
          }
@@ -127,7 +145,7 @@ define([
     }
 
     function hideLoader(elm) {
-         var list = document.getElementById(elm).getElementsByClassName('printess-designer-preloader-wrapper');
+         let list = document.getElementById(elm).getElementsByClassName('printess-designer-preloader-wrapper');
          if (list && list.length > 0) {
              list[0].classList.add('hidden');
          }
@@ -246,20 +264,39 @@ define([
         this.printess.insertTemplateAsLayoutSnippet(this.startDesign.templateName, this.startDesign.templateVersion, this.startDesign.documentName, this.startDesign.mode);
     }
 
-    function hasSpecialPrice(priceInfo) {
-        return priceInfo.regular_price > priceInfo.special_price;
+    function updateVariantInfo() {
+
+        if (CartStore.hasDocumentsChanged(this.printess.getBuyerFrameCountAndMarkers())) {
+            CartStore.setDocuments.call(this.printess.getBuyerFrameCountAndMarkers());
+        }
+
+        fetchAndRenderVariantInfo.call(this, this.currentVariant.sku, CartStore.getDocuments(), CartStore.getFormFields(), CartStore.getPriceInfo());
     }
 
-    function updatePriceInfo(priceFormat, priceInfo) {
+    function fetchAndRenderVariantInfo(sku, documents, formFields, priceInfo) {
 
-        let progressTmpl = mageTemplate('#designer-price-template');
-        document.getElementById("designerProductPrice").innerHTML = progressTmpl({
-            data: {
-                has_special_price: hasSpecialPrice(priceInfo),
-                regular_price: priceUtils.formatPrice(priceInfo.regular_price, JSON.parse(priceFormat), false),
-                special_price: priceUtils.formatPrice(priceInfo.special_price, JSON.parse(priceFormat), false),
-            }
-        });
+        getVariant(this.config.storeCode, sku, documents, formFields, priceInfo, this.session)
+            .then(response => response.json())
+            .then((variant) => {
+                renderVariantInfo.call(this, variant);
+            })
+            .catch((msg) => {
+                console.error(msg);
+            });
+
+    }
+
+    function renderVariantInfo(variant) {
+
+        const info = {
+            price: priceUtils.formatPrice(variant.prices[0].price.price, JSON.parse(this.config.priceFormat), false) + '*',
+            legalNotice: '* ' + this.config.legalNotice,
+            productName: variant.name,
+            oldPrice: null,
+            infoUrl: null,
+        }
+
+        window.uiHelper.refreshPriceDisplay(this.printess, info);
 
     }
 
@@ -313,8 +350,6 @@ define([
             let event = new CustomEvent('processStop');
             document.getElementById('printessDesigner').dispatchEvent(event);
 
-            updatePriceInfo.call(this, this.config.priceFormat, this.currentVariant.price_info);
-
             UiStore.setAppWasLoaded();
 
         });
@@ -337,6 +372,10 @@ define([
             uiHelper.refreshUndoRedoState(this.printess);
         }
 
+        if (state === "frames") {
+            updateVariantInfo.call(this);
+        }
+
     }
 
     Bridge.prototype.spreadChange = function(groupSnippets, layoutSnippets, tabs) {
@@ -351,13 +390,26 @@ define([
 
     Bridge.prototype.addToBasket = function(saveToken, thumbnailUrl) {
 
+        this.cartOffcanvas.show();
+        showLoader('cartOffcanvas');
+
         CartStore.setSku(this.currentVariant.sku);
         CartStore.setSaveToken(saveToken);
         CartStore.setThumbnailUrl(thumbnailUrl);
         CartStore.setDocuments(this.printess.getBuyerFrameCountAndMarkers());
         CartStore.setFormFields(this.printess.getAllPriceRelevantFormFields());
 
-        this.cartOffcanvas.show();
+        getVariant(this.config.storeCode, this.currentVariant.sku, CartStore.getDocuments(), CartStore.getFormFields(), CartStore.getPriceInfo(), this.session)
+            .then(response => response.json())
+            .then((variant) => {
+                this.cartOffcanvas.updateUi(variant);
+                hideLoader('cartOffcanvas');
+
+            })
+            .catch((msg) => {
+                console.error(msg);
+            });
+
     }
 
     Bridge.prototype.formFieldChanged = function(name, value, tag) {
@@ -392,8 +444,6 @@ define([
         updateCurrentAttributeMap.call(this, name, value);
         this.currentVariant = getVariantByAttributeMap.call(this, this.currentAttributeMap);
 
-        updatePriceInfo(this.config.priceFormat, this.currentVariant.price_info);
-
     }
 
     Bridge.prototype.refreshPagination = function () {
@@ -405,7 +455,14 @@ define([
     }
 
     Bridge.prototype.priceChange = function(priceInfo) {
-        CartStore.setPriceInfo(priceInfo);
+
+        if (!this.currentVariant) {
+            return;
+        }
+
+        CartStore.setPriceInfo(priceInfo, this.config.priceFormat);
+
+        updateVariantInfo.call(this);
     }
 
     return Bridge;

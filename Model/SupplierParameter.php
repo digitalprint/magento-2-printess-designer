@@ -3,6 +3,7 @@
 namespace Digitalprint\PrintessDesigner\Model;
 
 use Digitalprint\PrintessDesigner\Model\Processor\ProcessorFactory;
+use RuntimeException;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\SyntaxError;
@@ -11,20 +12,23 @@ use Twig\TwigFunction;
 
 class SupplierParameter
 {
+
+    public const TYPE_NAME = 'supplierparameter';
+
     /**
      * @var \Digitalprint\PrintessDesigner\Helper\Data
      */
-    protected $helper;
+    protected \Digitalprint\PrintessDesigner\Helper\Data $helper;
 
     /**
      * @var ProcessorFactory
      */
-    protected $processorFactory;
+    protected ProcessorFactory $processorFactory;
 
     /**
      * @var Environment
      */
-    protected $twig;
+    protected Environment $twig;
 
     /**
      * @param \Digitalprint\PrintessDesigner\Helper\Data $helper
@@ -74,24 +78,25 @@ class SupplierParameter
         foreach ($processors as $processor) {
             $processorInstance = $this->processorFactory->create($processor);
 
-            if ($name === $processorInstance->getName()) {
+            if (self::TYPE_NAME === $processorInstance->getType() && $name === $processorInstance->getName()) {
                 return $processorInstance->process($productConfiguration);
             }
         }
 
-        throw new \RuntimeException('The parameter with the name [' . $name . '] cannot be processed.');
+        throw new RuntimeException('The parameter with the name [' . $name . '] cannot be processed.');
     }
 
     /**
      * @param $product
-     * @param $productConfiguration
+     * @param array $productConfiguration
      * @return array|mixed|string
      * @throws LoaderError
      * @throws SyntaxError
      * @throws \JsonException
      */
-    public function createSupplierParameter($product, $productConfiguration = [])
+    public function createSupplierParameter($product, array $productConfiguration = [])
     {
+
         $attribute = $product->getData('printess_supplier_parameter');
 
         if (null === $attribute) {

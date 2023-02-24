@@ -7,8 +7,6 @@ use Digitalprint\PrintessDesigner\Api\Data\CartInterface as DataCartInterface;
 use JsonException;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\DataObject;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -18,6 +16,8 @@ use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
 use Magento\Framework\Stdlib\Cookie\FailureToSendException;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Twig\Error\LoaderError;
+use Twig\Error\SyntaxError;
 
 class Cart implements CartInterface
 {
@@ -31,11 +31,6 @@ class Cart implements CartInterface
      * @var StoreManagerInterface
      */
     private StoreManagerInterface $storeManager;
-
-    /**
-     * @var ProductFactory
-     */
-    private ProductFactory $productFactory;
 
     /**
      * @var SessionManagerInterface
@@ -63,9 +58,9 @@ class Cart implements CartInterface
     private ProductRepositoryInterface $productRepository;
 
     /**
-     * @var Configurable
+     * @var \Digitalprint\PrintessDesigner\Model\Printess\Product
      */
-    private Configurable $configurableType;
+    private \Digitalprint\PrintessDesigner\Model\Printess\Product $printessProduct;
 
     /**
      * @param DataCartInterface $dataCart
@@ -76,7 +71,7 @@ class Cart implements CartInterface
      * @param \Magento\Checkout\Model\Cart $cart
      * @param ProductFactory $productFactory
      * @param ProductRepositoryInterface $productRepository
-     * @param Configurable $configurableType
+     * @param \Digitalprint\PrintessDesigner\Model\Printess\Product $printessProduct
      */
     public function __construct(
         DataCartInterface $dataCart,
@@ -85,9 +80,8 @@ class Cart implements CartInterface
         CookieManagerInterface $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Checkout\Model\Cart $cart,
-        ProductFactory $productFactory,
         ProductRepositoryInterface $productRepository,
-        Configurable $configurableType
+        \Digitalprint\PrintessDesigner\Model\Printess\Product $printessProduct,
     ) {
         $this->dataCart = $dataCart;
         $this->storeManager = $storeManager;
@@ -95,9 +89,8 @@ class Cart implements CartInterface
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->cart = $cart;
-        $this->productFactory = $productFactory;
         $this->productRepository = $productRepository;
-        $this->configurableType = $configurableType;
+        $this->printessProduct = $printessProduct;
     }
 
     /**
@@ -115,31 +108,24 @@ class Cart implements CartInterface
      * @throws JsonException
      * @throws LocalizedException
      * @throws NoSuchEntityException
+     * @throws LoaderError
+     * @throws SyntaxError
      */
     public function addToCart(string $sku, int $quantity, string $saveToken, string $thumbnailUrl, mixed $documents, mixed $formFields, mixed $priceInfo)
     {
         $this->dataCart->setStatus('error');
 
+        $productConfiguration = [
+            'documents' => $documents,
+            'formFields' => $formFields
+        ];
+
+        $buyRequest = $this->printessProduct->createBuyRequest($sku, $quantity, $productConfiguration);
+
         $product = $this->productRepository->get($sku);
-        $parentId = $this->configurableType->getParentIdsByChild($product->getId());
+        $parentProduct = $this->printessProduct->getParent($product);
 
-        if (($parentId = reset($parentId)) !== false) {
-            $parentProduct = $this->productFactory->create()->load($parentId);
-            $productAttributeOptions = $this->configurableType->getConfigurableAttributesAsArray($parentProduct);
-
-            $options = [];
-            foreach ($productAttributeOptions as $option) {
-                $options[$option['attribute_id']] =  $product->getData($option['attribute_code']);
-            }
-            $buyRequest = new DataObject(['product_id' => $product->getId(), 'qty' => $quantity, 'super_attribute' => $options]);
-
-            $this->cart->addProduct($parentProduct, $buyRequest);
-        } else {
-            $buyRequest = new DataObject(['product_id' => $product->getId(), 'qty' => $quantity]);
-
-            $this->cart->addProduct($product, $buyRequest);
-        }
-
+        $this->cart->addProduct(!is_null($parentProduct) ? $parentProduct : $product, $buyRequest);
         $this->cart->save();
 
         $this->invalidateCartCookie();
@@ -183,4 +169,5 @@ class Cart implements CartInterface
             $this->cookieManager->setPublicCookie('section_data_ids', json_encode($data, JSON_THROW_ON_ERROR), $meta);
         }
     }
+
 }

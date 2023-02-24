@@ -31,6 +31,18 @@
     <type name="Magento\Framework\Pricing\Render">
         <plugin name="product_pricing_renderer" type="Digitalprint\PrintessDesigner\Plugin\Pricing\LinkParser" sortOrder="100"/>
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Option">
+        <plugin name="printess_catalog_pricetypes" type="Digitalprint\PrintessDesigner\Plugin\Catalog\PriceTypes" sortOrder="1"/>
+    </type>
+    <type name="Magento\Catalog\Block\Product\View\Options">
+        <plugin name="printess_product_options" type="Digitalprint\PrintessDesigner\Plugin\Product\Options" sortOrder="1"/>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Option\Type\DefaultType">
+        <plugin name="printess_product_defaulttype" type="Digitalprint\PrintessDesigner\Plugin\Product\DefaultType" sortOrder="1"/>
+    </type>
+    <type name="Magento\Sales\Block\Order\Email\Items\Order\DefaultOrder">
+        <plugin name="printess_email_order_defaultorder" type="Digitalprint\PrintessDesigner\Plugin\Email\Order\DefaultOrder" sortOrder="1"/>
+    </type>
     <preference for="Digitalprint\PrintessDesigner\Api\DesignerInterface" type="Digitalprint\PrintessDesigner\Model\Api\Designer"/>
     <preference for="Digitalprint\PrintessDesigner\Api\Data\DesignerInterface" type="Digitalprint\PrintessDesigner\Model\Api\Data\Designer"/>
     <preference for="Digitalprint\PrintessDesigner\Api\CartInterface" type="Digitalprint\PrintessDesigner\Model\Api\Cart"/>
@@ -39,4 +51,6 @@
     <preference for="Digitalprint\PrintessDesigner\Api\Data\OrderInterface" type="Digitalprint\PrintessDesigner\Model\Api\Data\Order"/>
     <preference for="Digitalprint\PrintessDesigner\Api\ProductInterface" type="Digitalprint\PrintessDesigner\Model\Api\Product"/>
     <preference for="Digitalprint\PrintessDesigner\Api\Data\ProductInterface" type="Digitalprint\PrintessDesigner\Model\Api\Data\Product" />
+    <preference for="Digitalprint\PrintessDesigner\Api\VariantInterface" type="Digitalprint\PrintessDesigner\Model\Api\Variant"/>
+    <preference for="Digitalprint\PrintessDesigner\Api\Data\VariantInterface" type="Digitalprint\PrintessDesigner\Model\Api\Data\Variant" />
 </config>

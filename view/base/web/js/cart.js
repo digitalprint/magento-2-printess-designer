@@ -1,5 +1,9 @@
 
-define(['bootstrap', 'Digitalprint_PrintessDesigner/js/store/cart'], function(bootstrap, CartStore) {
+define([
+    'bootstrap',
+    'Magento_Catalog/js/price-utils',
+    'Digitalprint_PrintessDesigner/js/store/cart'
+], function(bootstrap, priceUtils, CartStore) {
 
     let initOffCanvas = function(element) {
 
@@ -35,13 +39,15 @@ define(['bootstrap', 'Digitalprint_PrintessDesigner/js/store/cart'], function(bo
 
     }
 
-    function Cart(element, quantity) {
+    function Cart(element, config) {
+
         this.element = document.getElementById(element);
+        this.config = config;
 
         this.offCanvas = initOffCanvas(this.element);
 
-        CartStore.setQuantity(quantity);
-        document.getElementById('designerQuantity').value = CartStore.quantity;
+        CartStore.setQuantity(this.config.qty);
+        document.getElementById('designerQuantity').value = CartStore.getQuantity();
 
         initQuantityChanges();
     }
@@ -70,6 +76,14 @@ define(['bootstrap', 'Digitalprint_PrintessDesigner/js/store/cart'], function(bo
 
     Cart.prototype.toggle = function () {
         return this.offCanvas.toggle();
+    }
+
+    Cart.prototype.updateUi = function(variant) {
+
+        document.getElementsByClassName('js-cart-title')[0].innerHTML = variant.name;
+        document.getElementsByClassName('js-cart-price')[0].innerHTML = priceUtils.formatPrice(variant.prices[0].price.price, JSON.parse(this.config.priceFormat), false) + '*';
+        document.getElementsByClassName('js-cart-legal-notice')[0].innerHTML = '* ' + this.config.legalNotice;
+
     }
 
     return Cart;

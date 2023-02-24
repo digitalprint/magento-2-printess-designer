@@ -1,22 +1,20 @@
 <?php
 
-namespace Digitalprint\PrintessDesigner\Plugin\CheckoutCart;
+namespace Digitalprint\PrintessDesigner\Plugin\Email\Order;
 
 use Digitalprint\PrintessDesigner\Model\Adjustment;
 use Digitalprint\PrintessDesigner\Model\SupplierParameter;
-use Magento\Checkout\Block\Cart\Item\Renderer;
 
-class OptionList
+class DefaultOrder
 {
 
     /**
-     * @param Renderer $subject
+     * @param \Magento\Sales\Block\Order\Email\Items\Order\DefaultOrder $subject
      * @param $result
      * @return array
      */
-    public function afterGetOptionList(Renderer $subject, $result): array
+    public function afterGetItemOptions(\Magento\Sales\Block\Order\Email\Items\Order\DefaultOrder $subject, $result)
     {
-
         return array_filter($result, static function ($v, $k) {
 
             if (array_key_exists('option_type', $v)) {
@@ -28,4 +26,5 @@ class OptionList
         }, ARRAY_FILTER_USE_BOTH);
 
     }
+
 }

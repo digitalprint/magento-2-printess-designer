@@ -2,6 +2,8 @@
 
 namespace Digitalprint\PrintessDesigner\Plugin\Adminhtml;
 
+use Digitalprint\PrintessDesigner\Model\Adjustment;
+use Digitalprint\PrintessDesigner\Model\SupplierParameter;
 use Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn;
 
 class OrderOptions {
@@ -14,15 +16,15 @@ class OrderOptions {
     public function afterGetOrderOptions(DefaultColumn $subject, $result): array
     {
 
-        unset(
-            $result['printess_save_token'],
-            $result['printess_thumbnail_url'],
-            $result['printess_documents'],
-            $result['printess_price_info'],
-            $result['printess_supplier_parameter']
-        );
+        return array_filter($result, static function ($v, $k) {
 
-        return $result;
+            if (array_key_exists('option_type', $v)) {
+                return !in_array($v['option_type'], [SupplierParameter::TYPE_NAME, Adjustment::TYPE_NAME], true);
+            }
+
+            return !(str_starts_with($k, 'printess'));
+
+        }, ARRAY_FILTER_USE_BOTH);
 
     }
 }

@@ -18,6 +18,12 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+    <route url="/V1/digitalprint-designer/variant/" method="GET">
+        <service class="Digitalprint\PrintessDesigner\Api\VariantInterface" method="getVariant"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
     <route url="/V1/printess/designer/geturlbytag/" method="GET">
         <service class="Digitalprint\PrintessDesigner\Api\DesignerInterface" method="getUrlByTag"/>
         <resources>

@@ -25,7 +25,7 @@ class Product implements ProductInterface
     /**
      * @var CollectionFactory
      */
-    private $productCollectionFactory;
+    private CollectionFactory $productCollectionFactory;
 
     public function __construct(
         DataProductInterface $dataProduct,
@@ -35,27 +35,6 @@ class Product implements ProductInterface
         $this->dataProduct = $dataProduct;
         $this->productRepository = $productRepository;
         $this->productCollectionFactory = $productCollectionFactory;
-    }
-
-    /**
-     * @param $product
-     * @return array
-     */
-    private function getPrice($product): array
-    {
-        if ($product->getTypeId() === Configurable::TYPE_CODE) {
-            $basePrice = $product->getPriceInfo()->getPrice('regular_price');
-            $regularPrice = $basePrice->getMinRegularAmount()->getValue();
-        } else {
-            $regularPrice = $product->getPriceInfo()->getPrice('regular_price')->getValue();
-        }
-
-        $specialPrice = $product->getFinalPrice();
-
-        return [
-            'regular_price' => $regularPrice,
-            'special_price' => $specialPrice
-        ];
     }
 
     /**
@@ -128,25 +107,25 @@ class Product implements ProductInterface
             );
 
             foreach ($children as $child) {
+
                 $childProduct = $this->productRepository->getById($child->getId());
 
                 $variants[] = [
                     'id' => $child->getId(),
                     'product_id' => $product->getId(),
                     'sku' => $child->getSku(),
-                    'name' => $child->getName(),
-                    'attributes' => $this->getAttributes($childProduct),
-                    'price_info' => $this->getPrice($childProduct)
+                    'name' => $childProduct->getName(),
+                    'attributes' => $this->getAttributes($childProduct)
                 ];
             }
         } else {
+
             $variants[] = [
                 'id' => $product->getId(),
                 'product_id' => $product->getId(),
                 'sku' => $product->getSku(),
                 'name' => $product->getName(),
-                'attributes' => $this->getAttributes($product),
-                'price_info' => $this->getPrice($product)
+                'attributes' => $this->getAttributes($product)
             ];
         }
 
@@ -154,4 +133,5 @@ class Product implements ProductInterface
 
         return $dataProduct;
     }
+
 }
