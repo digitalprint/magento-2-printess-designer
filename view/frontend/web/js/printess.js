@@ -13,7 +13,7 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
 
         require(['Magento_Customer/js/customer-data', 'Digitalprint_PrintessDesigner/js/bridge', 'Digitalprint_PrintessDesigner/js/postMessage'], function(customerData, Bridge, postMessage) {
 
-            let session = customerData.get('printessdesigner')();
+            let session = customerData.get(['printessdesigner'])();
 
             window.WebComponents.waitFor(async () => {
                 const printessLoader = await import('https://editor.printess.com/v/2.0.0/printess-editor/printess-editor.js');
