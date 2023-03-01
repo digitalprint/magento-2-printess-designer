@@ -290,7 +290,7 @@ define([
 
         const info = {
             price: priceUtils.formatPrice(variant.prices[0].price.price, JSON.parse(this.config.priceFormat), false) + '*',
-            legalNotice: '* ' + this.config.legalNotice,
+            legalNotice: '* ' + variant.legal_notice,
             productName: variant.name,
             oldPrice: null,
             infoUrl: null,
@@ -460,7 +460,7 @@ define([
             return;
         }
 
-        CartStore.setPriceInfo(priceInfo, this.config.priceFormat);
+        CartStore.setPriceInfo(priceInfo);
 
         updateVariantInfo.call(this);
     }

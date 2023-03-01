@@ -309,7 +309,6 @@ class Designer extends Template
         $config['translationKey'] = strstr($this->store->getLocale(), '_', true);
 
         $config['priceFormat'] = $this->taxHelper->getPriceFormat($this->storeManager->getStore()->getId());
-        $config['legalNotice'] = $this->getLegalNotice();
 
         $config['shopToken'] = $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_SHOP_TOKEN, $storeScope);
 
@@ -473,25 +472,6 @@ class Designer extends Template
         }
 
         return $this->serializer->serialize($config);
-    }
-
-    /**
-     * @return Phrase
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
-     */
-    private function getLegalNotice() {
-
-        $sku = $this->getRequest()->getParam('sku');
-
-        $taxPercent = $this->printessProduct->getTaxRatePercent($sku);
-
-        if ($this->taxHelper->getPriceDisplayType() === \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX) {
-            return __('Excl. %1 VAT', $taxPercent);
-        }
-
-        return __('Incl. %1 VAT', $taxPercent);
-
     }
 
 }

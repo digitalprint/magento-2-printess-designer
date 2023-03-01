@@ -11,6 +11,8 @@ interface VariantInterface
 
     public const PRICE = 'price';
 
+    public const LEGALNOTICE = 'legal_notice';
+
     /**
      * Get sku
      * @return string|null
@@ -49,5 +51,18 @@ interface VariantInterface
      * @return VariantInterface
      */
     public function setPrices(array $price);
+
+    /**
+     * get legal notice
+     * @return string|null
+     */
+    public function getLegalNotice();
+
+    /**
+     * Set legal notice
+     * @param string $legalNotice
+     * @return VariantInterface
+     */
+    public function setLegalNotice(string $legalNotice);
 
 }

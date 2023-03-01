@@ -69,4 +69,25 @@ class Variant extends AbstractExtensibleModel implements VariantInterface
         return $this->setData(self::PRICE, $price);
     }
 
+    /**
+     * Get legal notice
+     *
+     * @return string|null
+     */
+    public function getLegalNotice()
+    {
+        return $this->getData(self::LEGALNOTICE);
+    }
+
+    /**
+     * Set legal notice
+     *
+     * @param string $legalNotice
+     * @return VariantInterface
+     */
+    public function setLegalNotice(string $legalNotice)
+    {
+        return $this->setData(self::LEGALNOTICE, $legalNotice);
+    }
+
 }

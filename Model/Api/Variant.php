@@ -67,6 +67,8 @@ class Variant implements VariantInterface
             ]
         ]);
 
+        $dataVariant->setLegalNotice($this->printessProduct->getLegalNotice($sku));
+
         return $dataVariant;
     }
 

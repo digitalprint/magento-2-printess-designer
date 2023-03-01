@@ -6,7 +6,6 @@ use Digitalprint\PrintessDesigner\Model\Adjustment;
 use Digitalprint\PrintessDesigner\Model\SupplierParameter;
 use JsonException;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product\Type\Price;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Customer\Model\ResourceModel\GroupRepository;
@@ -15,6 +14,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Tax\Helper\Data as taxHelper;
 use Magento\Tax\Model\Calculation;
 use Twig\Error\LoaderError;
 use Twig\Error\SyntaxError;
@@ -77,6 +77,7 @@ class Product {
      * @param SupplierParameter $supplierParameter
      * @param Adjustment $adjustment
      * @param Calculation $taxCalculation
+     * @param taxHelper $taxHelper
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -87,7 +88,8 @@ class Product {
         Configurable $configurableType,
         SupplierParameter $supplierParameter,
         Adjustment $adjustment,
-        Calculation $taxCalculation
+        Calculation $taxCalculation,
+        taxHelper $taxHelper,
     ) {
         $this->storeManager = $storeManager;
         $this->customerSession = $customerSession;
@@ -98,6 +100,7 @@ class Product {
         $this->supplierParameter = $supplierParameter;
         $this->adjustment = $adjustment;
         $this->taxCalculation = $taxCalculation;
+        $this->taxHelper = $taxHelper;
     }
 
 
@@ -247,36 +250,13 @@ class Product {
 
     }
 
-    /**
-     * @param $sku
-     * @return float|int
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
-     */
-    public function getTaxRatePercent($sku) {
+    public function getLegalNotice($sku) {
 
-        $product = $this->productRepository->get($sku);
-
-        $productTaxClassId = $product->getAttributeText('tax_class_id');
-
-        if ($productTaxClassId) {
-
-            $store = $this->storeManager->getStore();
-            $groupId = $this->customerSession->getCustomerGroupId();
-            $group = $this->groupRepository->getById($groupId);
-            $customerTaxClassId = $group->getTaxClassId();
-
-            $request = $this->taxCalculation->getRateRequest(null, null, $customerTaxClassId, $store);
-            $request->setData('product_class_id', $productTaxClassId);
-
-            $taxPercent = $this->taxCalculation->getRate($request);
-
-            if ($taxPercent) {
-                return $taxPercent;
-            }
+        if ($this->taxHelper->displayPriceExcludingTax()) {
+            return __('All prices excl. VAT, plus shipping costs.');
         }
 
-        return 0;
+        return __('All prices incl. VAT, plus shipping costs.');
 
     }
 
