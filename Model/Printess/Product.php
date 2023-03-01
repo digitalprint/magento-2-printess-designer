@@ -62,11 +62,6 @@ class Product {
     private Adjustment $adjustment;
 
     /**
-     * @var Price
-     */
-    private Price $productPrice;
-
-    /**
      * @var Calculation
      */
     private Calculation $taxCalculation;
@@ -81,7 +76,6 @@ class Product {
      * @param Configurable $configurableType
      * @param SupplierParameter $supplierParameter
      * @param Adjustment $adjustment
-     * @param Price $productPrice
      * @param Calculation $taxCalculation
      */
     public function __construct(
@@ -93,7 +87,6 @@ class Product {
         Configurable $configurableType,
         SupplierParameter $supplierParameter,
         Adjustment $adjustment,
-        Price $productPrice,
         Calculation $taxCalculation
     ) {
         $this->storeManager = $storeManager;
@@ -104,7 +97,6 @@ class Product {
         $this->configurableType = $configurableType;
         $this->supplierParameter = $supplierParameter;
         $this->adjustment = $adjustment;
-        $this->productPrice = $productPrice;
         $this->taxCalculation = $taxCalculation;
     }
 
@@ -247,11 +239,11 @@ class Product {
 
         if (!is_null($parentProduct)) {
             $parentProduct->getTypeInstance()->prepareForCart($buyRequest, $parentProduct);
-            return $this->productPrice->getFinalPrice($qty, $parentProduct);
+            return $parentProduct->getFinalPrice($qty);
         }
 
         $product->getTypeInstance()->prepareForCart($buyRequest, $product);
-        return $this->productPrice->getFinalPrice($qty, $product);
+        return $product->getFinalPrice($qty);
 
     }
 
