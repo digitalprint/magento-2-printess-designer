@@ -196,10 +196,9 @@ class Product {
         $product = $this->productRepository->get($sku);
 
         $parentId = $this->configurableType->getParentIdsByChild($product->getId());
+        $parentProduct = $this->getParent($product);
 
         if (($parentId = reset($parentId)) !== false) {
-
-            $parentProduct = $this->getParent($product);
 
             $supplierParameter = $this->supplierParameter->createSupplierParameter(!is_null($product->getData('printess_supplier_parameter')) ? $product : $parentProduct, $productConfiguration);
 
