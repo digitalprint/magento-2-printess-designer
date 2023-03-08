@@ -456,11 +456,11 @@ define([
 
     Bridge.prototype.priceChange = function(priceInfo) {
 
+        CartStore.setPriceInfo(priceInfo);
+
         if (!this.currentVariant) {
             return;
         }
-
-        CartStore.setPriceInfo(priceInfo);
 
         updateVariantInfo.call(this);
     }
