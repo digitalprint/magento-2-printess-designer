@@ -267,7 +267,7 @@ define([
     function updateVariantInfo() {
 
         if (CartStore.hasDocumentsChanged(this.printess.getBuyerFrameCountAndMarkers())) {
-            CartStore.setDocuments.call(this.printess.getBuyerFrameCountAndMarkers());
+            CartStore.setDocuments(this.printess.getBuyerFrameCountAndMarkers());
         }
 
         fetchAndRenderVariantInfo.call(this, this.currentVariant.sku, CartStore.getDocuments(), CartStore.getFormFields(), CartStore.getPriceInfo());

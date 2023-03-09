@@ -170,7 +170,7 @@ class Product {
             }
 
             if ($option->getType() === Adjustment::TYPE_NAME) {
-                $customOptions[$option->getOptionId()] = $this->adjustment->getAdjustment($option->getTitle(), $supplierParameter);
+                $customOptions[$option->getOptionId()] = $this->adjustment->getAdjustment($option->getTitle(), $productConfiguration);
             }
 
         }
@@ -191,27 +191,21 @@ class Product {
      */
     public function createBuyRequest($sku, $qty, $productConfiguration) {
 
-        $attributes = [];
-
         $product = $this->productRepository->get($sku);
 
         $parentId = $this->configurableType->getParentIdsByChild($product->getId());
         $parentProduct = $this->getParent($product);
 
+        $attributes = [];
+        $options = $this->getCustomOptions($product, $productConfiguration);
+
         if (($parentId = reset($parentId)) !== false) {
-
-            $supplierParameter = $this->supplierParameter->createSupplierParameter(!is_null($product->getData('printess_supplier_parameter')) ? $product : $parentProduct, $productConfiguration);
-
-            $options = $this->getCustomOptions($product, $supplierParameter, $productConfiguration);
 
             $productAttributes = $this->configurableType->getConfigurableAttributesAsArray($parentProduct);
             foreach ($productAttributes as $attribute) {
                 $attributes[$attribute['attribute_id']] = $product->getData($attribute['attribute_code']);
             }
 
-        } else {
-            $supplierParameter = $this->supplierParameter->createSupplierParameter($product, $productConfiguration);
-            $options = $this->getCustomOptions($product, $supplierParameter, $productConfiguration);
         }
 
         return new DataObject([
