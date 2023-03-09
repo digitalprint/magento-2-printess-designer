@@ -46,6 +46,7 @@ class Variant implements VariantInterface
      */
     public function getVariant(string $sku, mixed $documents, mixed $formFields)
     {
+
         $dataVariant = clone $this->dataVariant;
 
         $product = $this->productRepository->get($sku);
@@ -54,8 +55,8 @@ class Variant implements VariantInterface
         $dataVariant->setSku($product->getSku());
 
         $price = $this->printessProduct->getPrice($product, 1, [
-            'documents' => $documents,
-            'formFields' => $formFields
+            'documents' => json_decode($documents, true),
+            'formFields' => json_decode($formFields, true)
         ]);
 
         $dataVariant->setPrices([
