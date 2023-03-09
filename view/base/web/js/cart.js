@@ -81,8 +81,8 @@ define([
     Cart.prototype.updateUi = function(variant) {
 
         document.getElementsByClassName('js-cart-title')[0].innerHTML = variant.name;
-        document.getElementsByClassName('js-cart-price')[0].innerHTML = priceUtils.formatPrice(variant.prices[0].price.price, JSON.parse(this.config.priceFormat), false) + '*';
-        document.getElementsByClassName('js-cart-legal-notice')[0].innerHTML = '* ' + variant.legal_notice;
+        document.getElementsByClassName('js-cart-price')[0].innerHTML = priceUtils.formatPrice(variant.prices[0].price.price, JSON.parse(this.config.priceFormat), false);
+        document.getElementsByClassName('js-cart-legal-notice')[0].innerHTML = variant.legal_notice;
 
     }
 

@@ -289,8 +289,8 @@ define([
     function renderVariantInfo(variant) {
 
         const info = {
-            price: priceUtils.formatPrice(variant.prices[0].price.price, JSON.parse(this.config.priceFormat), false) + '*',
-            legalNotice: '* ' + variant.legal_notice,
+            price: priceUtils.formatPrice(variant.prices[0].price.price, JSON.parse(this.config.priceFormat), false),
+            legalNotice: variant.legal_notice,
             productName: variant.name,
             oldPrice: null,
             infoUrl: null,
