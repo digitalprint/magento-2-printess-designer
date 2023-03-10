@@ -53,4 +53,5 @@
     <preference for="Digitalprint\PrintessDesigner\Api\Data\ProductInterface" type="Digitalprint\PrintessDesigner\Model\Api\Data\Product" />
     <preference for="Digitalprint\PrintessDesigner\Api\VariantInterface" type="Digitalprint\PrintessDesigner\Model\Api\Variant"/>
     <preference for="Digitalprint\PrintessDesigner\Api\Data\VariantInterface" type="Digitalprint\PrintessDesigner\Model\Api\Data\Variant" />
+    <preference for="Magento\Catalog\Model\Product\Option" type="Digitalprint\PrintessDesigner\Model\Product\Option" />
 </config>
