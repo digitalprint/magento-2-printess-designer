@@ -288,7 +288,7 @@ class Designer extends Template
 
         $params = $this->getRequest()->getParams();
 
-        foreach (['sku', 'super_attribute', 'startDesign', 'save_token'] as $key) {
+        foreach (['sku', 'super_attribute', 'startDesign', 'save_token', 'merge1'] as $key) {
             if (!array_key_exists($key, $params)) {
                 $params[$key] = null;
             }
@@ -326,6 +326,14 @@ class Designer extends Template
         }
 
         $config['mergeTemplates'] = [];
+
+        if (!is_null($params['merge1'])) {
+            $config['mergeTemplates'][] = [
+                'templateName' => $params['merge1'],
+                'mergeMode' => 'layout-snippet-no-repeat'
+            ];
+        }
+
         $snippetFields = ['printess_layout_snippets', 'printess_group_snippets'];
 
         foreach ($snippetFields as $snippetField) {
