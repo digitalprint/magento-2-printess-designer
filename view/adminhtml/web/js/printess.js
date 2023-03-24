@@ -14,9 +14,9 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
         require(['Digitalprint_PrintessDesigner/js/bridge', 'Digitalprint_PrintessDesigner/js/postMessage'], function(Bridge, postMessage) {
 
             window.WebComponents.waitFor(async () => {
-                const printessLoader = await import('https://editor.printess.com/v/2.0.0/printess-editor/printess-editor.js');
+                const printessLoader = await import('https://editor.printess.com/v/2.1.0/printess-editor/printess-editor.js');
                 printess = await printessLoader.attachPrintess({
-                    resourcePath: "https://editor.printess.com/v/2.0.0/printess-editor",
+                    resourcePath: "https://editor.printess.com/v/2.1.0/printess-editor",
                     domain: "api.printess.com",
                     div: document.getElementById("desktop-printess-container"),
                     token: config.printess.shopToken,

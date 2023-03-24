@@ -465,5 +465,9 @@ define([
         updateVariantInfo.call(this);
     }
 
+    Bridge.prototype.receiveMessage = function(topic, data) {
+        window.uiHelper.receiveMessage(this.printess, topic, data);
+    }
+
     return Bridge;
 });
