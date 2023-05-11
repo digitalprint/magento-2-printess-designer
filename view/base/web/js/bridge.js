@@ -62,7 +62,7 @@ define([
         });
     }
 
-    function getProductWithVariants(storeCode, sku, session) {
+    function getProductWithVariants(storeCode, sku, superAttributes, session) {
 
         let headers = {
             'Content-Type': 'application/json'
@@ -72,7 +72,15 @@ define([
             headers['Authorization'] = `Bearer ${session.admin_token}`
         }
 
-        return fetch(`/rest/${storeCode}/V1/digitalprint-designer/product?sku=${sku}`, {
+        let params = {
+            'sku': sku
+        };
+
+        Object.keys(superAttributes).forEach(key => {
+            params['super_attribute[' + key + ']'] = superAttributes[key];
+        });
+
+        return fetch(`/rest/${storeCode}/V1/digitalprint-designer/product?${new URLSearchParams(params)}`, {
             method: 'GET',
             headers: headers
         });
@@ -335,7 +343,7 @@ define([
 
         loadStartDesign.call(this);
 
-        getProductWithVariants(this.config.storeCode, this.config.sku, this.session)
+        getProductWithVariants(this.config.storeCode, this.config.sku, this.config.superAttribute, this.session)
         .then(response => response.json())
         .then((product) => {
 

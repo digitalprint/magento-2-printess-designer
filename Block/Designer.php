@@ -375,6 +375,7 @@ class Designer extends Template
         }
 
         $config['sku'] = $product->getSku();
+        $config['superAttribute'] = $params['super_attribute'];
         $config['variant'] = !is_null($childProduct) ? $childProduct->getSku() : $product->getSku();
 
         $config['qty'] = $params['qty'];

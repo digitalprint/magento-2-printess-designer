@@ -13,6 +13,11 @@ class Product implements ProductInterface
 {
 
     /**
+     * @var \Digitalprint\PrintessDesigner\Helper\Data
+     */
+    protected \Digitalprint\PrintessDesigner\Helper\Data $helper;
+
+    /**
      * @var DataProductInterface
      */
     private DataProductInterface $dataProduct;
@@ -27,14 +32,23 @@ class Product implements ProductInterface
      */
     private CollectionFactory $productCollectionFactory;
 
+    /**
+     * @var Configurable
+     */
+    protected Configurable $configurable;
+
     public function __construct(
+        \Digitalprint\PrintessDesigner\Helper\Data $helper,
         DataProductInterface $dataProduct,
         ProductRepositoryInterface $productRepository,
-        CollectionFactory $productCollectionFactory
+        CollectionFactory $productCollectionFactory,
+        Configurable $configurable
     ) {
+        $this->helper = $helper;
         $this->dataProduct = $dataProduct;
         $this->productRepository = $productRepository;
         $this->productCollectionFactory = $productCollectionFactory;
+        $this->configurable = $configurable;
     }
 
     /**
@@ -87,7 +101,7 @@ class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function getProduct(string $sku): DataProductInterface
+    public function getProduct(string $sku, mixed $super_attribute): DataProductInterface
     {
         $dataProduct = clone $this->dataProduct;
 
@@ -99,12 +113,32 @@ class Product implements ProductInterface
         $variants = [];
 
         if ($product->getTypeId() === Configurable::TYPE_CODE) {
-            $children = $this->productCollectionFactory->create()->setFlag(
+
+            $children = $this->productCollectionFactory->create();
+
+            $children->setFlag(
                 'product_children',
                 true
             )->setProductFilter(
                 $product
             );
+
+            $childProduct = $this->configurable->getProductByAttributes($super_attribute, $product);
+            $childFormFields = $childProduct->getData('printess_form_fields');
+
+            $availableMappings = [];
+            if (!$this->helper->isJson($childFormFields)) {
+                $childFormFields = json_decode($childFormFields, true, 512, JSON_THROW_ON_ERROR);
+                $availableMappings = array_column($childFormFields, 'pim_attr_name');
+            }
+
+            $productAttributes = $this->configurable->getConfigurableAttributesAsArray($product);
+
+            foreach ($productAttributes as $productAttribute) {
+                if (!in_array($productAttribute['attribute_code'], $availableMappings, true)) {
+                    $children->addAttributeToFilter($productAttribute['attribute_code'], $super_attribute[$productAttribute['attribute_id']]);
+                }
+            }
 
             foreach ($children as $child) {
 
