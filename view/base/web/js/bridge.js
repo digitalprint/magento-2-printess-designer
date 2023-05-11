@@ -76,9 +76,11 @@ define([
             'sku': sku
         };
 
-        Object.keys(superAttributes).forEach(key => {
-            params['super_attribute[' + key + ']'] = superAttributes[key];
-        });
+        if (superAttributes !== null && superAttributes !== undefined) {
+            Object.keys(superAttributes).forEach(key => {
+                params['super_attribute[' + key + ']'] = superAttributes[key];
+            });
+        }
 
         return fetch(`/rest/${storeCode}/V1/digitalprint-designer/product?${new URLSearchParams(params)}`, {
             method: 'GET',
