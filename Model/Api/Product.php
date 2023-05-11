@@ -127,7 +127,7 @@ class Product implements ProductInterface
             $childFormFields = $childProduct->getData('printess_form_fields');
 
             $availableMappings = [];
-            if (!$this->helper->isJson($childFormFields)) {
+            if ($this->helper->isJson($childFormFields)) {
                 $childFormFields = json_decode($childFormFields, true, 512, JSON_THROW_ON_ERROR);
                 $availableMappings = array_column($childFormFields, 'pim_attr_name');
             }
