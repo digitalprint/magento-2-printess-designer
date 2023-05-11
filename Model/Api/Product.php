@@ -100,8 +100,9 @@ class Product implements ProductInterface
 
     /**
      * @inheritdoc
+     * @throws JsonException
      */
-    public function getProduct(string $sku, mixed $super_attribute): DataProductInterface
+    public function getProduct(string $sku, mixed $super_attribute = []): DataProductInterface
     {
         $dataProduct = clone $this->dataProduct;
 
