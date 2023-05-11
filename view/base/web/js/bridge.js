@@ -134,6 +134,9 @@ define([
 
                     if (data.redirect_url) {
                         location.href = data.redirect_url;
+                    } else if (data.message) {
+                        alert(data.message);
+                        hideLoader('cartOffcanvas');
                     }
 
                 })
