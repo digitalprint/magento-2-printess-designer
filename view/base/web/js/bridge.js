@@ -225,7 +225,7 @@ define([
     }
 
     function updateProductSize(formFields, context = 'productWidth') {
-        
+
         if (! formFields.hasOwnProperty('productWidth') && !formFields.hasOwnProperty('productHeight')) {
             return;
         }
@@ -278,20 +278,6 @@ define([
         });
 
         return attribute !== undefined;
-    }
-
-    function setStartDesign(startDesign) {
-        this.startDesign = startDesign;
-        return this.startDesign;
-    }
-
-    function loadStartDesign() {
-
-        if (null === this.startDesign) {
-            return;
-        }
-
-        this.printess.insertTemplateAsLayoutSnippet(this.startDesign.templateName, this.startDesign.templateVersion, this.startDesign.documentName, this.startDesign.mode);
     }
 
     function updateVariantInfo() {
@@ -355,15 +341,19 @@ define([
 
         this.cartOffcanvas = createOffcanvas.call(this);
 
-        setStartDesign.call(this, config.startDesign);
-
     }
 
     Bridge.prototype.loadingDone = function (spreads, title) {
 
         this.printess.resizePrintess();
+        
+        if (this.config.startDesign.templateName) {
 
-        loadStartDesign.call(this);
+            UiStore.setCurrentDesignId(this.config.startDesign.templateName);
+
+            this.printess.insertTemplateAsLayoutSnippet(this.config.startDesign.templateName, 'published', this.config.startDesign.documentName, 'layout');
+
+        }
 
         getProductWithVariants(this.config.storeCode, this.config.sku, this.config.superAttribute, this.session)
         .then(response => response.json())
@@ -475,6 +465,11 @@ define([
 
         updateCurrentAttributeMap.call(this, name, value);
         this.currentVariant = getVariantByAttributeMap.call(this, this.currentAttributeMap);
+
+        if ('designOrientation' === name) {
+            UiStore.setCurrentDesignFormat(value);
+            this.printess.insertTemplateAsLayoutSnippet(UiStore.getCurrentDesignId(), 'published', value, 'layout');
+        }
 
         if ('DOCUMENT_SIZE' === name) {
             updateProductSize.call(this, formFields, 'DOCUMENT_SIZE');
