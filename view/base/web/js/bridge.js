@@ -347,7 +347,7 @@ define([
 
         this.printess.resizePrintess();
 
-        if (this.config.startDesign.templateName) {
+        if (null !== this.config.startDesign) {
 
             UiStore.setCurrentDesignId(this.config.startDesign.templateName);
 
