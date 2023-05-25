@@ -4,8 +4,9 @@ define([
         'Magento_Catalog/js/price-utils',
         'Digitalprint_PrintessDesigner/js/cart',
         'Digitalprint_PrintessDesigner/js/store/cart',
-        'Digitalprint_PrintessDesigner/js/store/ui'
-    ], function(mageTemplate, priceUtils, Cart, CartStore, UiStore) {
+        'Digitalprint_PrintessDesigner/js/store/ui',
+        'Digitalprint_PrintessDesigner/js/store/productConfiguration'
+    ], function(mageTemplate, priceUtils, Cart, CartStore, UiStore, ProductConfigurationStore) {
 
     function addToCart(storeCode, sku, quantity, thumbnailUrl, saveToken, documents, formFields, priceInfo, customerToken) {
 
@@ -223,6 +224,22 @@ define([
         return this.currentAttributeMap;
     }
 
+    function updateProductSize(formFields, context = 'productWidth') {
+        
+        if (! formFields.hasOwnProperty('productWidth') && !formFields.hasOwnProperty('productHeight')) {
+            return;
+        }
+
+        if ('DOCUMENT_SIZE' === context) {
+            ProductConfigurationStore.setSizeByPrintessDocumentSize(formFields.DOCUMENT_SIZE);
+        } else {
+            ProductConfigurationStore.setSize(formFields.productWidth, formFields.productHeight);
+
+            this.printess.setFormFieldValue('DOCUMENT_SIZE', ProductConfigurationStore.getPrintessDocumentSize());
+        }
+
+    }
+
     function getAttributeFromVariantByName(variant, name) {
 
         return variant.attributes.find((attribute) => {
@@ -358,6 +375,8 @@ define([
             setAttributeMappingByVariant.call(this, this.currentVariant);
             setCurrentAttributeMapByVariant.call(this, this.currentVariant);
 
+            updateProductSize.call(this, this.printess.getAllPriceRelevantFormFields());
+
             hideLoader('printessDesigner');
 
             let event = new CustomEvent('processStop');
@@ -456,6 +475,16 @@ define([
 
         updateCurrentAttributeMap.call(this, name, value);
         this.currentVariant = getVariantByAttributeMap.call(this, this.currentAttributeMap);
+
+        if ('DOCUMENT_SIZE' === name) {
+            updateProductSize.call(this, formFields, 'DOCUMENT_SIZE');
+
+            return;
+        }
+
+        if ('productWidth' === name || 'productHeight' === name) {
+            updateProductSize.call(this, formFields);
+        }
 
     }
 
