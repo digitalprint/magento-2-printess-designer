@@ -286,6 +286,8 @@ define([
             CartStore.setDocuments(this.printess.getBuyerFrameCountAndMarkers());
         }
 
+        CartStore.setFormFields(this.printess.getAllPriceRelevantFormFields());
+
         fetchAndRenderVariantInfo.call(this, this.currentVariant.sku, CartStore.getDocuments(), CartStore.getFormFields(), CartStore.getPriceInfo());
     }
 
