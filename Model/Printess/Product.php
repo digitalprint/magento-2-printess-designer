@@ -11,7 +11,6 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Customer\Model\ResourceModel\GroupRepository;
 use Magento\Customer\Model\Session;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Helper\Data as taxHelper;
@@ -66,40 +65,33 @@ class Product {
      */
     private Calculation $taxCalculation;
 
+    /**
+     * @var taxHelper
+     */
+    private taxHelper $taxHelper;
+
 
     /**
-     * @param StoreManagerInterface $storeManager
-     * @param Session $customerSession
-     * @param GroupRepository $groupRepository
      * @param ProductRepositoryInterface $productRepository
      * @param ProductFactory $productFactory
      * @param Configurable $configurableType
      * @param SupplierParameter $supplierParameter
      * @param Adjustment $adjustment
-     * @param Calculation $taxCalculation
      * @param taxHelper $taxHelper
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        Session $customerSession,
-        GroupRepository $groupRepository,
         ProductRepositoryInterface $productRepository,
         ProductFactory $productFactory,
         Configurable $configurableType,
         SupplierParameter $supplierParameter,
         Adjustment $adjustment,
-        Calculation $taxCalculation,
         taxHelper $taxHelper,
     ) {
-        $this->storeManager = $storeManager;
-        $this->customerSession = $customerSession;
-        $this->groupRepository = $groupRepository;
         $this->productRepository = $productRepository;
         $this->productFactory = $productFactory;
         $this->configurableType = $configurableType;
         $this->supplierParameter = $supplierParameter;
         $this->adjustment = $adjustment;
-        $this->taxCalculation = $taxCalculation;
         $this->taxHelper = $taxHelper;
     }
 
@@ -162,6 +154,12 @@ class Product {
             if ($option->getType() === SupplierParameter::TYPE_NAME && isset($supplierParameter[$option->getTitle()])) {
 
                 foreach ($option->getValues() as $value) {
+
+                    if ($supplierParameter[$option->getTitle()] === "true") {
+                        $supplierParameter[$option->getTitle()] = "1";
+                    } elseif ($supplierParameter[$option->getTitle()] === "false") {
+                        $supplierParameter[$option->getTitle()] = "0";
+                    }
 
                     if ($supplierParameter[$option->getTitle()] === $value->getTitle()) {
                         $customOptions[$option->getOptionId()] = $value->getOptionTypeId();
