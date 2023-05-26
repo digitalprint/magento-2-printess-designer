@@ -99,7 +99,7 @@ define([
             headers['Authorization'] = `Bearer ${session.admin_token}`
         }
 
-        return fetch(`/rest/${storeCode}/V1/digitalprint-designer/variant?sku=${sku}&documents=${encodeURI(JSON.stringify(documents))}&formFields=${JSON.stringify(encodeURI(formFields))}&priceInfo=${JSON.stringify(encodeURI(priceInfo))}`, {
+        return fetch(`/rest/${storeCode}/V1/digitalprint-designer/variant?sku=${sku}&documents=${encodeURI(JSON.stringify(documents))}&formFields=${encodeURI(JSON.stringify(formFields))}&priceInfo=${encodeURI(JSON.stringify(priceInfo))}`, {
             method: 'GET',
             headers: headers
         });
