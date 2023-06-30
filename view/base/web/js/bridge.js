@@ -7,7 +7,7 @@ define([
         'Digitalprint_PrintessDesigner/js/store/cart',
         'Digitalprint_PrintessDesigner/js/store/ui',
         'Digitalprint_PrintessDesigner/js/store/productConfiguration'
-    ], function(mageTemplate, priceUtils, Cart, CartStore, UiStore, ProductConfigurationStore) {
+    ], function(mageTemplate, priceUtils, customerData, Cart, CartStore, UiStore, ProductConfigurationStore) {
 
     function addToCart(storeCode, sku, quantity, thumbnailUrl, saveToken, documents, formFields, priceInfo, customerToken) {
 
