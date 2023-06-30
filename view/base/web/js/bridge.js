@@ -2,6 +2,7 @@
 define([
         'mage/template',
         'Magento_Catalog/js/price-utils',
+        'Magento_Customer/js/customer-data',
         'Digitalprint_PrintessDesigner/js/cart',
         'Digitalprint_PrintessDesigner/js/store/cart',
         'Digitalprint_PrintessDesigner/js/store/ui',
@@ -132,6 +133,8 @@ define([
                 })
                 .then(response => response.json())
                 .then((data) => {
+
+                    customerData.invalidate(['cart']);
 
                     if (data.redirect_url) {
                         location.href = data.redirect_url;
