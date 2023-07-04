@@ -1,13 +1,12 @@
-
 define([
         'mage/template',
         'Magento_Catalog/js/price-utils',
-        'Magento_Customer/js/customer-data',
+        'Digitalprint_PrintessDesigner/js/invalidate',
         'Digitalprint_PrintessDesigner/js/cart',
         'Digitalprint_PrintessDesigner/js/store/cart',
         'Digitalprint_PrintessDesigner/js/store/ui',
         'Digitalprint_PrintessDesigner/js/store/productConfiguration'
-    ], function(mageTemplate, priceUtils, customerData, Cart, CartStore, UiStore, ProductConfigurationStore) {
+    ], function(mageTemplate, priceUtils, Invalidate, Cart, CartStore, UiStore, ProductConfigurationStore) {
 
     function addToCart(storeCode, sku, quantity, thumbnailUrl, saveToken, documents, formFields, priceInfo, customerToken) {
 
@@ -134,7 +133,7 @@ define([
                 .then(response => response.json())
                 .then((data) => {
 
-                    customerData.invalidate(['cart']);
+                    Invalidate.section('cart');
 
                     if (data.redirect_url) {
                         location.href = data.redirect_url;
