@@ -557,6 +557,7 @@ body {
     max-height: 38px;
     margin-left: .5rem !important;
     align-self: center;
+    overflow: hidden;
 }
 
 .total-price-container.price-info-only {
@@ -581,8 +582,7 @@ body {
 }
 
 .product-name {
-    display: flex;
-    align-items: center;
+    display: inline-block;
     text-align: left;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -591,6 +591,7 @@ body {
 }
 
 .price-info-icon {
+    min-width: 17px;
     width: 17px;
     height: 17px;
     color: var(--bs-primary);
@@ -824,6 +825,7 @@ body {
 
 #printess-desktop-grid.main-tabs .tab-content.card {
     border: none;
+    background: transparent;
 }
 
 #tabs-panel-photo-frames li.nav-item {
@@ -873,7 +875,7 @@ body {
     display: grid;
 }
 
-.control-group .btn-group.form-control {
+.btn-group.form-control {
     padding: 0;
 }
 
@@ -945,6 +947,10 @@ body {
         line-height: 20px;
     }
 
+    .nav-tabs .nav-link.active,
+    .nav-tabs .nav-item.show .nav-link {
+        border-bottom: 1px solid var(--bs-body-bg);
+    }
 
     ul.step-tabs-desktop .nav-link {
         font-size: 14px;
@@ -952,7 +958,8 @@ body {
 
     ul.step-tabs-desktop .nav-link.active {
         /*  background: linear-gradient(#eee,white,white) !important;*/
-        border-color: var(--bs-primary) var(--bs-primary) #fff;
+        background: transparent;
+        border-color: var(--bs-primary) var(--bs-primary) var(--bs-body-bg);
         color: var(--bs-primary);
         font-size: 20px;
         line-height: 23px;
@@ -974,7 +981,7 @@ body {
 
     ul.step-tabs-desktop>.nav-item:first-child>.nav-link.active,
     ul.step-tabs-desktop>.nav-item:first-child>.nav-link.active:hover {
-        border-color: var(--bs-primary) var(--bs-primary) #fff;
+        border-color: var(--bs-primary) var(--bs-primary) var(--bs-body-bg);
     }
 
     ul.nav.nav-tabs.step-tabs-desktop:last-child {
@@ -1262,7 +1269,7 @@ input[type="radio"]:checked+label>svg {
 }
 
 .modal {
-    z-index: 100000;
+    z-index: 1000000;
 }
 
 .modal-body {
@@ -1418,6 +1425,10 @@ ul.progress-steps {
     /*border-top: 1px solid;*/
     position: sticky;
     padding: 1.25rem;
+}
+
+#validation-modal .modal-dialog {
+    min-width: 450px;
 }
 
 #pageArrangementDialog .modal-dialog,
@@ -1734,6 +1745,10 @@ li.spread-separator {
         grid-template-rows: 22px auto;
     }
 
+    #validation-modal .modal-dialog {
+        min-width: unset;
+    }
+
     .add-pages-icon,
     .remove-pages-icon,
     .move-pages-icon {
@@ -1791,6 +1806,11 @@ li.spread-separator {
     #layoutSnippetsSelection .layout-snippet-cluster {
         display: grid;
         grid-template-columns: 1fr 1fr;
+    }
+
+    #layoutSnippetsSelection .layout-snippet-cluster.big-thumbs {
+        display: grid;
+        grid-template-columns: 1fr;
     }
 
     #pageArrangementDialog .scroll-up-indicator {
@@ -1898,8 +1918,13 @@ li.spread-separator {
 
 .snippet-thumb.layout-dialog>img {
     width: unset;
-    max-height: 400px;
+    max-height: 300px;
     max-width: 300px;
+}
+
+.layout-snippet-cluster.big-thumbs>.snippet-thumb.layout-dialog>img {
+    max-height: 400px;
+    max-width: 400px;
 }
 
 .snippet-cluster-name {
@@ -2453,19 +2478,6 @@ input#invert-image-checker {
     cursor: pointer;
 }
 
-.form-switch .form-check-input {
-    width: 4em;
-    height: 2em;
-}
-
-.form-switch .form-check-label {
-    width: auto;
-    cursor: pointer;
-    font-size: 16pt;
-    margin-left: 10px;
-    line-height: 40px;
-}
-
 .form-check-input:checked {
     background-color: var(--bs-primary);
     border-color: var(--bs-primary);
@@ -2691,6 +2703,11 @@ input#invert-image-checker {
     text-overflow: ellipsis;
 }
 
+.disabled > .dropdown-item, .image-select-list > .disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+}
 a.dropdown-item .dropdown-list-info {
     white-space: pre-line;
 }
@@ -2714,6 +2731,7 @@ a.dropdown-item .dropdown-list-info {
 .color-drop-down-list {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 
 /* overide bootstrap behaviour */
@@ -2731,19 +2749,17 @@ a.dropdown-item .dropdown-list-info {
     filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0100%) contrast(100%);
 }
 
-.color-label-group {
+.printess-color-label {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
     background: var(--bs-light);
     margin-bottom: 0.25rem;
     cursor: pointer;
 }
 
-.color-label-group::after {
+.printess-color-label::after {
     position: absolute;
     right: 0px;
     display: inline-block;
@@ -2758,15 +2774,15 @@ a.dropdown-item .dropdown-list-info {
     pointer-events: none;
 }
 
-.color-label-group:empty::after {
+.printess-color-label:empty::after {
     margin-left: 0;
 }
 
-.color-label-group .dropdown-toggle::after {
+.printess-color-label .dropdown-toggle::after {
     visibility: hidden;
 }
 
-.color-label-group .dropdown-menu.show {
+.printess-color-label .dropdown-menu.show {
     /* transform: translate3d(0px, 40px, 0px) !important; */
     padding: 0.5rem;
     max-height: 60vh;
@@ -2851,15 +2867,18 @@ a.dropdown-item .dropdown-list-info {
 #desktop-properties .color-drop-down-list .btn-color-select:after {
     position: absolute;
     top: 45%;
-    right: 12px;
-    color: white;
+    /* switch color between white and black depending on background*/
+    --light: 80;
+    --threshod: 60;
+    --switch: calc((var(--light) - var(--threshold)) * -100%);
+    color: hsl(0, 0%, var(--switch));
 }
 
-#desktop-properties .color-drop-down-list .btn-color-select {
+#desktop-properties .color-drop-down-list .btn-color-select {  display: flex;
+    justify-content: center;
     border-radius: 50%;
     min-width: 39px;
     min-height: 39px;
-    padding: 2px;
     border: 1px solid lightgray;
 }
 
@@ -3112,7 +3131,7 @@ a.dropdown-item .dropdown-list-info {
     justify-content: center;
     font-family: sans-serif;
     color: white;
-    background-image: linear-gradient(to right, rgba(168, 168, 168, 0), #f8f8f8);
+    background-image: linear-gradient(to right, rgba(168, 168, 168, 0), var(--mobile-panel-background));
     right: 0;
     top: 0;
     bottom: 0;
