@@ -37,9 +37,12 @@ class OptionsManager
         try {
             $sourceItems = [];
 
-            foreach ($source->getItems() as $sourceItem) {
-                if (!$sourceItem->getParentItemId()) {
-                    $sourceItems[$sourceItem->getId()] = $sourceItem;
+            if (is_array($source->getItems())) {
+
+                foreach ($source->getItems() as $sourceItem) {
+                    if (!$sourceItem->getParentItemId()) {
+                        $sourceItems[$sourceItem->getId()] = $sourceItem;
+                    }
                 }
             }
 
