@@ -324,6 +324,12 @@ define([
         return JSON.parse(JSON.stringify(obj));
     }
 
+    function isUuid(uuid, isNullable) {
+        return isNullable
+            ? /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(uuid)
+            : /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(uuid);
+    }
+
     function Bridge(printess, session, config) {
 
         showLoader('printessDesigner');
@@ -439,10 +445,10 @@ define([
     }
 
     Bridge.prototype.formFieldChanged = function(name, value, tag) {
-
+        
         const formFields = this.printess.getAllPriceRelevantFormFields();
 
-        if (UiStore.isAppLoaded() && tag) {
+        if (UiStore.isAppLoaded() && isUuid(tag)) {
 
             this.printess.persistExchangeState().then(() => {
 
