@@ -2,6 +2,10 @@
 
 namespace Digitalprint\PrintessDesigner\Plugin\Adminhtml\Catalog;
 
+use Magento\Ui\Component\Form\Element\Input;
+use Magento\Ui\Component\Form\Element\DataType\Text;
+use Magento\Ui\Component\Form\Field;
+
 class CustomOptions
 {
 
@@ -54,7 +58,22 @@ class CustomOptions
                                                                     ]
                                                                 ]
                                                             ]
+                                                        ],
+                                                        'price_tag_prefix' => [
+                                                            'arguments' => [
+                                                                'data' => [
+                                                                    'config' => [
+                                                                        'label'         => __('Price-Tag-Prefix'),
+                                                                        'componentType' => Field::NAME,
+                                                                        'formElement'   => Input::NAME,
+                                                                        'dataScope'     => 'price_tag_prefix',
+                                                                        'dataType'      => Text::NAME,
+                                                                        'sortOrder'     => 35,
+                                                                    ],
+                                                                ],
+                                                            ],
                                                         ]
+
                                                     ]
                                                 ]
                                             ]

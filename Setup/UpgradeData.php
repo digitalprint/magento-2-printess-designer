@@ -9,6 +9,8 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
+use Magento\Framework\DB\Ddl\Table;
+
 /**
  * @codeCoverageIgnore
  */
@@ -37,6 +39,8 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
+        $setup->startSetup();
+
         $eavSetup = $this->eavSetupFactory->create();
 
         if (version_compare($context->getVersion(), '1.4', '<')) {
@@ -222,6 +226,24 @@ class UpgradeData implements UpgradeDataInterface
             );
 
         }
+
+        if (version_compare($context->getVersion(), '1.19', '<')) {
+
+            $setup->getConnection()->addColumn(
+                $setup->getTable('catalog_product_option'),
+                'price_tag_prefix',
+                [
+                    'type' => Table::TYPE_TEXT,
+                    'length' => 128,
+                    'nullable' => false,
+                    'default' => '',
+                    'comment' => 'Printess Price Tag Prefix',
+                ]
+            );
+
+        }
+
+        $setup->endSetup();
 
     }
 }

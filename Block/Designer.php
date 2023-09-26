@@ -3,6 +3,7 @@
 namespace Digitalprint\PrintessDesigner\Block;
 
 use Digitalprint\PrintessDesigner\Model\Printess\Product as PrintessProduct;
+use Digitalprint\PrintessDesigner\Model\SupplierParameter;
 use JsonException;
 use Magento\Backend\Model\Auth\Session as AuthSession;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -17,7 +18,6 @@ use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\Resolver;
-use Magento\Framework\Phrase;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Element\Template;
@@ -400,6 +400,30 @@ class Designer extends Template
         }
 
         $config['snippetPriceCategoryLabels'] = ['', '', '', '', ''];
+
+        $options = !is_null($childProduct) ? $childProduct->getOptions() : $product->getOptions();
+
+        $config['priceCategoryLabels'] = [];
+
+        foreach ($options as $option) {
+
+            if ($option->getType() === SupplierParameter::TYPE_NAME) {
+
+                $priceTagPrefix = $option->getPriceTagPrefix();
+
+                if ($priceTagPrefix !== '') {
+
+                    foreach ($option->getValues() as $value) {
+
+                        $key = "$priceTagPrefix:{$value->getTitle()}";
+
+                        $config['priceCategoryLabels'][$key] = $value->getPrice() > 0 ? $value->getPrice() : '';
+                    }
+
+                }
+            }
+
+        }
 
         return $this->serializer->serialize($config);
     }

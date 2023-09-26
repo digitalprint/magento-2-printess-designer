@@ -5,6 +5,7 @@ namespace Digitalprint\PrintessDesigner\Setup;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -37,6 +38,8 @@ class InstallData implements InstallDataInterface
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
+        $setup->startSetup();
+
         $eavSetup = $this->eavSetupFactory->create();
 
         //  Printess Template-Name
@@ -206,6 +209,20 @@ class InstallData implements InstallDataInterface
                 'apply_to' => ''
             ]
         );
+
+        $setup->getConnection()->addColumn(
+            $setup->getTable('catalog_product_option'),
+            'price_tag_prefix',
+            [
+                'type' => Table::TYPE_TEXT,
+                'length' => 128,
+                'nullable' => false,
+                'default' => '',
+                'comment' => 'Printess Price Tag Prefix',
+            ]
+        );
+
+        $setup->endSetup();
 
     }
 }

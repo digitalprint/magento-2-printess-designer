@@ -445,7 +445,7 @@ define([
     }
 
     Bridge.prototype.formFieldChanged = function(name, value, tag) {
-        
+
         const formFields = this.printess.getAllPriceRelevantFormFields();
 
         if (UiStore.isAppLoaded() && isUuid(tag)) {

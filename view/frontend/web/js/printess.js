@@ -1,4 +1,8 @@
-define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner/js/uiHelper'], function () {
+define([
+    'webcomponents-loader',
+    'polyfill-fetch',
+    'Digitalprint_PrintessDesigner/js/uiHelper'
+    ], function () {
 
     let printess = null;
     let bridge = null;
@@ -11,7 +15,18 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
             }
         };
 
-        require(['Magento_Customer/js/customer-data', 'Digitalprint_PrintessDesigner/js/bridge', 'Digitalprint_PrintessDesigner/js/postMessage'], function(customerData, Bridge, postMessage) {
+        require([
+            'Magento_Customer/js/customer-data',
+            'Magento_Catalog/js/price-utils',
+            'Digitalprint_PrintessDesigner/js/bridge',
+            'Digitalprint_PrintessDesigner/js/postMessage'
+        ], function(customerData, priceUtils, Bridge, postMessage) {
+
+            for(let key in config.printess.priceCategoryLabels) {
+                if (config.printess.priceCategoryLabels[key] !== '') {
+                    config.printess.priceCategoryLabels[key] = ' + ' + priceUtils.formatPrice(config.printess.priceCategoryLabels[key], JSON.parse(config.printess.priceFormat), false);
+                }
+            }
 
             let session = customerData.get(['printessdesigner'])();
 
@@ -31,6 +46,7 @@ define(['webcomponents-loader', 'polyfill-fetch', 'Digitalprint_PrintessDesigner
                     mergeTemplates: config.printess.mergeTemplates,
                     formFields: config.printess.formFields,
                     snippetPriceCategoryLabels: config.printess.snippetPriceCategoryLabels,
+                    priceCategoryLabels: config.printess.priceCategoryLabels,
                     singleSpreadView: true,
                     loadingDoneCallback: (spreads, title) => { bridge.loadingDone(spreads, title) },
                     selectionChangeCallback: (properties, state) => { bridge.selectionChange(properties, state) },
