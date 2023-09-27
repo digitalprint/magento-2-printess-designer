@@ -19,7 +19,7 @@ class CustomOptions
 
         if (!empty($result[\Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions::GROUP_CUSTOM_OPTIONS_NAME])) {
 
-            return array_merge_recursive($result, [
+            return array_replace_recursive($result, [
                 \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions::GROUP_CUSTOM_OPTIONS_NAME => [
                     'children' => [
                         'options' => [
