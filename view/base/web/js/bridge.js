@@ -248,6 +248,10 @@ define([
 
     function getAttributeFromVariantByName(variant, name) {
 
+        if (! name) {
+            return;
+        }
+
         return variant.attributes.find((attribute) => {
             return attribute.code === name;
         });
