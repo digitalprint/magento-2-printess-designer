@@ -10,7 +10,6 @@ use Magento\Store\Model\ScopeInterface;
 
 class Image
 {
-
     /**
      * @var string;
      */
@@ -20,6 +19,7 @@ class Image
      * @var ScopeConfigInterface
      */
     protected ScopeConfigInterface $scopeConfig;
+
     /**
      * @var Json|mixed
      */

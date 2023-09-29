@@ -10,7 +10,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 class Printess extends AbstractHelper
 {
-
     /**
      * @var ProductRepositoryInterface
      */
@@ -45,11 +44,11 @@ class Printess extends AbstractHelper
      */
     public function getStartDesign($sku = null): array
     {
-        if (!is_null($sku)) {
+        if (! is_null($sku)) {
             $product = $this->productRepository->get($sku);
             $config = $product->getData('printess_start_design');
 
-            if (!is_null($config)) {
+            if (! is_null($config)) {
                 $config = json_decode($config, true, 512, JSON_THROW_ON_ERROR);
                 if (isset($config['templateName'], $config['documentName'])) {
                     return $config;
@@ -67,7 +66,7 @@ class Printess extends AbstractHelper
      */
     public function hasTemplate($sku = null): bool
     {
-        if (!is_null($sku)) {
+        if (! is_null($sku)) {
             $product = $this->productRepository->get($sku);
 
             $printessTemplate = $product->getData('printess_template');

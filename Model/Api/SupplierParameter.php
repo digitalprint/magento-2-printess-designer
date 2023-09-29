@@ -7,7 +7,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 
 class SupplierParameter extends AbstractExtensibleModel implements SupplierParameterInterface
 {
-
     /**
      * {@inheritdoc}
      */
@@ -23,7 +22,4 @@ class SupplierParameter extends AbstractExtensibleModel implements SupplierParam
     {
         return $this->setData(self::VALUE, $value);
     }
-
 }
-
-

@@ -6,7 +6,6 @@ use Magento\Framework\Exception\LocalizedException;
 
 class Adjustment extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
-
     /**
      * @var \Magento\Framework\Stdlib\StringUtils
      */
@@ -49,7 +48,7 @@ class Adjustment extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $value = $this->getUserValue() !== null ? trim($this->getUserValue()) : '';
 
         // Check requires option to have some value
-        if (strlen($value) == 0 && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
+        if (strlen($value) == 0 && $option->getIsRequire() && ! $this->getSkipCheckRequiredOption()) {
             $this->setIsValid(false);
             throw new LocalizedException(
                 __("The product's required option(s) weren't entered. Make sure the options are entered and try again.")

@@ -13,7 +13,6 @@ use Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn;
 
 class Printess extends DefaultColumn
 {
-
     /**
      * @var AuthorizationInterface
      */
@@ -42,7 +41,7 @@ class Printess extends DefaultColumn
             $queryParams = [];
             $queryParams['order_id'] = $this->getItem()->getOrderId();
             $queryParams['item_id'] = $this->getItem()->getItemId();
-            $queryParams['qty'] = (int)$this->getItem()->getQtyOrdered();
+            $queryParams['qty'] = (int) $this->getItem()->getQtyOrdered();
 
             if ($this->getItem()->getProductType() === Configurable::TYPE_CODE) {
                 $queryParams['sku'] = $this->getItem()->getProduct()->getSku();
@@ -56,7 +55,11 @@ class Printess extends DefaultColumn
 
             $queryParams['save_token'] = $options['additional_options']['printess_save_token']['value'];
 
-            return $this->getUrl('designer/page/view', ['_current' => false, '_use_rewrite' => true, '_query' => $queryParams]);
+            return $this->getUrl('designer/page/view', [
+                '_current' => false,
+                '_use_rewrite' => true,
+                '_query' => $queryParams,
+            ]);
         }
 
         return false;
@@ -72,7 +75,11 @@ class Printess extends DefaultColumn
             $queryParams['order_id'] = $this->getItem()->getOrderId();
             $queryParams['item_id'] = $this->getItem()->getItemId();
 
-            return  $this->getUrl('designer/download/index', ['_current' => false,'_use_rewrite' => true, '_query' => $queryParams]);
+            return $this->getUrl('designer/download/index', [
+                '_current' => false,
+                '_use_rewrite' => true,
+                '_query' => $queryParams,
+            ]);
         }
 
         return false;

@@ -4,7 +4,6 @@ namespace Digitalprint\PrintessDesigner\Model\Processor;
 
 interface ProcessorInterface
 {
-
     /**
      * @return string
      */
@@ -20,5 +19,4 @@ interface ProcessorInterface
      * @return string|null
      */
     public function process($params): mixed;
-
 }

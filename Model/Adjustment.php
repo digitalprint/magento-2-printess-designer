@@ -7,7 +7,6 @@ use RuntimeException;
 
 class Adjustment
 {
-
     public const TYPE_NAME = 'adjustment';
 
     /**
@@ -42,7 +41,6 @@ class Adjustment
         $processors = $this->registeredProcessors();
 
         foreach ($processors as $processor) {
-
             $processorInstance = $this->processorFactory->create($processor);
 
             if (self::TYPE_NAME === $processorInstance->getType() && $name === $processorInstance->getName()) {
@@ -52,5 +50,4 @@ class Adjustment
 
         throw new RuntimeException('The parameter with the name [' . $name . '] cannot be processed.');
     }
-
 }

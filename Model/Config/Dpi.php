@@ -6,7 +6,6 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 class Dpi implements OptionSourceInterface
 {
-
     /**
      * @return array[]
      */
@@ -17,7 +16,7 @@ class Dpi implements OptionSourceInterface
         foreach ($arr as $key => $value) {
             $ret[] = [
                 'value' => $key,
-                'label' => $value
+                'label' => $value,
             ];
         }
         return $ret;
@@ -31,7 +30,7 @@ class Dpi implements OptionSourceInterface
         return [
             72 => '72 dpi',
             150 => '150 dpi',
-            300 => '300 dpi'
+            300 => '300 dpi',
         ];
     }
 }

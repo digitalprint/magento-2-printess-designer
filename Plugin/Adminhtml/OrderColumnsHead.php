@@ -6,7 +6,6 @@ use Magento\Sales\Block\Adminhtml\Order\View\Items;
 
 class OrderColumnsHead
 {
-
     /**
      * @param $items
      * @param $a
@@ -23,9 +22,7 @@ class OrderColumnsHead
 
     public function afterGetColumns(Items $subject, $result): array
     {
-
         $result = $this->changeColumnPosition($result, 10, 0);
         return $this->changeColumnPosition($result, 11, 2);
     }
 }
-

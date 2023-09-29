@@ -7,7 +7,6 @@ use Digitalprint\PrintessDesigner\Model\SupplierParameter;
 
 class Option extends \Magento\Catalog\Model\Product\Option
 {
-
     /**
      * @param $type
      * @return mixed|string

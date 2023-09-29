@@ -18,8 +18,8 @@ use Magento\Tax\Model\Calculation;
 use Twig\Error\LoaderError;
 use Twig\Error\SyntaxError;
 
-class Product {
-
+class Product
+{
     /**
      * @var ProductRepositoryInterface
      */
@@ -70,7 +70,6 @@ class Product {
      */
     private taxHelper $taxHelper;
 
-
     /**
      * @param ProductRepositoryInterface $productRepository
      * @param ProductFactory $productFactory
@@ -95,7 +94,6 @@ class Product {
         $this->taxHelper = $taxHelper;
     }
 
-
     /**
      * @param $product
      * @return \Magento\Catalog\Model\Product|null
@@ -109,7 +107,6 @@ class Product {
         }
 
         return null;
-
     }
 
     /**
@@ -120,11 +117,11 @@ class Product {
      * @throws LoaderError
      * @throws SyntaxError
      */
-    public function getSupplierParameter($product, $productConfiguration) {
-
+    public function getSupplierParameter($product, $productConfiguration)
+    {
         $parentProduct = $this->getParent($product);
 
-        return $this->supplierParameter->createSupplierParameter(!is_null($product->getData('printess_supplier_parameter')) ? $product : $parentProduct, $productConfiguration);
+        return $this->supplierParameter->createSupplierParameter(! is_null($product->getData('printess_supplier_parameter')) ? $product : $parentProduct, $productConfiguration);
     }
 
     /**
@@ -137,24 +134,20 @@ class Product {
      */
     public function getCustomOptions($product, $productConfiguration)
     {
-
         $customOptions = [];
 
         $parentProduct = $this->getParent($product);
         $supplierParameter = $this->getSupplierParameter($product, $productConfiguration);
 
-        if (!is_null($parentProduct)) {
+        if (! is_null($parentProduct)) {
             $options = $parentProduct->getOptions();
         } else {
             $options = $product->getOptions();
         }
 
         foreach ($options as $option) {
-
             if ($option->getType() === SupplierParameter::TYPE_NAME && isset($supplierParameter[$option->getTitle()])) {
-
                 foreach ($option->getValues() as $value) {
-
                     if ($supplierParameter[$option->getTitle()] === "true") {
                         $supplierParameter[$option->getTitle()] = "1";
                     } elseif ($supplierParameter[$option->getTitle()] === "false") {
@@ -170,11 +163,9 @@ class Product {
             if ($option->getType() === Adjustment::TYPE_NAME) {
                 $customOptions[$option->getOptionId()] = $this->adjustment->getAdjustment($option->getTitle(), $productConfiguration);
             }
-
         }
 
         return $customOptions;
-
     }
 
     /**
@@ -187,8 +178,8 @@ class Product {
      * @throws LoaderError
      * @throws SyntaxError
      */
-    public function createBuyRequest($sku, $qty, $productConfiguration) {
-
+    public function createBuyRequest($sku, $qty, $productConfiguration)
+    {
         $product = $this->productRepository->get($sku);
 
         $parentId = $this->configurableType->getParentIdsByChild($product->getId());
@@ -198,21 +189,18 @@ class Product {
         $options = $this->getCustomOptions($product, $productConfiguration);
 
         if (($parentId = reset($parentId)) !== false) {
-
             $productAttributes = $this->configurableType->getConfigurableAttributesAsArray($parentProduct);
             foreach ($productAttributes as $attribute) {
                 $attributes[$attribute['attribute_id']] = $product->getData($attribute['attribute_code']);
             }
-
         }
 
         return new DataObject([
-            'product_id' => !is_null($parentProduct) ? $parentProduct->getId() : $product->getId(),
+            'product_id' => ! is_null($parentProduct) ? $parentProduct->getId() : $product->getId(),
             'qty' => $qty,
             'super_attribute' => $attributes,
-            'options' => $options
+            'options' => $options,
         ]);
-
     }
 
     /**
@@ -225,30 +213,27 @@ class Product {
      * @throws LoaderError
      * @throws SyntaxError
      */
-    public function getPrice($product, $qty, $productConfiguration) {
-
+    public function getPrice($product, $qty, $productConfiguration)
+    {
         $buyRequest = $this->createBuyRequest($product->getSku(), $qty, $productConfiguration);
 
         $parentProduct = $this->getParent($product);
 
-        if (!is_null($parentProduct)) {
+        if (! is_null($parentProduct)) {
             $parentProduct->getTypeInstance()->prepareForCart($buyRequest, $parentProduct);
             return $parentProduct->getFinalPrice($qty);
         }
 
         $product->getTypeInstance()->prepareForCart($buyRequest, $product);
         return $product->getFinalPrice($qty);
-
     }
 
-    public function getLegalNotice($sku) {
-
+    public function getLegalNotice($sku)
+    {
         if ($this->taxHelper->displayPriceExcludingTax()) {
             return __('All prices excl. VAT, plus shipping costs.');
         }
 
         return __('All prices incl. VAT, plus shipping costs.');
-
     }
-
 }

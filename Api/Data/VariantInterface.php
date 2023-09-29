@@ -4,7 +4,6 @@ namespace Digitalprint\PrintessDesigner\Api\Data;
 
 interface VariantInterface
 {
-
     public const SKU = 'sku';
 
     public const NAME = 'name';
@@ -64,5 +63,4 @@ interface VariantInterface
      * @return VariantInterface
      */
     public function setLegalNotice(string $legalNotice);
-
 }

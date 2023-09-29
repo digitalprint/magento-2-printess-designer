@@ -7,7 +7,6 @@ use Digitalprint\PrintessDesigner\Model\SupplierParameter;
 
 class Options
 {
-
     /**
      * @param \Magento\Catalog\Block\Product\View\Options $subject
      * @param $options
@@ -22,5 +21,4 @@ class Options
         }
         return $options;
     }
-
 }

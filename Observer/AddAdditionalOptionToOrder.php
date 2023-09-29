@@ -10,7 +10,6 @@ use Magento\Sales\Model\Order;
 
 class AddAdditionalOptionToOrder implements ObserverInterface
 {
-
     /**
      * @var OptionsManager
      */
@@ -33,7 +32,6 @@ class AddAdditionalOptionToOrder implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-
         /** @var Quote $quote */
         $quote = $observer->getData('quote');
         /** @var Order $order */

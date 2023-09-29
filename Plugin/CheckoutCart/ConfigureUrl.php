@@ -13,7 +13,6 @@ use Magento\Store\Model\ScopeInterface;
 
 class ConfigureUrl
 {
-
     /**
      * @var string
      */
@@ -90,7 +89,9 @@ class ConfigureUrl
                     }
                 }
 
-                return $this->urlBuilder->getUrl('designer/page/view', ['_query' => $urlParams]);
+                return $this->urlBuilder->getUrl('designer/page/view', [
+                    '_query' => $urlParams,
+                ]);
             }
         }
 

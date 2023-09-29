@@ -20,5 +20,4 @@ interface SupplierParameterInterface
      * @return $this
      */
     public function setValue(?string $value);
-
 }

@@ -16,20 +16,16 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Item;
 use Magento\Store\Model\ScopeInterface;
-use Printess\Api\Exceptions\ApiException;
 use Printess\Api\PrintessApiClient;
 use RuntimeException;
 
-/**
- *
- */
 class Index extends Action
 {
-
     /**
      * @var string
      */
     private const CACHE_KEY = CacheType::TYPE_IDENTIFIER;
+
     /**
      * @var string
      */
@@ -39,14 +35,17 @@ class Index extends Action
      * @var string
      */
     private const XML_PATH_DESIGNER_SERVICE_TOKEN = 'designer/api_token/service_token';
+
     /**
      * @var string
      */
     private const XML_PATH_DESIGNER_ORIGIN = 'designer/output/origin';
+
     /**
      * @var string
      */
     private const XML_PATH_DESIGNER_DPI = 'designer/output/dpi';
+
     /**
      * @var string
      */
@@ -149,17 +148,19 @@ class Index extends Action
             $cacheKey = implode("_", [self::CACHE_KEY, $params['order_id'], $params['item_id']]);
             $cacheData = $this->cache->load($cacheKey);
 
-            if (!$cacheData) {
+            if (! $cacheData) {
                 $job = $printess->production->produce([
                     'templateName' => $options['additional_options']['printess_save_token']['value'],
                     'outputSettings' => [
-                        'dpi' => (int)($product->getData('printess_output_dpi') ?? $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_DPI, $storeScope)),
-                        'optimizeImages' => (bool)$this->scopeConfig->getValue(self::XML_PATH_DESIGNER_OPTIMIZE_IMAGES, $storeScope),
+                        'dpi' => (int) ($product->getData('printess_output_dpi') ?? $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_DPI, $storeScope)),
+                        'optimizeImages' => (bool) $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_OPTIMIZE_IMAGES, $storeScope),
                     ],
                     'outputFiles' => [
-                        ['documentName' => 'myDocument'],
+                        [
+                            'documentName' => 'myDocument',
+                        ],
                     ],
-                    'origin' => $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ORIGIN, $storeScope)
+                    'origin' => $this->scopeConfig->getValue(self::XML_PATH_DESIGNER_ORIGIN, $storeScope),
                 ]);
 
                 $data['jobId'] = $job->jobId;

@@ -19,7 +19,6 @@ use Twig\Error\SyntaxError;
 
 class Order implements OrderInterface
 {
-
     /**
      * @var DataOrderInterface
      */
@@ -146,7 +145,7 @@ class Order implements OrderInterface
 
                     $productConfiguration = [
                         'documents' => $documents,
-                        'formFields' => $formFields
+                        'formFields' => $formFields,
                     ];
 
                     if (($parentId = reset($parentId)) !== false) {
@@ -165,24 +164,24 @@ class Order implements OrderInterface
                         $buyRequest['super_attribute'] = $options;
 
                         $updateOptions[] = [
-                                'product_id' => $product->getId(),
-                                'code' => 'info_buyRequest',
-                                'value' => $this->serializer->serialize($buyRequest)
-                            ];
+                            'product_id' => $product->getId(),
+                            'code' => 'info_buyRequest',
+                            'value' => $this->serializer->serialize($buyRequest),
+                        ];
 
                         $updateOptions[] = [
-                                'product_id' => $product->getId(),
-                                'code' => 'simple_product',
-                                'value' => $parentProduct->getId()
-                            ];
+                            'product_id' => $product->getId(),
+                            'code' => 'simple_product',
+                            'value' => $parentProduct->getId(),
+                        ];
 
                         $updateOptions[] = [
-                                'product_id' => $product->getId(),
-                                'code' => 'product_qty_' . $product->getId(),
-                                'value' => $qty
-                            ];
+                            'product_id' => $product->getId(),
+                            'code' => 'product_qty_' . $product->getId(),
+                            'value' => $qty,
+                        ];
 
-                        $supplierParameter = $this->supplierParameter->createSupplierParameter(!is_null($product->getData('printess_supplier_parameter')) ? $product : $parentProduct, $productConfiguration);
+                        $supplierParameter = $this->supplierParameter->createSupplierParameter(! is_null($product->getData('printess_supplier_parameter')) ? $product : $parentProduct, $productConfiguration);
                     } else {
                         $buyRequest = $this->serializer->unserialize($quoteItem->getOptionByCode('info_buyRequest')->getValue());
 
@@ -190,10 +189,10 @@ class Order implements OrderInterface
                         $buyRequest['qty'] = $qty;
 
                         $updateOptions[] = [
-                                'product_id' => $product->getId(),
-                                'code' => 'info_buyRequest',
-                                'value' => $this->serializer->serialize($buyRequest)
-                            ];
+                            'product_id' => $product->getId(),
+                            'code' => 'info_buyRequest',
+                            'value' => $this->serializer->serialize($buyRequest),
+                        ];
 
                         $supplierParameter = $this->supplierParameter->createSupplierParameter($product, $productConfiguration);
                     }
@@ -207,35 +206,35 @@ class Order implements OrderInterface
                     }
 
                     $additionalOptions['printess_save_token'] = [
-                            'label' => 'save_token',
-                            'value' => $saveToken
-                        ];
+                        'label' => 'save_token',
+                        'value' => $saveToken,
+                    ];
 
                     $additionalOptions['printess_thumbnail_url'] = [
-                            'label' => 'thumbnail_url',
-                            'value' => $thumbnailUrl
-                        ];
+                        'label' => 'thumbnail_url',
+                        'value' => $thumbnailUrl,
+                    ];
 
                     $additionalOptions['printess_documents'] = [
-                            'label' => 'documents',
-                            'value' => json_encode($documents)
-                        ];
+                        'label' => 'documents',
+                        'value' => json_encode($documents),
+                    ];
 
                     $additionalOptions['printess_price_info'] = [
-                            'label' => 'price_info',
-                            'value' => json_encode($priceInfo)
-                        ];
+                        'label' => 'price_info',
+                        'value' => json_encode($priceInfo),
+                    ];
 
                     $additionalOptions['printess_supplier_parameter'] = [
                         'label' => 'supplier_parameter',
-                        'value' => json_encode($supplierParameter)
+                        'value' => json_encode($supplierParameter),
                     ];
 
                     $updateOptions[] = [
-                            'product_id' => $product->getId(),
-                            'code' => 'additional_options',
-                            'value' => $this->serializer->serialize($additionalOptions)
-                        ];
+                        'product_id' => $product->getId(),
+                        'code' => 'additional_options',
+                        'value' => $this->serializer->serialize($additionalOptions),
+                    ];
 
                     $quoteItem->setOptions($updateOptions);
 
@@ -289,11 +288,11 @@ class Order implements OrderInterface
 
                             if (isset($res['label'])) {
                                 $attributes[] = [
-                                        'label' => $productAttributeOptions[$key]['label'],
-                                        'value' => $res['label'],
-                                        'option_id' => $key,
-                                        'option_value' => $val
-                                    ];
+                                    'label' => $productAttributeOptions[$key]['label'],
+                                    'value' => $res['label'],
+                                    'option_id' => $key,
+                                    'option_value' => $val,
+                                ];
                             }
                         }
                     }
@@ -326,8 +325,8 @@ class Order implements OrderInterface
 
         $this->dataOrder->setRedirectUrl(
             $this->urlBuilder->getUrl('sales/order/view', [
-                    'order_id' => $orderId
-                ])
+                'order_id' => $orderId,
+            ])
         );
 
         $this->dataOrder->setStatus('success');

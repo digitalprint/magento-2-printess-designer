@@ -7,7 +7,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 
 class Documents extends AbstractExtensibleModel implements DocumentsInterface
 {
-
     /**
      * {@inheritdoc}
      */
@@ -23,7 +22,4 @@ class Documents extends AbstractExtensibleModel implements DocumentsInterface
     {
         return $this->setData(self::VALUE, $value);
     }
-
 }
-
-

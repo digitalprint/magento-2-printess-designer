@@ -29,7 +29,6 @@ use Magento\Tax\Helper\Data as taxHelper;
 
 class Designer extends Template
 {
-
     /**
      * @var \Digitalprint\PrintessDesigner\Helper\Data
      */
@@ -138,8 +137,7 @@ class Designer extends Template
     /**
      * @var string
      */
-    private const XML_PATH_DESIGNER_DESIGNPICKER_CLIENT= 'designer/designpicker/client';
-
+    private const XML_PATH_DESIGNER_DESIGNPICKER_CLIENT = 'designer/designpicker/client';
 
     /**
      * @param Context $context
@@ -233,7 +231,7 @@ class Designer extends Template
                 FinalPrice::PRICE_CODE,
                 $product,
                 [
-                    'zone' => Render::ZONE_ITEM_LIST
+                    'zone' => Render::ZONE_ITEM_LIST,
                 ]
             );
         }
@@ -264,13 +262,13 @@ class Designer extends Template
         $childProduct = $this->configurable->getProductByAttributes($superAttribute, $product);
 
         $value = null;
-        if (!(is_null($childProduct)) && !is_null($childProduct->getData($path))) {
+        if (! (is_null($childProduct)) && ! is_null($childProduct->getData($path))) {
             $value = $childProduct->getData($path);
-        } elseif (!is_null($product->getData($path))) {
+        } elseif (! is_null($product->getData($path))) {
             $value = $product->getData($path);
         }
 
-        if (!$this->helper->isJson($value)) {
+        if (! $this->helper->isJson($value)) {
             return [];
         }
 
@@ -289,12 +287,12 @@ class Designer extends Template
         $params = $this->getRequest()->getParams();
 
         foreach (['sku', 'super_attribute', 'startDesign', 'save_token', 'merge1'] as $key) {
-            if (!array_key_exists($key, $params)) {
+            if (! array_key_exists($key, $params)) {
                 $params[$key] = null;
             }
         }
 
-        if (!array_key_exists('qty', $params)) {
+        if (! array_key_exists('qty', $params)) {
             $params['qty'] = 1;
         }
 
@@ -319,18 +317,18 @@ class Designer extends Template
             $config['itemId'] = $params['item_id'];
         }
 
-        if (!is_null($params['save_token'])) {
+        if (! is_null($params['save_token'])) {
             $config['templateName'] = $params['save_token'];
         } else {
-            $config['templateName'] = !(is_null($childProduct)) && !is_null($childProduct->getData('printess_template')) ? $childProduct->getData('printess_template') : $product->getData('printess_template');
+            $config['templateName'] = ! (is_null($childProduct)) && ! is_null($childProduct->getData('printess_template')) ? $childProduct->getData('printess_template') : $product->getData('printess_template');
         }
 
         $config['mergeTemplates'] = [];
 
-        if (!is_null($params['merge1'])) {
+        if (! is_null($params['merge1'])) {
             $config['mergeTemplates'][] = [
                 'templateName' => $params['merge1'],
-                'mergeMode' => 'layout-snippet-no-repeat'
+                'mergeMode' => 'layout-snippet-no-repeat',
             ];
         }
 
@@ -347,7 +345,7 @@ class Designer extends Template
                         $data[$key] = $val;
                     }
 
-                    if (!isset($data['templateName']) && isset($data['id'])) {
+                    if (! isset($data['templateName']) && isset($data['id'])) {
                         $data['templateName'] = $data['id'];
                         unset($data['id']);
                     }
@@ -360,15 +358,15 @@ class Designer extends Template
         $config['startDesign'] = null;
 
         if (is_null($params['save_token'])) {
-            $startDesign = !is_null($params['startDesign']) ? $params['startDesign'] : $this->getPrintessConfig('printess_start_design', $params['sku'], $params['super_attribute']);
+            $startDesign = ! is_null($params['startDesign']) ? $params['startDesign'] : $this->getPrintessConfig('printess_start_design', $params['sku'], $params['super_attribute']);
 
-            if (!is_null($startDesign) && isset($startDesign['templateName'], $startDesign['documentName'])) {
+            if (! is_null($startDesign) && isset($startDesign['templateName'], $startDesign['documentName'])) {
                 $config['startDesign'] = $startDesign;
 
-                if (!isset($config['startDesign']['templateVersion'])) {
+                if (! isset($config['startDesign']['templateVersion'])) {
                     $config['startDesign']['templateVersion'] = 'published';
                 }
-                if (!isset($config['startDesign']['mode'])) {
+                if (! isset($config['startDesign']['mode'])) {
                     $config['startDesign']['mode'] = 'layout';
                 }
             }
@@ -376,14 +374,14 @@ class Designer extends Template
 
         $config['sku'] = $product->getSku();
         $config['superAttribute'] = $params['super_attribute'];
-        $config['variant'] = !is_null($childProduct) ? $childProduct->getSku() : $product->getSku();
+        $config['variant'] = ! is_null($childProduct) ? $childProduct->getSku() : $product->getSku();
 
         $config['qty'] = $params['qty'];
 
         $config['formFields'] = [];
 
         if (is_null($params['save_token'])) {
-            $formFields = !is_null($childProduct) ? $childProduct->getData('printess_form_fields') : $product->getData('printess_form_fields');
+            $formFields = ! is_null($childProduct) ? $childProduct->getData('printess_form_fields') : $product->getData('printess_form_fields');
 
             if ($this->helper->isJson($formFields)) {
                 $formFields = json_decode($formFields, true, 512, JSON_THROW_ON_ERROR);
@@ -393,7 +391,7 @@ class Designer extends Template
                 foreach ($formFields as $formField) {
                     $config['formFields'][] = [
                         'name' => $formField['printess_ff_name'],
-                        'value' => $formField['value']
+                        'value' => $formField['value'],
                     ];
                 }
             }
@@ -401,28 +399,20 @@ class Designer extends Template
 
         $config['snippetPriceCategoryLabels'] = ['', '', '', '', ''];
 
-        $options = !is_null($childProduct) ? $childProduct->getOptions() : $product->getOptions();
+        $options = ! is_null($childProduct) ? $childProduct->getOptions() : $product->getOptions();
 
         $config['priceCategoryLabels'] = [];
 
         foreach ($options as $option) {
-
             if ($option->getType() === SupplierParameter::TYPE_NAME) {
-
                 $priceTagPrefix = $option->getPriceTagPrefix();
-
                 if ($priceTagPrefix !== '') {
-
                     foreach ($option->getValues() as $value) {
-
                         $key = "$priceTagPrefix:{$value->getTitle()}";
-
                         $config['priceCategoryLabels'][$key] = $value->getPrice() > 0 ? $value->getPrice() : '';
                     }
-
                 }
             }
-
         }
 
         return $this->serializer->serialize($config);
@@ -441,7 +431,7 @@ class Designer extends Template
             'locale' => null,
             'client' => null,
             'attributes' => [],
-            'designFormat' => 'square'
+            'designFormat' => 'square',
         ];
 
         $storeScope = ScopeInterface::SCOPE_STORE;
@@ -453,10 +443,10 @@ class Designer extends Template
             $product = $this->productRepository->get($sku);
             $childProduct = $this->configurable->getProductByAttributes($superAttribute, $product);
 
-            $attributes = !is_null($childProduct) && !is_null($childProduct->getData('printess_design_picker_attributes')) ? $childProduct->getData('printess_design_picker_attributes') : $product->getData('printess_design_picker_attributes');
+            $attributes = ! is_null($childProduct) && ! is_null($childProduct->getData('printess_design_picker_attributes')) ? $childProduct->getData('printess_design_picker_attributes') : $product->getData('printess_design_picker_attributes');
 
-            if (!is_null($attributes)) {
-                $designFormat = !is_null($childProduct) && !is_null($childProduct->getData('printess_design_picker_design_format')) ? $childProduct->getData('printess_design_picker_design_format') : $product->getData('printess_design_picker_design_format');
+            if (! is_null($attributes)) {
+                $designFormat = ! is_null($childProduct) && ! is_null($childProduct->getData('printess_design_picker_design_format')) ? $childProduct->getData('printess_design_picker_design_format') : $product->getData('printess_design_picker_design_format');
                 if (is_null($designFormat)) {
                     $designFormat = 'square';
                 }
@@ -489,7 +479,7 @@ class Designer extends Template
 
             $config = [
                 'session_id' => $this->authSession->getSessionId(),
-                'user_id' => $userId
+                'user_id' => $userId,
             ];
 
             $tokenFactory = $this->tokenFactory->create();
@@ -500,11 +490,10 @@ class Designer extends Template
             $config = [
                 'session_id' => $this->customerSession->getSessionId(),
                 'customer_id' => null,
-                'customer_token' => null
+                'customer_token' => null,
             ];
         }
 
         return $this->serializer->serialize($config);
     }
-
 }

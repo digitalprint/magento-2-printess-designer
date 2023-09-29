@@ -2,12 +2,11 @@
 
 namespace Digitalprint\PrintessDesigner\Model\Api\Data;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
 use Digitalprint\PrintessDesigner\Api\Data\ProductInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
 
 class Product extends AbstractExtensibleModel implements ProductInterface
 {
-
     /**
      * Get sku
      *
@@ -70,5 +69,4 @@ class Product extends AbstractExtensibleModel implements ProductInterface
     {
         return $this->setData(self::VARIANTS, $title);
     }
-
 }

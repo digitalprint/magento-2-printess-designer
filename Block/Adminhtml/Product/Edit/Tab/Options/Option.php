@@ -7,7 +7,6 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 class Option extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option
 {
-
     /**
      * @var string
      */
@@ -24,7 +23,6 @@ class Option extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\O
         ?JsonHelper $jsonHelper = null,
         ?SecureHtmlRenderer $secureRenderer = null
     ) {
-
         parent::__construct(
             $context,
             $configYesNo,
@@ -36,9 +34,7 @@ class Option extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\O
             $jsonHelper,
             $secureRenderer
         );
-
     }
-
 
     /**
      * @return string
@@ -53,5 +49,4 @@ class Option extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\O
         return parent::getTemplatesHtml() . "\n" .
             $this->getChildHtml('adjustment_option_type');
     }
-
 }

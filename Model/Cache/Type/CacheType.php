@@ -7,7 +7,6 @@ use Magento\Framework\Cache\Frontend\Decorator\TagScope;
 
 class CacheType extends TagScope
 {
-
     /**
      * @var string
      */

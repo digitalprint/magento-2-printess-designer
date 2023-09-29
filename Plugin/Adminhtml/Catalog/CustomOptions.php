@@ -3,12 +3,10 @@
 namespace Digitalprint\PrintessDesigner\Plugin\Adminhtml\Catalog;
 
 use Magento\Ui\Component\Form\Element\Input;
-use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Form\Field;
 
 class CustomOptions
 {
-
     /**
      * @param \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions $subject
      * @param array $result
@@ -16,9 +14,7 @@ class CustomOptions
      */
     public function afterModifyMeta(\Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions $subject, array $result): array
     {
-
-        if (!empty($result[\Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions::GROUP_CUSTOM_OPTIONS_NAME])) {
-
+        if (! empty($result[\Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions::GROUP_CUSTOM_OPTIONS_NAME])) {
             return array_replace_recursive($result, [
                 \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions::GROUP_CUSTOM_OPTIONS_NAME => [
                     'children' => [
@@ -34,62 +30,58 @@ class CustomOptions
                                                             'arguments' => [
                                                                 'data' => [
                                                                     'config' => [
-                                                                        'groupsConfig' =>  [
+                                                                        'groupsConfig' => [
                                                                             'supplierparameter' => [
                                                                                 'values' => [
-                                                                                    'supplierparameter'
+                                                                                    'supplierparameter',
                                                                                 ],
                                                                                 'indexes' => [
-                                                                                    'values'
-                                                                                ]
+                                                                                    'values',
+                                                                                ],
                                                                             ],
                                                                             'adjustment' => [
                                                                                 'values' => [
-                                                                                    'adjustment'
+                                                                                    'adjustment',
                                                                                 ],
                                                                                 'indexes' => [
                                                                                     'container_type_static',
                                                                                     'price',
                                                                                     'price_type',
-                                                                                    'sku'
-                                                                                ]
-                                                                            ]
-                                                                        ]
-                                                                    ]
-                                                                ]
-                                                            ]
+                                                                                    'sku',
+                                                                                ],
+                                                                            ],
+                                                                        ],
+                                                                    ],
+                                                                ],
+                                                            ],
                                                         ],
                                                         'price_tag_prefix' => [
                                                             'arguments' => [
                                                                 'data' => [
                                                                     'config' => [
-                                                                        'label'         => __('Price-Tag-Prefix'),
+                                                                        'label' => __('Price-Tag-Prefix'),
                                                                         'componentType' => Field::NAME,
-                                                                        'formElement'   => Input::NAME,
-                                                                        'dataScope'     => 'price_tag_prefix',
-                                                                        'dataType'      => Text::NAME,
-                                                                        'sortOrder'     => 35,
+                                                                        'formElement' => Input::NAME,
+                                                                        'dataScope' => 'price_tag_prefix',
+                                                                        'dataType' => Text::NAME,
+                                                                        'sortOrder' => 35,
                                                                     ],
                                                                 ],
                                                             ],
-                                                        ]
-
-                                                    ]
-                                                ]
-                                            ]
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
+                                                        ],
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ]);
-
         }
 
         return $result;
-
     }
-
 }

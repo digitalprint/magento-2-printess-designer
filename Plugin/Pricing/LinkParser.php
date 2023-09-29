@@ -24,7 +24,7 @@ class LinkParser
             preg_match_all('/<a ((?!target)[^>])+?>/', $result, $matches);
 
             foreach ($matches[0] as $key => $val) {
-                if (!preg_match('/target="_blank"/', $val)) {
+                if (! preg_match('/target="_blank"/', $val)) {
                     $newLink = preg_replace("/<a(.*?)>/", "<a$1 target=\"_blank\">", $val);
                     $result = str_replace($val, $newLink, $result);
                 }

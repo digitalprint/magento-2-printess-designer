@@ -8,7 +8,6 @@ use Magento\Checkout\Block\Cart\Item\Renderer;
 
 class OptionList
 {
-
     /**
      * @param Renderer $subject
      * @param $result
@@ -16,16 +15,12 @@ class OptionList
      */
     public function afterGetOptionList(Renderer $subject, $result): array
     {
-
         return array_filter($result, static function ($v, $k) {
-
             if (array_key_exists('option_type', $v)) {
-                return !in_array($v['option_type'], [SupplierParameter::TYPE_NAME, Adjustment::TYPE_NAME], true);
+                return ! in_array($v['option_type'], [SupplierParameter::TYPE_NAME, Adjustment::TYPE_NAME], true);
             }
 
-            return !(str_starts_with($k, 'printess'));
-
+            return ! str_starts_with($k, 'printess');
         }, ARRAY_FILTER_USE_BOTH);
-
     }
 }

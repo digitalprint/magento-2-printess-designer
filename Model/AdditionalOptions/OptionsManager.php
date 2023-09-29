@@ -8,7 +8,6 @@ use Psr\Log\LoggerInterface;
 
 class OptionsManager
 {
-
     /**
      * @var LoggerInterface
      */
@@ -38,16 +37,15 @@ class OptionsManager
             $sourceItems = [];
 
             if (is_array($source->getItems())) {
-
                 foreach ($source->getItems() as $sourceItem) {
-                    if (!$sourceItem->getParentItemId()) {
+                    if (! $sourceItem->getParentItemId()) {
                         $sourceItems[$sourceItem->getId()] = $sourceItem;
                     }
                 }
             }
 
             foreach ($destination->getItems() as $destinationItem) {
-                if (!$destinationItem->getParentItemId()) {
+                if (! $destinationItem->getParentItemId()) {
                     $quoteItemId = $destinationItem->getQuoteItemId();
 
                     if (isset($sourceItems[$quoteItemId])) {

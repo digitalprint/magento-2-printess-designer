@@ -8,7 +8,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 class RenderQuantity
 {
-
     /**
      * @var Printess
      */

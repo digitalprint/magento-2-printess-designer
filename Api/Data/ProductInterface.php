@@ -5,7 +5,9 @@ namespace Digitalprint\PrintessDesigner\Api\Data;
 interface ProductInterface
 {
     public const SKU = 'sku';
+
     public const NAME = 'name';
+
     public const VARIANTS = 'variants';
 
     /**
@@ -46,5 +48,4 @@ interface ProductInterface
      * @return ProductInterface
      */
     public function setVariants(array $variants);
-
 }

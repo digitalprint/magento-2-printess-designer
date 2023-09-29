@@ -15,7 +15,6 @@ use Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn;
 
 class Thumbnail extends DefaultColumn
 {
-
     /**
      * @var Image
      */
@@ -47,7 +46,6 @@ class Thumbnail extends DefaultColumn
      */
     public function getThumbnailUrl()
     {
-
         if (($options = $this->getItem()->getProductOptions()) && isset($options['additional_options']['printess_thumbnail_url'])) {
             return $options['additional_options']['printess_thumbnail_url']['value'];
         }
@@ -59,7 +57,5 @@ class Thumbnail extends DefaultColumn
         }
 
         return $this->imageHelper->init($product, 'product_listing_thumbnail')->resize(100, 100)->getUrl();
-
     }
-
 }

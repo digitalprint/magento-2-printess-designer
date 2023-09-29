@@ -18,5 +18,4 @@ interface DesignerInterface
      * @return DesignerInterface
      */
     public function setUrl(string $url);
-
 }

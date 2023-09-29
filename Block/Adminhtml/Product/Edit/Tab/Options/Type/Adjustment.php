@@ -4,7 +4,6 @@ namespace Digitalprint\PrintessDesigner\Block\Adminhtml\Product\Edit\Tab\Options
 
 class Adjustment extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\AbstractType
 {
-
     /**
      * @var string
      */
@@ -23,5 +22,4 @@ class Adjustment extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Optio
         $this->_optionPrice = $optionPrice;
         parent::__construct($context, $optionPrice, $data);
     }
-
 }

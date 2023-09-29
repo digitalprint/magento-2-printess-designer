@@ -13,7 +13,6 @@ use Magento\Store\Model\ScopeInterface;
 
 class ItemData
 {
-
     /**
      * @var string
      */
@@ -82,7 +81,7 @@ class ItemData
             if (isset($additionalOptions['printess_save_token']['value'])) {
                 $urlParams = [
                     'sku' => $product->getSku(),
-                    'save_token' => $additionalOptions['printess_save_token']['value']
+                    'save_token' => $additionalOptions['printess_save_token']['value'],
                 ];
 
                 if ($buyRequest = $item->getOptionByCode('info_buyRequest')) {
@@ -95,7 +94,9 @@ class ItemData
                     }
                 }
 
-                $result['configure_url'] = $this->urlBuilder->getUrl('designer/page/view', ['_query' => $urlParams]);
+                $result['configure_url'] = $this->urlBuilder->getUrl('designer/page/view', [
+                    '_query' => $urlParams,
+                ]);
             }
         }
 

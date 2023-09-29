@@ -2,12 +2,11 @@
 
 namespace Digitalprint\PrintessDesigner\Model\Api\Data;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
 use Digitalprint\PrintessDesigner\Api\Data\DesignerInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
 
 class Designer extends AbstractExtensibleModel implements DesignerInterface
 {
-
     /**
      * Get designer url
      *
@@ -28,5 +27,4 @@ class Designer extends AbstractExtensibleModel implements DesignerInterface
     {
         return $this->setData(self::URL, $url);
     }
-
 }

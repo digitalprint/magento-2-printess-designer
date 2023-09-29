@@ -20,5 +20,4 @@ interface DocumentsInterface
      * @return $this
      */
     public function setValue(?string $value);
-
 }

@@ -66,7 +66,7 @@ class InstallData implements InstallDataInterface
                 'visible_on_front' => false,
                 'used_in_product_listing' => false,
                 'unique' => false,
-                'apply_to' => ''
+                'apply_to' => '',
             ]
         );
 
@@ -94,7 +94,7 @@ class InstallData implements InstallDataInterface
                 'visible_on_front' => false,
                 'used_in_product_listing' => false,
                 'unique' => false,
-                'apply_to' => ''
+                'apply_to' => '',
             ]
         );
 
@@ -122,7 +122,7 @@ class InstallData implements InstallDataInterface
                 'visible_on_front' => false,
                 'used_in_product_listing' => false,
                 'unique' => false,
-                'apply_to' => ''
+                'apply_to' => '',
             ]
         );
 
@@ -150,7 +150,7 @@ class InstallData implements InstallDataInterface
                 'visible_on_front' => false,
                 'used_in_product_listing' => false,
                 'unique' => false,
-                'apply_to' => ''
+                'apply_to' => '',
             ]
         );
 
@@ -178,7 +178,7 @@ class InstallData implements InstallDataInterface
                 'visible_on_front' => false,
                 'used_in_product_listing' => false,
                 'unique' => false,
-                'apply_to' => ''
+                'apply_to' => '',
             ]
         );
 
@@ -206,7 +206,7 @@ class InstallData implements InstallDataInterface
                 'visible_on_front' => false,
                 'used_in_product_listing' => false,
                 'unique' => false,
-                'apply_to' => ''
+                'apply_to' => '',
             ]
         );
 
@@ -223,6 +223,5 @@ class InstallData implements InstallDataInterface
         );
 
         $setup->endSetup();
-
     }
 }

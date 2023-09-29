@@ -33,7 +33,6 @@ class Data extends AbstractHelper
         } catch (JsonException $ex) {
             return false;
         }
-
         return true;
     }
 }

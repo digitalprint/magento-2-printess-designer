@@ -12,5 +12,4 @@ interface ProductInterface
      * @return Data\ProductInterface
      */
     public function getProduct(string $sku, mixed $super_attribute = []);
-
 }

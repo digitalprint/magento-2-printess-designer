@@ -10,6 +10,5 @@ interface DesignerInterface
      * @param string $tag
      * @return Data\DesignerInterface
      */
-
     public function getUrlByTag(string $tag);
 }

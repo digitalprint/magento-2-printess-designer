@@ -13,7 +13,6 @@ use Magento\Sales\Api\OrderItemRepositoryInterface;
 
 class CustomProductAttributes
 {
-
     /**
      * @var OrderItemExtensionFactory
      */

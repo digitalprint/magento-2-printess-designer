@@ -12,7 +12,6 @@ use Twig\TwigFunction;
 
 class SupplierParameter
 {
-
     public const TYPE_NAME = 'supplierparameter';
 
     /**
@@ -96,20 +95,19 @@ class SupplierParameter
      */
     public function createSupplierParameter($product, array $productConfiguration = [])
     {
-
-        if (!(is_null($product)) && !is_null($product->getData('printess_supplier_parameter'))) {
-
+        if (! is_null($product) && ! is_null($product->getData('printess_supplier_parameter'))) {
             $attribute = $product->getData('printess_supplier_parameter');
             $template = $this->twig->createTemplate($attribute);
 
-            $json = $template->render(['productConfiguration' => $productConfiguration]);
+            $json = $template->render([
+                'productConfiguration' => $productConfiguration,
+            ]);
 
             if ($this->helper->isJson($json)) {
                 $json = json_decode($json, true);
             }
 
             return $json;
-
         }
 
         return [];

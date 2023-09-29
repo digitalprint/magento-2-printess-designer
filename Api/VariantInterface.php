@@ -4,7 +4,6 @@ namespace Digitalprint\PrintessDesigner\Api;
 
 interface VariantInterface
 {
-
     /**
      * @param string $sku
      * @param mixed $documents
@@ -12,5 +11,4 @@ interface VariantInterface
      * @return Data\VariantInterface
      */
     public function getVariant(string $sku, mixed $documents, mixed $formFields);
-
 }

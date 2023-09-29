@@ -11,7 +11,6 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Pr
 
 class Product implements ProductInterface
 {
-
     /**
      * @var \Digitalprint\PrintessDesigner\Helper\Data
      */
@@ -62,12 +61,12 @@ class Product implements ProductInterface
 
         $attributes[] = [
             'code' => 'printess_template',
-            'value' => $product->getData('printess_template')
+            'value' => $product->getData('printess_template'),
         ];
 
         $attributes[] = [
             'code' => 'printess_document',
-            'value' => $product->getData('printess_document')
+            'value' => $product->getData('printess_document'),
         ];
 
         $formFields = $product->getData('printess_form_fields');
@@ -79,18 +78,18 @@ class Product implements ProductInterface
                 foreach ($formFields as $formField) {
                     $attributes[] = [
                         'code' => $formField['pim_attr_name'],
-                        'value' => $formField['value']
+                        'value' => $formField['value'],
                     ];
 
                     $attributes[] = [
                         'code' => $formField['printess_ff_name'],
-                        'value' => $formField['value']
+                        'value' => $formField['value'],
                     ];
                 }
 
                 $attributes[] = [
                     'code' => 'printess_form_fields',
-                    'value' => $formFields
+                    'value' => $formFields,
                 ];
             }
         }
@@ -114,7 +113,6 @@ class Product implements ProductInterface
         $variants = [];
 
         if ($product->getTypeId() === Configurable::TYPE_CODE) {
-
             $children = $this->productCollectionFactory->create();
 
             $children->setFlag(
@@ -136,13 +134,12 @@ class Product implements ProductInterface
             $productAttributes = $this->configurable->getConfigurableAttributesAsArray($product);
 
             foreach ($productAttributes as $productAttribute) {
-                if (!in_array($productAttribute['attribute_code'], $availableMappings, true)) {
+                if (! in_array($productAttribute['attribute_code'], $availableMappings, true)) {
                     $children->addAttributeToFilter($productAttribute['attribute_code'], $super_attribute[$productAttribute['attribute_id']]);
                 }
             }
 
             foreach ($children as $child) {
-
                 $childProduct = $this->productRepository->getById($child->getId());
 
                 $variants[] = [
@@ -150,17 +147,16 @@ class Product implements ProductInterface
                     'product_id' => $product->getId(),
                     'sku' => $child->getSku(),
                     'name' => $childProduct->getName(),
-                    'attributes' => $this->getAttributes($childProduct)
+                    'attributes' => $this->getAttributes($childProduct),
                 ];
             }
         } else {
-
             $variants[] = [
                 'id' => $product->getId(),
                 'product_id' => $product->getId(),
                 'sku' => $product->getSku(),
                 'name' => $product->getName(),
-                'attributes' => $this->getAttributes($product)
+                'attributes' => $this->getAttributes($product),
             ];
         }
 
@@ -168,5 +164,4 @@ class Product implements ProductInterface
 
         return $dataProduct;
     }
-
 }

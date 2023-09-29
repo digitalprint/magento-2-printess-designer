@@ -6,11 +6,11 @@ use Digitalprint\PrintessDesigner\Api\Data\OrderInterface;
 
 class Order implements OrderInterface
 {
-
     /**
      * @var
      */
     private $status;
+
     /**
      * @var
      */

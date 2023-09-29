@@ -34,9 +34,13 @@ class Designer implements DesignerInterface
         $dataDesigner = clone $this->dataDesigner;
 
         $queryParams = [
-            'sku' => $tag
+            'sku' => $tag,
         ];
-        $designerUrl = $this->urlBuilder->getUrl('designer/page/view', ['_current' => false, '_use_rewrite' => true, '_query' => $queryParams]);
+        $designerUrl = $this->urlBuilder->getUrl('designer/page/view', [
+            '_current' => false,
+            '_use_rewrite' => true,
+            '_query' => $queryParams,
+        ]);
 
         $dataDesigner->setUrl($designerUrl);
 

@@ -2,12 +2,11 @@
 
 namespace Digitalprint\PrintessDesigner\Model\Api\Data;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
 use Digitalprint\PrintessDesigner\Api\Data\VariantInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
 
 class Variant extends AbstractExtensibleModel implements VariantInterface
 {
-
     /**
      * Get sku
      *
@@ -89,5 +88,4 @@ class Variant extends AbstractExtensibleModel implements VariantInterface
     {
         return $this->setData(self::LEGALNOTICE, $legalNotice);
     }
-
 }

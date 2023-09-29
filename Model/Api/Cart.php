@@ -21,7 +21,6 @@ use Twig\Error\SyntaxError;
 
 class Cart implements CartInterface
 {
-
     /**
      * @var DataCartInterface
      */
@@ -117,7 +116,7 @@ class Cart implements CartInterface
 
         $productConfiguration = [
             'documents' => $documents,
-            'formFields' => $formFields
+            'formFields' => $formFields,
         ];
 
         $buyRequest = $this->printessProduct->createBuyRequest($sku, $quantity, $productConfiguration);
@@ -125,7 +124,7 @@ class Cart implements CartInterface
         $product = $this->productRepository->get($sku);
         $parentProduct = $this->printessProduct->getParent($product);
 
-        $this->cart->addProduct(!is_null($parentProduct) ? $parentProduct : $product, $buyRequest);
+        $this->cart->addProduct(! is_null($parentProduct) ? $parentProduct : $product, $buyRequest);
         $this->cart->save();
 
         $this->invalidateCartCookie();
@@ -134,8 +133,8 @@ class Cart implements CartInterface
 
         $this->dataCart->setRedirectUrl(
             $this->storeManager->getStore()->getUrl('checkout/cart', [
-                    '_secure' => true
-                ])
+                '_secure' => true,
+            ])
         );
 
         return $this->dataCart;
@@ -154,7 +153,7 @@ class Cart implements CartInterface
         if ($cookie) {
             $data = json_decode($cookie, true, 512, JSON_THROW_ON_ERROR);
 
-            if (!isset($data['cart'])) {
+            if (! isset($data['cart'])) {
                 $data['cart'] = date('U');
             }
 
@@ -169,5 +168,4 @@ class Cart implements CartInterface
             $this->cookieManager->setPublicCookie('section_data_ids', json_encode($data, JSON_THROW_ON_ERROR), $meta);
         }
     }
-
 }

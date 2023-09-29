@@ -6,11 +6,9 @@ use Digitalprint\PrintessDesigner\Api\Data\VariantInterface as DataVariantInterf
 use Digitalprint\PrintessDesigner\Api\VariantInterface;
 use Digitalprint\PrintessDesigner\Model\Printess\Product as PrintessProduct;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\ProductFactory;
 
 class Variant implements VariantInterface
 {
-
     /**
      * @var DataVariantInterface
      */
@@ -46,7 +44,6 @@ class Variant implements VariantInterface
      */
     public function getVariant(string $sku, mixed $documents, mixed $formFields)
     {
-
         $dataVariant = clone $this->dataVariant;
 
         $product = $this->productRepository->get($sku);
@@ -56,21 +53,20 @@ class Variant implements VariantInterface
 
         $price = $this->printessProduct->getPrice($product, 1, [
             'documents' => json_decode($documents, true),
-            'formFields' => json_decode($formFields, true)
+            'formFields' => json_decode($formFields, true),
         ]);
 
         $dataVariant->setPrices([
             [
                 'price' => [
                     'type' => 'price',
-                    'price' => $price
-                ]
-            ]
+                    'price' => $price,
+                ],
+            ],
         ]);
 
         $dataVariant->setLegalNotice($this->printessProduct->getLegalNotice($sku));
 
         return $dataVariant;
     }
-
 }

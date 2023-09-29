@@ -7,13 +7,11 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 
 class PriceInfo extends AbstractExtensibleModel implements PriceInfoInterface
 {
-
     /**
      * {@inheritdoc}
      */
     public function getValue(): array
     {
-
         return [json_decode($this->getData(self::VALUE), true, 512, JSON_THROW_ON_ERROR)];
     }
 

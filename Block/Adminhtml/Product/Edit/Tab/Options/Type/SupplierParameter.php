@@ -2,12 +2,8 @@
 
 namespace Digitalprint\PrintessDesigner\Block\Adminhtml\Product\Edit\Tab\Options\Type;
 
-/**
- *
- */
 class SupplierParameter extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\AbstractType
 {
-
     /**
      * @var string
      */
@@ -35,7 +31,7 @@ class SupplierParameter extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Ta
             [
                 'label' => __('Add New Row'),
                 'class' => 'add add-select-row',
-                'id' => 'product_option_<%- data.option_id %>_add_select_row'
+                'id' => 'product_option_<%- data.option_id %>_add_select_row',
             ]
         );
 
@@ -45,7 +41,7 @@ class SupplierParameter extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Ta
             [
                 'label' => __('Delete Row'),
                 'class' => 'delete delete-select-row icon-btn',
-                'id' => 'product_option_<%- data.id %>_select_<%- data.select_id %>_delete'
+                'id' => 'product_option_<%- data.id %>_select_<%- data.select_id %>_delete',
             ]
         );
 

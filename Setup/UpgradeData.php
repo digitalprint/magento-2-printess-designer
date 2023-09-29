@@ -5,11 +5,10 @@ namespace Digitalprint\PrintessDesigner\Setup;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\Setup\UpgradeDataInterface;
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-
-use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
  * @codeCoverageIgnore
@@ -44,7 +43,6 @@ class UpgradeData implements UpgradeDataInterface
         $eavSetup = $this->eavSetupFactory->create();
 
         if (version_compare($context->getVersion(), '1.4', '<')) {
-
             // Printess Layout Snippets
             $eavSetup->addAttribute(
                 Product::ENTITY,
@@ -69,7 +67,7 @@ class UpgradeData implements UpgradeDataInterface
                     'visible_on_front' => false,
                     'used_in_product_listing' => false,
                     'unique' => false,
-                    'apply_to' => ''
+                    'apply_to' => '',
                 ]
             );
 
@@ -97,14 +95,12 @@ class UpgradeData implements UpgradeDataInterface
                     'visible_on_front' => false,
                     'used_in_product_listing' => false,
                     'unique' => false,
-                    'apply_to' => ''
+                    'apply_to' => '',
                 ]
             );
-
         }
 
         if (version_compare($context->getVersion(), '1.5', '<')) {
-
             // Printess Start Design
             $eavSetup->addAttribute(
                 Product::ENTITY,
@@ -129,14 +125,12 @@ class UpgradeData implements UpgradeDataInterface
                     'visible_on_front' => false,
                     'used_in_product_listing' => false,
                     'unique' => false,
-                    'apply_to' => ''
+                    'apply_to' => '',
                 ]
             );
-
         }
 
         if (version_compare($context->getVersion(), '1.9', '<')) {
-
             // Printess Design Picker Attributes
             $eavSetup->addAttribute(
                 Product::ENTITY,
@@ -161,7 +155,7 @@ class UpgradeData implements UpgradeDataInterface
                     'visible_on_front' => false,
                     'used_in_product_listing' => false,
                     'unique' => false,
-                    'apply_to' => ''
+                    'apply_to' => '',
                 ]
             );
 
@@ -189,14 +183,12 @@ class UpgradeData implements UpgradeDataInterface
                     'visible_on_front' => false,
                     'used_in_product_listing' => false,
                     'unique' => false,
-                    'apply_to' => ''
+                    'apply_to' => '',
                 ]
             );
-
         }
 
         if (version_compare($context->getVersion(), '1.11', '<')) {
-
             // Printess Start Design
             $eavSetup->addAttribute(
                 Product::ENTITY,
@@ -221,14 +213,12 @@ class UpgradeData implements UpgradeDataInterface
                     'visible_on_front' => false,
                     'used_in_product_listing' => false,
                     'unique' => false,
-                    'apply_to' => ''
+                    'apply_to' => '',
                 ]
             );
-
         }
 
         if (version_compare($context->getVersion(), '1.19', '<')) {
-
             $setup->getConnection()->addColumn(
                 $setup->getTable('catalog_product_option'),
                 'price_tag_prefix',
@@ -240,10 +230,8 @@ class UpgradeData implements UpgradeDataInterface
                     'comment' => 'Printess Price Tag Prefix',
                 ]
             );
-
         }
 
         $setup->endSetup();
-
     }
 }

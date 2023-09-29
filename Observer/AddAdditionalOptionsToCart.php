@@ -15,7 +15,6 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 class AddAdditionalOptionsToCart implements ObserverInterface
 {
-
     /**
      * @var \Digitalprint\PrintessDesigner\Helper\Data
      */
@@ -25,6 +24,7 @@ class AddAdditionalOptionsToCart implements ObserverInterface
      * @var RequestInterface
      */
     protected RequestInterface $request;
+
     /**
      * @var SerializerInterface
      */
@@ -89,43 +89,43 @@ class AddAdditionalOptionsToCart implements ObserverInterface
             if (isset($params['saveToken'], $params['thumbnailUrl'])) {
                 $additionalOptions['printess_save_token'] = [
                     'label' => 'save_token',
-                    'value' => $params['saveToken']
+                    'value' => $params['saveToken'],
                 ];
 
                 $additionalOptions['printess_thumbnail_url'] = [
                     'label' => 'thumbnail_url',
-                    'value' => $params['thumbnailUrl']
+                    'value' => $params['thumbnailUrl'],
                 ];
             }
 
             if (isset($params['documents'])) {
                 $additionalOptions['printess_documents'] = [
                     'label' => 'documents',
-                    'value' => json_encode($params['documents'], JSON_THROW_ON_ERROR)
+                    'value' => json_encode($params['documents'], JSON_THROW_ON_ERROR),
                 ];
 
                 $productConfiguration = [
                     'documents' => $params['documents'],
-                    'formFields' => $params['formFields']
+                    'formFields' => $params['formFields'],
                 ];
 
                 if (($parentId = reset($parentId)) !== false) {
                     $parentProduct = $this->productFactory->create()->load($parentId);
-                    $supplierParameter  = $this->supplierParameter->createSupplierParameter(!is_null($product->getData('printess_supplier_parameter')) ? $product : $parentProduct, $productConfiguration);
+                    $supplierParameter = $this->supplierParameter->createSupplierParameter(! is_null($product->getData('printess_supplier_parameter')) ? $product : $parentProduct, $productConfiguration);
                 } else {
                     $supplierParameter = $this->supplierParameter->createSupplierParameter($product, $productConfiguration);
                 }
 
                 $additionalOptions['printess_supplier_parameter'] = [
                     'label' => 'supplier_parameter',
-                    'value' => json_encode($supplierParameter, JSON_THROW_ON_ERROR)
+                    'value' => json_encode($supplierParameter, JSON_THROW_ON_ERROR),
                 ];
             }
 
             if (isset($params['priceInfo'])) {
                 $additionalOptions['printess_price_info'] = [
                     'label' => 'price_info',
-                    'value' => json_encode($params['priceInfo'], JSON_THROW_ON_ERROR)
+                    'value' => json_encode($params['priceInfo'], JSON_THROW_ON_ERROR),
                 ];
             }
 
@@ -133,7 +133,7 @@ class AddAdditionalOptionsToCart implements ObserverInterface
                 $item->addOption([
                     'product_id' => $item->getProductId(),
                     'code' => 'additional_options',
-                    'value' => $this->serializer->serialize($additionalOptions)
+                    'value' => $this->serializer->serialize($additionalOptions),
                 ]);
             }
         }

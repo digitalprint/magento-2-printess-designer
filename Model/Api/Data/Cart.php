@@ -6,7 +6,6 @@ use Digitalprint\PrintessDesigner\Api\Data\CartInterface;
 
 class Cart implements CartInterface
 {
-
     /**
      * @var string|null
      */
