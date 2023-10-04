@@ -3,7 +3,7 @@
 namespace Digitalprint\PrintessDesigner\Api;
 
 interface CartInterface
-
+{
     /**
      * Add to cart
      *
