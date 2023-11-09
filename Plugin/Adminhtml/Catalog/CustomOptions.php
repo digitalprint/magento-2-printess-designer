@@ -3,6 +3,7 @@
 namespace Digitalprint\PrintessDesigner\Plugin\Adminhtml\Catalog;
 
 use Magento\Ui\Component\Form\Element\Input;
+use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Form\Field;
 
 class CustomOptions
