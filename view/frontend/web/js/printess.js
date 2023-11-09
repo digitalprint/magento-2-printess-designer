@@ -31,9 +31,9 @@ define([
             let session = customerData.get(['printessdesigner'])();
 
             window.WebComponents.waitFor(async () => {
-                const printessLoader = await import('https://editor.printess.com/v/2.3.0/printess-editor/printess-editor.js');
+                const printessLoader = await import('https://editor.printess.com/v/2.5.0/printess-editor/printess-editor.js');
                 printess = await printessLoader.attachPrintess({
-                    resourcePath: "https://editor.printess.com/v/2.3.0/printess-editor",
+                    resourcePath: "https://editor.printess.com/v/2.5.0/printess-editor",
                     domain: "api.printess.com",
                     div: document.getElementById("desktop-printess-container"),
                     token: config.printess.shopToken,
