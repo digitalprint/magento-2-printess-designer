@@ -456,24 +456,29 @@ define([
 
         const formFields = this.printess.getAllPriceRelevantFormFields();
 
-        if (UiStore.isAppLoaded() && isUuid(tag)) {
+        if (UiStore.isAppLoaded() && this.currentVariant && tag) {
 
-            this.printess.persistExchangeState().then(() => {
+            tag = tag.replace('_standard', '');
 
-                fetch('/rest/V1/printess/designer/geturlbytag?' + new URLSearchParams({'tag': tag }),
-                {
-                    method: "GET"
-                })
-                .then(response => response.json())
-                .then((data) => {
+            if (isUuid(tag) && this.currentVariant.sku !== tag) {
 
-                    if (data.url) {
-                        location.href = data.url;
-                    }
+                this.printess.persistExchangeState().then(() => {
 
-                })
+                    fetch('/rest/V1/printess/designer/geturlbytag?' + new URLSearchParams({'tag': tag}),
+                        {
+                            method: "GET"
+                        })
+                        .then(response => response.json())
+                        .then((data) => {
 
-            });
+                            if (data.url) {
+                                location.href = data.url;
+                            }
+
+                        })
+
+                });
+            }
 
             return;
 
