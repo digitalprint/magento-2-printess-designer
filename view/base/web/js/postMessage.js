@@ -1,12 +1,12 @@
 
 define(['penpal'], function() {
 
-    let iframeInstance = null;
+    let iframeInstances = [];
     let isChildConnected = false;
 
-    let getIframeInstance = function(config) {
+    let getIframeInstance = function(config, index) {
 
-        if (null === iframeInstance) {
+        if (!iframeInstances[index]) {
 
             const designPickerAttributes = config.attributes;
 
@@ -30,24 +30,22 @@ define(['penpal'], function() {
             iframe.src = config.path + '?' + searchParams.toString();
             iframe.classList.add('w-100', 'h-100');
 
-            iframeInstance = iframe;
+            iframeInstances[index] = iframe;
 
         }
 
-        return iframeInstance
+        return iframeInstances[index];
 
     }
 
     function postMessage(config) {
 
-        const iframe = getIframeInstance(config);
-
         function renderLayouts(printess, layoutSnippets, forMobile, forLayoutDialog = false, insertTemplateAsLayoutSnippetCallback) {
-            console.debug('window.uiHelper.customLayoutSnippetRenderCallback');
+
+            const index = JSON.stringify(forLayoutDialog);
+            const iframe = getIframeInstance(config, index);
 
             if (isChildConnected === true) {
-                console.debug('child is already connected, return iframe.');
-
                 return iframe;
             }
 
