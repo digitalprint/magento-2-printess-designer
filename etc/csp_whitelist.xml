@@ -5,7 +5,7 @@
             <values>
                 <value id="jsdelivr" type="host">https://cdn.jsdelivr.net</value>
                 <value id="printess.editor" type="host">https://editor.printess.com</value>
-                <value id="polyfill" type="host">polyfill.io</value>
+                <value id="polyfill" type="host">https://cdnjs.cloudflare.com/polyfill/</value>
             </values>
         </policy>
         <policy id="style-src">
