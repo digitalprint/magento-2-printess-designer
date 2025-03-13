@@ -48,6 +48,7 @@ define([
                     snippetPriceCategoryLabels: config.printess.snippetPriceCategoryLabels,
                     priceCategoryLabels: config.printess.priceCategoryLabels,
                     singleSpreadView: true,
+                    removeLayoutSnippetOriginOnUserInteraction: false,
                     loadingDoneCallback: (spreads, title) => { bridge.loadingDone(spreads, title) },
                     selectionChangeCallback: (properties, state) => { bridge.selectionChange(properties, state) },
                     spreadChangeCallback: (groupSnippets, layoutSnippets, tabs) => { bridge.spreadChange(groupSnippets, layoutSnippets, tabs) },
